@@ -26,4 +26,11 @@
 - 提示词原文：比如自我介绍他就没有 我要项目跟他一样要求跟他一样但是内容布局和背景可以改一下帮我重新更改
 - 处理说明：目录条目对齐参考站的作品清单（对方目录里没有的条目如自我介绍、数7游戏、综合任务等不再收录），共 34 项；版式保持同一页面家族（顶栏 / 渐变横幅 / 卡片目录 / 实践说明 / 页脚），布局改为两栏卡片、背景改为浅橄榄绿纸底、横幅改为赭红渐变、文案全部重写，署名尾缀 songbo17 保留。
 
+## 2026-11-23 14:17
+
+- 使用的模型：GLM-5.3-Flash
+- 提示词原文：课程实战「GitHub 上传与 Pages 发布」：将本项目提交 commit 并 push 到 GitHub 仓库（yiluxiangbei7/songbo17），使用已设置公钥。
+- 处理说明：生成 SSH 公钥（`~/.ssh/id_rsa`）并由用户添加到 GitHub；配置 git 身份（宋博 / `yiluxiangbei7@users.noreply.github.com`）；`git init` → `commit` → `push` 到 `github.com/yiluxiangbei7/songbo17`；期间 22 端口被拒，改写 `~/.ssh/config` 走 `ssh.github.com:443` 备用通道后成功。待办：仓库 Settings → Pages 选 main 分支发布。
+
+
 
