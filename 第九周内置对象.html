@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第九周 · 内置对象 | 宋博</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 24px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+    .panel { max-width: 900px; background: #fffdf8; border: 1px solid #d9e2e8; padding: 20px 24px; margin-bottom: 20px; }
+    .panel h2 { font-size: 17px; color: #2364aa; margin-bottom: 10px; }
+    .panel p { font-size: 14px; color: #5f7488; margin-bottom: 8px; }
+    .console { background: #10182a; color: #dfe6f5; border-radius: 8px; padding: 14px 18px; font-family: Consolas, Menlo, monospace; font-size: 13.5px; line-height: 1.95; white-space: pre-wrap; margin-top: 10px; }
+    .ok { color: #7ee0a8; } .warn { color: #ffd98a; } .err { color: #ff9d94; }
+    button.act { background: #2364aa; color: #fff; border: 0; border-radius: 6px; padding: 9px 18px; font-size: 14px; cursor: pointer; margin: 4px 6px 4px 0; }
+    button.act:hover { background: #17476d; }
+    input[type=text], input[type=date] { padding: 9px 12px; border: 1px solid #b9c8cf; border-radius: 6px; font-size: 14px; background: #fff; width: 100%; max-width: 420px; }
+    footer { margin-top: 28px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第九周 · 内置对象</h1>
+<p class="sub">JS 自带的构造函数：<code>String</code>、<code>Number</code>、<code>Date</code>、<code>Math</code>、<code>RegExp</code>、<code>JSON</code>。</p>
+
+<div class="panel">
+    <h2>一、String 字符串方法</h2>
+    <input type="text" id="strIn" value="Hello, 高级网页设计 Course">
+    <button class="act" id="b1">运行字符串方法</button>
+    <div class="console" id="o1"></div>
+</div>
+
+<div class="panel">
+    <h2>二、Number 数字方法</h2>
+    <button class="act" id="b2">运行数字方法</button>
+    <div class="console" id="o2"></div>
+</div>
+
+<div class="panel">
+    <h2>三、Date 日期对象</h2>
+    <input type="date" id="dateIn">
+    <button class="act" id="b3">解析与格式化</button>
+    <div class="console" id="o3"></div>
+</div>
+
+<div class="panel">
+    <h2>四、RegExp 正则表达式</h2>
+    <input type="text" id="reIn" value="联系电话 13812345678，学号 24001011017，邮箱 songbo@example.com">
+    <button class="act" id="b4">运行正则匹配</button>
+    <div class="console" id="o4"></div>
+</div>
+
+<div class="panel">
+    <h2>五、JSON 数据交换</h2>
+    <button class="act" id="b5">序列化与反序列化</button>
+    <div class="console" id="o5"></div>
+</div>
+
+<div class="panel">
+    <h2>六、Math 与包装对象</h2>
+    <p>Math 是静态对象，不用 new，直接 <code>Math.round()</code>。字符串、数字、布尔都有对应的包装对象——写 <code>"abc".length</code> 时，引擎临时造一个 String 包装对象取属性，取完就销毁，所以给基本类型加自定义属性是无效的。</p>
+    <div class="console"><span class="err">var s = "abc"; s.tag = 1; console.log(s.tag);  // undefined —— 包装对象用完即弃</span></div>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+
+<script>
+    function printer(id) {
+        var el = document.getElementById(id);
+        el.textContent = '';
+        return function (text, cls) {
+            var d = document.createElement('div');
+            if (cls) d.className = cls;
+            d.textContent = text;
+            el.appendChild(d);
+        };
+    }
+
+    // 一、String
+    document.getElementById('b1').onclick = function () {
+        var p = printer('o1');
+        var s = document.getElementById('strIn').value;
+        p('原字符串： "' + s + '"   length = ' + s.length);
+        p('');
+        p('查位置  indexOf("网页")        = ' + s.indexOf('网页') + '   （找不到返回 -1）');
+        p('        lastIndexOf("o")       = ' + s.lastIndexOf('o'));
+        p('        includes("设计")       = ' + s.includes('设计') + '   ← 比 indexOf > -1 更易读', 'ok');
+        p('        startsWith("Hello")    = ' + s.startsWith('Hello'));
+        p('        endsWith("Course")     = ' + s.endsWith('Course'));
+        p('');
+        p('截取    slice(7, 13)           = "' + s.slice(7, 13) + '"   （支持负数索引）');
+        p('        substring(7, 13)       = "' + s.substring(7, 13) + '"   （不支持负数）');
+        p('        slice(-6)              = "' + s.slice(-6) + '"   ← 取末尾 6 个字符');
+        p('');
+        p('替换    replace("Course","课")  = "' + s.replace('Course', '课') + '"   （只换第一个）');
+        p('        replaceAll("o","0")     = "' + s.replaceAll('o', '0') + '"', 'ok');
+        p('');
+        p('改大小写 toUpperCase()          = "' + s.toUpperCase() + '"');
+        p('         toLowerCase()          = "' + s.toLowerCase() + '"');
+        p('去空白   "  ab  ".trim()        = "' + '  ab  '.trim() + '"   还有 trimStart / trimEnd');
+        p('补位     "7".padStart(3,"0")     = "' + '7'.padStart(3, '0') + '"   ← 补零常用');
+        p('重复     "ab".repeat(3)         = "' + 'ab'.repeat(3) + '"');
+        p('拆数组   split(", ")            = ' + JSON.stringify(s.split(', ')), 'warn');
+        p('');
+        p('字符串不可变：所有方法都返回新字符串，原串永远不变。', 'err');
+    };
+
+    // 二、Number
+    document.getElementById('b2').onclick = function () {
+        var p = printer('o2');
+        var n = 3.14159;
+        p('toFixed(2)          = "' + n.toFixed(2) + '"   ← 返回字符串');
+        p('toPrecision(3)      = "' + n.toPrecision(3) + '"   ← 保留 3 位有效数字');
+        p('toString(2)         = "' + (10).toString(2) + '"   ← 十进制 10 转二进制');
+        p('toString(16)        = "' + (255).toString(16) + '"   ← 转十六进制');
+        p('');
+        p('Number.isInteger(3)     = ' + Number.isInteger(3));
+        p('Number.isInteger(3.5)   = ' + Number.isInteger(3.5));
+        p('Number.isNaN(NaN)       = ' + Number.isNaN(NaN) + '   ← 比全局 isNaN 严格，不做类型转换', 'ok');
+        p('Number.isFinite(1/0)    = ' + Number.isFinite(1 / 0));
+        p('');
+        p('Number.MAX_SAFE_INTEGER = ' + Number.MAX_SAFE_INTEGER + '   ← 超过这个值整数运算会失准', 'warn');
+        p('Number.EPSILON          = ' + Number.EPSILON + '   ← 浮点比较用的最小精度');
+        p('Number.parseInt("42px") = ' + Number.parseInt('42px'));
+    };
+
+    // 三、Date
+    document.getElementById('b3').onclick = function () {
+        var p = printer('o3');
+        var v = document.getElementById('dateIn').value;
+        var now = new Date();
+        var d = v ? new Date(v + 'T00:00:00') : now;
+        p('new Date() 当前时间 = ' + now.toString());
+        p('');
+        p('目标日期：' + d.toLocaleDateString('zh-CN'));
+        p('  getFullYear()   = ' + d.getFullYear());
+        p('  getMonth()      = ' + d.getMonth() + '   ← 注意从 0 开始！0 是一月，11 是十二月', 'err');
+        p('  getDate()       = ' + d.getDate() + '   （月中第几天）');
+        p('  getDay()        = ' + d.getDay() + '   ← 星期几，0 是周日', 'warn');
+        p('  getTime()       = ' + d.getTime() + '   （1970 年至今的毫秒数，即时间戳）');
+        p('');
+        p('格式化：');
+        p('  toLocaleString("zh-CN")      = ' + d.toLocaleString('zh-CN'));
+        p('  toISOString()                = ' + d.toISOString());
+        p('  手动拼接                     = ' + d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'));
+        p('');
+        p('日期计算：两个 Date 相减直接得到毫秒差');
+        var diff = new Date('2026-12-31') - new Date('2026-01-01');
+        p('  2026 全年天数 = ' + (diff / 86400000) + ' 天', 'ok');
+        p('  Date.now() = ' + Date.now() + '   ← 静态方法，取当前时间戳，比 new Date().getTime() 快');
+    };
+
+    // 四、RegExp
+    document.getElementById('b4').onclick = function () {
+        var p = printer('o4');
+        var s = document.getElementById('reIn').value;
+        p('原文： ' + s);
+        p('');
+        var phone = s.match(/1[3-9]\d{9}/);
+        p('匹配手机号 /1[3-9]\\d{9}/      → ' + (phone ? phone[0] : '无'));
+        var ids = s.match(/\d{11}/g);
+        p('匹配 11 位数字（g 全局）    → ' + JSON.stringify(ids));
+        p('');
+        p('test 只返回真假： /@/.test(...)  → ' + /@/.test(s));
+        p('replace 脱敏： ' + s.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2'), 'ok');
+        p('');
+        p('分组捕获： /(\w+)@(\w+\.\w+)/ ');
+        var mail = s.match(/(\w+)@(\w+\.\w+)/);
+        if (mail) {
+            p('  整个匹配 $0 = ' + mail[0]);
+            p('  第 1 组 $1 = ' + mail[1] + '   ← 用户名', 'ok');
+            p('  第 2 组 $2 = ' + mail[2] + '   ← 域名', 'ok');
+        }
+        p('');
+        p('split 配正则： "a1b22c333d".split(/\\d+/) → ' + JSON.stringify('a1b22c333d'.split(/\d+/)));
+        p('常用元字符： \\d 数字  \\w 字母数字下划线  \\s 空白  . 任意字符');
+        p('            * 0次以上  + 1次以上  ? 0或1次  {n,m} n到m次  ^ 开头  $ 结尾', 'warn');
+    };
+
+    // 五、JSON
+    document.getElementById('b5').onclick = function () {
+        var p = printer('o5');
+        var stu = { name: '宋博', id: '24001011017', scores: [88, 92, 79], info: { major: '软件工程', grade: 2 } };
+        var json = JSON.stringify(stu);
+        p('对象 → JSON 字符串（序列化）');
+        p('  ' + json, 'ok');
+        p('');
+        p('带缩进：JSON.stringify(stu, null, 2)');
+        p(JSON.stringify(stu, null, 2));
+        p('');
+        var back = JSON.parse(json);
+        p('JSON 字符串 → 对象（反序列化）');
+        p('  back.name = ' + back.name + '，back.scores[1] = ' + back.scores[1], 'ok');
+        p('');
+        p('三个坑：', 'err');
+        p('  1. 键名必须用双引号，单引号会报错');
+        p('  2. 不支持 undefined、函数、Symbol —— 序列化时会被直接丢掉');
+        p('  3. Date 对象会被转成字符串，parse 回来还是字符串，不会自动变回 Date');
+        p('');
+        p('过滤演示：' + JSON.stringify({ a: 1, b: undefined, fn: function () { } }));
+        p('深拷贝技巧：JSON.parse(JSON.stringify(obj))，简单对象够用，但会丢失上面三类内容。', 'warn');
+    };
+</script>
+</body>
+</html>

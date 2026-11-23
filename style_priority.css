@@ -1,0 +1,21 @@
+/* CSS样式优先级.html 配套的外部样式表
+   作用：演示「外部样式表 vs 内部样式表」的加载顺序对层叠结果的影响。
+   本页 link 在 style 之前，所以同权重时内部样式表覆盖这里的规则。 */
+
+body {
+    /* 这条会被内部样式表里的同名规则覆盖（权重相同，后者胜） */
+    background-color: #ffffff;
+}
+
+.panel {
+    /* 外部表给的边框色，同样会被内部表覆盖 */
+    border-color: #ff0000;
+}
+
+/* 只有外部表里定义的规则会生效，因为内部表没有同名竞争 */
+.external-only {
+    color: #b28a28;
+    font-weight: 700;
+}
+
+.back:hover { text-decoration: underline; }

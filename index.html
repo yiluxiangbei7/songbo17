@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<!--
+  作者：宋博
+  建立时间：2026-11-23
+  使用模型：GLM-5.3-Flash
+  功能名称：课堂实践目录页（index.html）
+  简介：收录本学期《高级网页设计》34 个课堂练习页面的超链接入口；
+        原生 HTML 与 CSS 编写，不依赖 CDN，浅橄榄纸底配朱红油墨与赭红渐变横幅。
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="宋博（songbo17）的高级网页设计课堂实践目录，收录 34 个本地练习页面">
+    <title>宋博 songbo17 ｜ 高级网页设计课堂实践</title>
+    <style>
+        /* ===== 基础变量：浅橄榄纸底 + 朱红油墨 ===== */
+        :root {
+            --sjs-ink: #2f3228;        /* 主文字：暖橄榄黑 */
+            --sjs-muted: #7d806e;      /* 次级文字 */
+            --sjs-paper: #f0f2e6;      /* 页面底色：浅橄榄绿纸 */
+            --sjs-card: #fdfcf6;       /* 卡片底色 */
+            --sjs-line: #dfe1cb;       /* 分隔线 */
+            --sjs-red: #c14a33;        /* 朱红油墨强调 */
+            --sjs-shadow: 0 16px 44px rgba(58, 62, 45, 0.14);
+        }
+
+        * { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            margin: 0;
+            color: var(--sjs-ink);
+            background: var(--sjs-paper);
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+            line-height: 1.7;
+        }
+
+        a { color: inherit; }
+
+        /* ===== 顶部导航 ===== */
+        .sjs_topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 22px 28px;
+        }
+
+        .sjs_brand {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+        }
+
+        .sjs_brand_mark {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin-right: 9px;
+            background: var(--sjs-red);   /* 朱红方形标识 */
+        }
+
+        .sjs_topbar_link {
+            color: var(--sjs-muted);
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .sjs_topbar_link:hover { color: var(--sjs-red); }
+
+        /* ===== 首屏横幅 ===== */
+        .sjs_hero {
+            position: relative;
+            max-width: 1180px;
+            min-height: 430px;
+            margin: 0 auto;
+            padding: 72px clamp(28px, 7vw, 88px);
+            overflow: hidden;
+            /* 赭红暖调渐变，区别于参考站的蓝绿冷调 */
+            background: linear-gradient(100deg, #7c2d1c 0%, #b0502e 58%, #dfa15e 100%);
+            box-shadow: var(--sjs-shadow);
+            isolation: isolate;
+        }
+
+        /* 装饰：右上虚线圆环 + 左下细圆环，位置与参考站不同 */
+        .sjs_hero::before {
+            position: absolute;
+            right: -70px;
+            top: -110px;
+            width: 320px;
+            height: 320px;
+            border: 1px dashed rgba(255, 255, 255, 0.35);
+            border-radius: 50%;
+            content: "";
+            box-shadow: 0 0 0 26px rgba(255, 255, 255, 0.06);
+            z-index: -1;
+        }
+
+        .sjs_hero::after {
+            position: absolute;
+            left: -120px;
+            bottom: -160px;
+            width: 300px;
+            height: 300px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            content: "";
+            z-index: -1;
+        }
+
+        .sjs_hero_copy { max-width: 640px; color: #fff; }
+
+        .sjs_eyebrow {
+            margin: 0 0 14px;
+            color: #f3cf9a;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.24em;
+        }
+
+        .sjs_h1 {
+            max-width: 620px;
+            margin: 0;
+            font-family: "SimSun", "Songti SC", Georgia, "Times New Roman", serif;
+            font-size: clamp(42px, 6vw, 72px);
+            font-weight: 400;
+            line-height: 1.12;
+            letter-spacing: 0.02em;
+        }
+
+        .sjs_hero_intro {
+            max-width: 560px;
+            margin: 24px 0 0;
+            color: rgba(255, 255, 255, 0.88);
+            font-size: 17px;
+        }
+
+        .sjs_hero_link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 30px;
+            padding: 12px 20px;
+            color: #fff8ef;
+            background: var(--sjs-red);
+            font-weight: 700;
+            text-decoration: none;
+            transition: transform 180ms ease, background 180ms ease;
+        }
+
+        .sjs_hero_link:hover { background: #a63b28; transform: translateY(-3px); }
+
+        /* ===== 作品目录 ===== */
+        .sjs_content {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 72px 28px 90px;
+        }
+
+        .sjs_section_heading {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 26px;
+        }
+
+        .sjs_section_heading h2 {
+            margin: 0;
+            font-size: 30px;
+            line-height: 1.2;
+        }
+
+        .sjs_section_heading p { margin: 6px 0 0; color: var(--sjs-muted); }
+
+        .sjs_tech { color: var(--sjs-muted); letter-spacing: 0.08em; }
+
+        /* 卡片目录：两栏布局，区别于参考站的三栏 */
+        .sjs_works {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .sjs_work_card {
+            display: flex;
+            flex-direction: column;
+            padding: 22px 24px;
+            background: var(--sjs-card);
+            border: 1px solid var(--sjs-line);
+            border-top: 3px solid var(--sjs-line);   /* 顶部装饰线，悬停变红 */
+            transition: box-shadow 180ms ease, transform 180ms ease, border-color 180ms ease;
+        }
+
+        .sjs_work_card:hover {
+            box-shadow: var(--sjs-shadow);
+            transform: translateY(-4px);
+            border-top-color: var(--sjs-red);
+        }
+
+        .sjs_work_number {
+            color: var(--sjs-red);
+            font-family: "SimSun", "Songti SC", Georgia, serif;
+            font-size: 24px;
+        }
+
+        .sjs_work_card h3 { margin: 14px 0 6px; font-size: 18px; }
+
+        .sjs_work_card p { margin: 0; color: var(--sjs-muted); font-size: 14px; }
+
+        .sjs_work_card a {
+            align-self: flex-start;
+            margin-top: auto;
+            padding-top: 18px;
+            color: var(--sjs-red);
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .sjs_work_card a::after { margin-left: 7px; content: "→"; }
+        .sjs_work_card a:hover { text-decoration: underline; }
+
+        /* ===== 本次实践说明 ===== */
+        .sjs_brief {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 34px;
+            margin-top: 78px;
+            padding-top: 30px;
+            border-top: 1px solid var(--sjs-line);
+        }
+
+        .sjs_brief h2 { margin: 0 0 12px; font-size: 25px; }
+        .sjs_brief p { margin: 0; color: var(--sjs-muted); }
+
+        .sjs_prompt {
+            margin: 0;
+            padding: 22px 24px;
+            color: #6e5d4e;
+            background: #f7efe4;
+            border-left: 4px solid var(--sjs-red);   /* 朱红左边线，区别于参考站的黄 */
+            font-family: inherit;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+
+        /* ===== 页脚 ===== */
+        footer {
+            padding: 24px 28px;
+            color: #e6e3d5;
+            background: #2f3228;   /* 深橄榄色页脚，区别于参考站的藏蓝 */
+            text-align: center;
+            font-size: 13px;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 760px) {
+            .sjs_topbar { padding: 18px 20px; }
+            .sjs_topbar_link { display: none; }
+            .sjs_hero { min-height: 470px; padding: 60px 24px; }
+            .sjs_hero_intro { font-size: 16px; }
+            .sjs_content { padding: 54px 20px 70px; }
+            .sjs_section_heading { display: block; }
+            .sjs_works { grid-template-columns: 1fr; }
+            .sjs_brief { grid-template-columns: 1fr; gap: 20px; margin-top: 58px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="sjs_topbar">
+        <div class="sjs_brand"><span class="sjs_brand_mark"></span>宋博 / SONGBO17</div>
+        <a class="sjs_topbar_link" href="#sjs_works">浏览全部课堂作品 ↓</a>
+    </header>
+
+    <main>
+        <!-- 首屏横幅 -->
+        <section class="sjs_hero" aria-labelledby="sjs_page_title">
+            <div class="sjs_hero_copy">
+                <p class="sjs_eyebrow">高级网页设计 · 课堂练习档案</p>
+                <h1 class="sjs_h1" id="sjs_page_title">从第一行标签，<br>到会动的页面。</h1>
+                <p class="sjs_hero_intro">这里汇集宋博（24001011017）在《高级网页设计》课程中的阶段性练习：从标签与盒模型起步，经过布局、图标与组件，一路写到 JavaScript 交互，每一页都保留原始文件，集中收在这份目录里。</p>
+                <a class="sjs_hero_link" href="#sjs_works">翻开练习目录 <span aria-hidden="true">↓</span></a>
+            </div>
+        </section>
+
+        <!-- 作品目录 -->
+        <section class="sjs_content" id="sjs_works">
+            <div class="sjs_section_heading">
+                <div>
+                    <h2>课堂练习目录</h2>
+                    <p>按学习进度整理，共 34 个本地网页实践。</p>
+                </div>
+                <p class="sjs_tech">HTML · CSS · JAVASCRIPT</p>
+            </div>
+
+            <div class="sjs_works">
+                <!-- 01-12：HTML 与 CSS 布局基础 -->
+                <article class="sjs_work_card"><span class="sjs_work_number">01</span><h3>第一次课程标签</h3><p>HTML 标签练习：标题、段落、列表与超链接。</p><a href="24001011017第一次课程标签.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">02</span><h3>第二周 · 盒模型</h3><p>margin、padding 与层叠继承的基础练习。</p><a href="2.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">03</span><h3>第六周 · 背景图片代替</h3><p>用背景图片装饰列表项，替代 img 标签。</p><a href="第六周背景图片代替.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">04</span><h3>第三周 · CSS 布局</h3><p>标准流下的页面布局练习。</p><a href="第三周CSS布局.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">05</span><h3>第四周 · 上图下文绝对定位</h3><p>图片、文字与绝对定位的综合排版。</p><a href="第四周上图下文绝对定位.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">06</span><h3>第四周 · 一左一右</h3><p>左右两栏并排的经典分栏。</p><a href="第四周一左一右.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">07</span><h3>第四周 · Flex 布局</h3><p>Flexbox 主轴、交叉轴与对齐方式入门。</p><a href="第四周Flex布局.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">08</span><h3>第四周 · Flex 上图下文</h3><p>图在上、文在下的纵向卡片排法。</p><a href="第四周Flex上图下文.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">09</span><h3>第四周 · Flex 自适应宽度</h3><p>flex-grow 与 flex-basis 的伸缩实验。</p><a href="第四周Flex自适应宽度.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">10</span><h3>第五周 · CSS 选择器</h3><p>组合选择器与伪类的使用练习。</p><a href="css3.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">11</span><h3>第五周 · Flex 左图右文</h3><p>横向图文列表，图左文右的排法。</p><a href="第五周Flex左图右文.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">12</span><h3>CSS 基础</h3><p>常用文本、颜色与背景属性的集中演练。</p><a href="CSS基础.html">打开网页</a></article>
+                <!-- 13-18：样式进阶与第七周组件 -->
+                <article class="sjs_work_card"><span class="sjs_work_number">13</span><h3>CSS 样式优先级</h3><p>行内、id 与类选择器的优先级对照。</p><a href="CSS样式优先级.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">14</span><h3>第七周 · 幻灯片</h3><p>Swiper 轮播配置补全任务页。</p><a href="swiper-task.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">15</span><h3>第七周 · 溢出动画</h3><p>溢出处理与 CSS 动画的作业页。</p><a href="homework.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">16</span><h3>第七周 · SVG 图标对照</h3><p>Lucide SVG 图标集的使用与对照。</p><a href="iconfont-2.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">17</span><h3>第七周 · SVG 自适应导航</h3><p>内联 SVG 图标与固定底部导航。</p><a href="svg.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">18</span><h3>第七周 · 字体图标</h3><p>Font Awesome 字体图标的类名渲染。</p><a href="iconfont-1.html">打开网页</a></article>
+                <!-- 19-24：第八周 JavaScript -->
+                <article class="sjs_work_card"><span class="sjs_work_number">19</span><h3>第八周 · JavaScript</h3><p>JavaScript 入门：script 标签与基本语句。</p><a href="第八周JavaScript.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">20</span><h3>第八周 · JavaScript 变量</h3><p>var、let、const 的区别与命名习惯。</p><a href="第八周JavaScript变量.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">21</span><h3>第八周 · 媒体查询</h3><p>同一页面在不同屏幕宽度下的适配。</p><a href="第八周媒体查询.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">22</span><h3>第八周 · 变量提升与数值处理</h3><p>变量提升现象与常用数值方法。</p><a href="第八周JavaScript变量提升与数值处理.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">23</span><h3>第八周 · 对象</h3><p>对象属性遍历与引用赋值练习。</p><a href="obj.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">24</span><h3>第八周 · Promise 对象</h3><p>用 then 与 catch 处理异步操作。</p><a href="第八周Promise对象.html">打开网页</a></article>
+                <!-- 25-30：第九周 JavaScript -->
+                <article class="sjs_work_card"><span class="sjs_work_number">25</span><h3>第九周 · 函数</h3><p>函数声明、调用与返回值练习。</p><a href="第九周函数.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">26</span><h3>第九周 · 事件</h3><p>常见事件的绑定与响应。</p><a href="第九周事件.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">27</span><h3>第九周 · 内置对象</h3><p>Math、Date、String 等内置对象方法。</p><a href="第九周内置对象.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">28</span><h3>第九周 · 数组方法</h3><p>push、splice、indexOf 等数组操作。</p><a href="第九周数组方法.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">29</span><h3>第九周 · 数组方法进阶</h3><p>map、filter、reduce 的链式调用。</p><a href="第九周数组方法进阶.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">30</span><h3>第九周 · DOM</h3><p>查询节点并修改内容与样式。</p><a href="第九周DOM.html">打开网页</a></article>
+                <!-- 31-34：第十周之后与图标预览 -->
+                <article class="sjs_work_card"><span class="sjs_work_number">31</span><h3>第十周 · 参数</h3><p>形参、实参与 arguments 对象。</p><a href="第十周参数.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">32</span><h3>第十一周 · Tabs 选项卡</h3><p>悬停切换的新闻栏目选项卡。</p><a href="tab.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">33</span><h3>字体图标预览 · 下导航</h3><p>字体图标版底部导航，含徽标与红点。</p><a href="iconfont-3.html">打开网页</a></article>
+                <article class="sjs_work_card"><span class="sjs_work_number">34</span><h3>字体图标预览 · SVG 版</h3><p>SVG 图标版底部导航，与字体版对照。</p><a href="iconfont-4.html">打开网页</a></article>
+            </div>
+
+            <!-- 本次实践说明 -->
+            <section class="sjs_brief" aria-labelledby="sjs_brief_title">
+                <div>
+                    <h2 id="sjs_brief_title">本次实践说明</h2>
+                    <p>页面使用原生 HTML 与 CSS 编写，不依赖 CDN。入口页保留了本次任务要求，作为课堂实践的记录。姓名宋博，学号 24001011017，署名尾缀 songbo17。</p>
+                </div>
+                <pre class="sjs_prompt">创建一个新页面，包括本目录下的所有网页的超链接，使用原生代码，不使用cdn，新页面名称为index.html，主题为宋博的《高级网页设计》课堂实践，美化页面，页面中包括本提示词。</pre>
+            </section>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>宋博 · songbo17 · 24001011017 ｜ 《高级网页设计》课堂实践 ｜ 2026</footer>
+</body>
+</html>

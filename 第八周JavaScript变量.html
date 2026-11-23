@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第八周 · JavaScript 变量 | 宋博</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 24px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+
+    .panel { max-width: 860px; background: #fffdf8; border: 1px solid #d9e2e8; padding: 20px 24px; margin-bottom: 20px; }
+    .panel h2 { font-size: 17px; color: #2364aa; margin-bottom: 10px; }
+    .panel p { font-size: 14px; color: #5f7488; margin-bottom: 8px; }
+    .console { background: #10182a; color: #dfe6f5; border-radius: 8px; padding: 14px 18px; font-family: Consolas, Menlo, monospace; font-size: 13.5px; line-height: 1.95; white-space: pre-wrap; margin-top: 10px; }
+    .ok { color: #7ee0a8; } .warn { color: #ffd98a; } .err { color: #ff9d94; }
+
+    button.act { background: #2364aa; color: #fff; border: 0; border-radius: 6px; padding: 9px 18px; font-size: 14px; cursor: pointer; margin: 4px 6px 4px 0; }
+    button.act:hover { background: #17476d; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    th, td { border: 1px solid #d9e2e8; padding: 8px 10px; text-align: left; }
+    th { background: #e9f0ef; }
+    footer { margin-top: 28px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第八周 · JavaScript 变量</h1>
+<p class="sub">变量声明三兄弟 <code>var</code> / <code>let</code> / <code>const</code>、命名规则、七种数据类型与 <code>typeof</code>。</p>
+
+<div class="panel">
+    <h2>一、声明与赋值</h2>
+    <button class="act" id="b1">运行声明演示</button>
+    <div class="console" id="o1"></div>
+</div>
+
+<div class="panel">
+    <h2>二、var / let / const 的区别</h2>
+    <table>
+        <tr><th>关键字</th><th>作用域</th><th>重复声明</th><th>重新赋值</th><th>变量提升</th></tr>
+        <tr><td><code>var</code></td><td>函数作用域</td><td>允许</td><td>允许</td><td>提升并初始化为 undefined</td></tr>
+        <tr><td><code>let</code></td><td>块级作用域 {}</td><td>报错</td><td>允许</td><td>提升但不初始化（暂时性死区）</td></tr>
+        <tr><td><code>const</code></td><td>块级作用域 {}</td><td>报错</td><td>不允许</td><td>提升但不初始化</td></tr>
+    </table>
+    <button class="act" id="b2">运行块级作用域对比</button>
+    <div class="console" id="o2"></div>
+    <p style="margin-top:10px;"><b>const 锁的是「绑定」不是「内容」：</b>用 const 声明的对象和数组，内部属性照样能改，只有整体重新赋值才会报错。</p>
+    <button class="act" id="b3">const 与对象</button>
+    <div class="console" id="o3"></div>
+</div>
+
+<div class="panel">
+    <h2>三、命名规则</h2>
+    <p>只能包含字母、数字、下划线、美元符号；<b>不能以数字开头</b>；区分大小写；不能用保留字（<code>var</code>、<code>function</code>、<code>class</code> 等）。</p>
+    <p>惯例用小驼峰 <code>studentName</code>；常量全大写加下划线 <code>MAX_COUNT</code>；构造函数与类用大驼峰 <code>Person</code>。</p>
+    <div class="console"><span class="ok">合法：</span>  userName   _private   $price   count2   宋博姓名(可用但不建议)
+<span class="err">非法：</span>  2count（数字开头）  my-name（减号会被当运算符）  var（保留字）  my name（有空格）</div>
+</div>
+
+<div class="panel">
+    <h2>四、数据类型与 typeof</h2>
+    <p>基本类型 6 种：<code>Number</code>、<code>String</code>、<code>Boolean</code>、<code>Undefined</code>、<code>Null</code>、<code>Symbol</code>；引用类型统称 <code>Object</code>。</p>
+    <button class="act" id="b4">运行 typeof 检测</button>
+    <div class="console" id="o4"></div>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+
+<script>
+    function printer(id) {
+        var el = document.getElementById(id);
+        return function (text, cls) {
+            var d = document.createElement('div');
+            if (cls) d.className = cls;
+            d.textContent = text;
+            el.appendChild(d);
+        };
+    }
+
+    // 一、声明与赋值
+    document.getElementById('b1').onclick = function () {
+        var p = printer('o1');
+        var school = '东北大学';        // var 声明
+        let name = '宋博';              // let 声明
+        const id = '24001011017';       // const 声明，必须同时赋值
+        let score;                      // 只声明不赋值
+        p('var   school = ' + school);
+        p('let   name   = ' + name, 'ok');
+        p('const id     = ' + id, 'ok');
+        p('let   score  = ' + score + '  ← 未赋值时自动是 undefined', 'warn');
+        p('一次声明多个： let a = 1, b = 2, c = 3;');
+    };
+
+    // 二、块级作用域
+    document.getElementById('b2').onclick = function () {
+        var p = printer('o2');
+        var results = [];
+        for (var i = 0; i < 3; i++) {
+            setTimeout((function (n) { return function () { results.push('var i → ' + n); }; })(i), 0);
+        }
+        let out = [];
+        for (let j = 0; j < 3; j++) {
+            out.push(j);
+        }
+        p('var 声明的 i 泄漏到循环外：循环结束后 i = ' + i, 'warn');
+        p('let 声明的 j 只活在 {} 里：循环结束后访问会报 ReferenceError', 'ok');
+        p('let 每次循环都是一个全新的 j，所以闭包里能拿到正确的 ' + out.join(', '), 'ok');
+        p('经典的「循环里 setTimeout 打印全是 3」问题，把 var 换成 let 就解决了。');
+    };
+
+    // 三、const 与对象
+    document.getElementById('b3').onclick = function () {
+        var p = printer('o3');
+        const student = { name: '宋博', id: '24001011017' };
+        student.name = '宋博（已修改）';   // 合法
+        student.grade = '大二';            // 合法，新增属性也行
+        p('修改属性 student.name → ' + student.name, 'ok');
+        p('新增属性 student.grade → ' + student.grade, 'ok');
+        p('student = {}  ← 这一步会抛 TypeError: Assignment to constant variable', 'err');
+        p('结论：const 保证引用地址不变，不保证对象内容不变。想冻结内容要用 Object.freeze()。', 'warn');
+    };
+
+    // 四、typeof
+    document.getElementById('b4').onclick = function () {
+        var p = printer('o4');
+        var samples = [
+            ['100', 100], ['"宋博"', '宋博'], ['true', true],
+            ['undefined 变量', undefined], ['null', null],
+            ['[1,2,3]', [1, 2, 3]], ['{a:1}', { a: 1 }],
+            ['function(){}', function () {}], ['Symbol()', Symbol('s')]
+        ];
+        samples.forEach(function (s) {
+            p('typeof ' + s[0].padEnd(16) + ' → ' + typeof s[1]);
+        });
+        p('');
+        p('两个坑：typeof null 返回 "object"（JS 早期实现的历史遗留 bug）', 'warn');
+        p('        typeof 数组 也返回 "object"，要区分数组得用 Array.isArray()', 'warn');
+        p('未声明的变量直接读会报错，但 typeof 未声明变量不会报错，返回 "undefined"。');
+    };
+</script>
+</body>
+</html>

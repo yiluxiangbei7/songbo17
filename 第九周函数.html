@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第九周 · 函数 | 宋博</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 24px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+    .panel { max-width: 880px; background: #fffdf8; border: 1px solid #d9e2e8; padding: 20px 24px; margin-bottom: 20px; }
+    .panel h2 { font-size: 17px; color: #2364aa; margin-bottom: 10px; }
+    .panel p { font-size: 14px; color: #5f7488; margin-bottom: 8px; }
+    .console { background: #10182a; color: #dfe6f5; border-radius: 8px; padding: 14px 18px; font-family: Consolas, Menlo, monospace; font-size: 13.5px; line-height: 1.95; white-space: pre-wrap; margin-top: 10px; }
+    .ok { color: #7ee0a8; } .warn { color: #ffd98a; } .err { color: #ff9d94; }
+    button.act { background: #2364aa; color: #fff; border: 0; border-radius: 6px; padding: 9px 18px; font-size: 14px; cursor: pointer; margin: 4px 6px 4px 0; }
+    button.act:hover { background: #17476d; }
+    footer { margin-top: 28px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第九周 · 函数</h1>
+<p class="sub">四种定义方式、返回值、作用域与闭包、箭头函数、以及函数作为一等公民的用法。</p>
+
+<div class="panel">
+    <h2>一、四种定义方式</h2>
+    <button class="act" id="b1">运行对比</button>
+    <div class="console" id="o1"></div>
+</div>
+
+<div class="panel">
+    <h2>二、返回值与提前 return</h2>
+    <p>函数遇到 <code>return</code> 立即结束。没有 return 语句、或 return 后面不带值，返回 <code>undefined</code>。</p>
+    <button class="act" id="b2">运行返回值演示</button>
+    <div class="console" id="o2"></div>
+</div>
+
+<div class="panel">
+    <h2>三、作用域与闭包</h2>
+    <p>内层函数能访问外层函数的变量，即使外层函数已经执行完毕——这就是闭包。它让「私有变量」成为可能。</p>
+    <button class="act" id="b3">运行计数器闭包</button>
+    <button class="act" id="b3b">计数器 +1</button>
+    <div class="console" id="o3"></div>
+</div>
+
+<div class="panel">
+    <h2>四、箭头函数</h2>
+    <p>写法更短，且<b>没有自己的 this</b>——它继承定义时所在作用域的 this，这正是它最大的价值。</p>
+    <button class="act" id="b4">运行 this 对比</button>
+    <div class="console" id="o4"></div>
+</div>
+
+<div class="panel">
+    <h2>五、函数是一等公民</h2>
+    <p>函数可以赋值给变量、作为参数传递、作为返回值、存进对象和数组。</p>
+    <button class="act" id="b5">运行高阶函数</button>
+    <div class="console" id="o5"></div>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+
+<script>
+    function printer(id) {
+        var el = document.getElementById(id);
+        el.textContent = '';
+        return function (text, cls) {
+            var d = document.createElement('div');
+            if (cls) d.className = cls;
+            d.textContent = text;
+            el.appendChild(d);
+        };
+    }
+
+    // 一、四种定义
+    function declare(a, b) { return a + b; }                       // 函数声明
+    var express = function (a, b) { return a + b; };                // 函数表达式
+    var arrow = (a, b) => a + b;                                    // 箭头函数
+    var ctor = new Function('a', 'b', 'return a + b');              // Function 构造器
+    document.getElementById('b1').onclick = function () {
+        var p = printer('o1');
+        p('函数声明   function declare(a,b){}  → declare(3,4) = ' + declare(3, 4), 'ok');
+        p('函数表达式 var f = function(a,b){}  → f(3,4)       = ' + express(3, 4));
+        p('箭头函数   const f = (a,b) => a+b   → f(3,4)       = ' + arrow(3, 4));
+        p('构造器     new Function("a","b","...")→ (3,4)       = ' + ctor(3, 4), 'warn');
+        p('');
+        p('声明会整体提升，可以在定义前调用；表达式只提升变量名，提前调用会报错。');
+        p('Function 构造器会把字符串当代码解析，有注入风险，实际项目基本不用。', 'err');
+    };
+
+    // 二、返回值
+    document.getElementById('b2').onclick = function () {
+        var p = printer('o2');
+        function noReturn() { var x = 1; }
+        function emptyReturn() { return; }
+        function multi(a) {
+            if (a < 0) return '负数';
+            if (a === 0) return '零';
+            return '正数';
+        }
+        p('没有 return 的函数 → ' + noReturn(), 'warn');
+        p('return 后不带值   → ' + emptyReturn(), 'warn');
+        p('多个 return 分支，传入 -5 → ' + multi(-5));
+        p('传入 0  → ' + multi(0));
+        p('传入 12 → ' + multi(12), 'ok');
+        p('');
+        p('一个函数只能返回一个值。要返回多个，用数组或对象打包：');
+        function stats(arr) {
+            return { min: Math.min.apply(null, arr), max: Math.max.apply(null, arr), sum: arr.reduce((a, b) => a + b, 0) };
+        }
+        p('stats([4,9,2]) → ' + JSON.stringify(stats([4, 9, 2])), 'ok');
+    };
+
+    // 三、闭包
+    var counter = (function () {
+        var count = 0;                       // 外部无法直接访问
+        return {
+            add: function () { return ++count; },
+            get: function () { return count; }
+        };
+    })();
+    document.getElementById('b3').onclick = function () {
+        var p = printer('o3');
+        p('用立即执行函数 (function(){...})() 造了一个模块：');
+        p('  变量 count 被关在函数作用域里，外面拿不到，只能通过 add() / get() 操作。');
+        p('  这就是闭包最实用的场景——模拟私有变量。', 'ok');
+        p('当前 count = ' + counter.get());
+        p('点右边的「计数器 +1」按钮，会调用被闭包捕获的 add()。');
+    };
+    document.getElementById('b3b').onclick = function () {
+        var p = printer('o3');
+        p('add() → count 现在是 ' + counter.add(), 'ok');
+    };
+
+    // 四、箭头函数 this
+    document.getElementById('b4').onclick = function () {
+        var p = printer('o4');
+        var person = {
+            name: '宋博',
+            // 普通函数：this 由调用方式决定，setTimeout 里会丢失
+            normalMethod: function () {
+                var self = this;                                  // 老办法：先存一份
+                setTimeout(function () {
+                    p('普通函数 + var self = this 的绕法 → ' + self.name, 'warn');
+                }, 0);
+                setTimeout(function () {
+                    p('普通函数直接写 this.name → ' + (typeof this === 'undefined' ? '报错/undefined' : this.name), 'err');
+                }, 0);
+            },
+            // 箭头函数：this 沿用定义处，天然正确
+            arrowMethod: function () {
+                setTimeout(() => {
+                    p('箭头函数里 this.name → ' + this.name + '  ← 自动继承外层 this', 'ok');
+                }, 10);
+            }
+        };
+        person.normalMethod();
+        person.arrowMethod();
+        setTimeout(function () {
+            p('');
+            p('箭头函数没有自己的 this、arguments，也不能用 new 调用。');
+            p('作为对象方法或需要动态 this 的场合（如事件处理器想拿到当前元素），反而要用普通函数。', 'warn');
+        }, 60);
+    };
+
+    // 五、高阶函数
+    document.getElementById('b5').onclick = function () {
+        var p = printer('o5');
+        function add(a, b) { return a + b; }
+        function mul(a, b) { return a * b; }
+        // 函数存进对象，做成一张操作表
+        var ops = { '+': add, '*': mul };
+        p('函数存在对象里：ops["+"](6,3) = ' + ops['+'](6, 3));
+        p('              ops["*"](6,3) = ' + ops['*'](6, 3));
+        // 函数作为参数
+        function apply(a, b, fn) { return fn(a, b); }
+        p('函数作为参数：apply(6,3,add) = ' + apply(6, 3, add));
+        // 函数作为返回值
+        function multiplier(n) { return function (x) { return x * n; }; }
+        var triple = multiplier(3);
+        p('函数作为返回值：multiplier(3)(10) = ' + triple(10), 'ok');
+        p('');
+        p('接收函数或返回函数的函数叫「高阶函数」。map / filter / reduce 都是。');
+        p('回调也是同一个道理：把函数交出去，让别人在合适的时机调用。');
+    };
+</script>
+</body>
+</html>

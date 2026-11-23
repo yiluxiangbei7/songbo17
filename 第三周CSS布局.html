@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第三周 · CSS 布局 | 宋博</title>
+<style>
+    /* 练习点：经典浮动布局 + 清除浮动，搭一个上中下三栏页面骨架 */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 28px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+
+    .layout { max-width: 900px; border: 2px solid #2364aa; background: #fffdf8; }
+    .layout > div { padding: 18px 20px; font-size: 14px; }
+
+    .header { background: #17476d; color: #fff; text-align: center; font-weight: 700; letter-spacing: .1em; }
+    .nav { background: #2364aa; color: #fff; }
+    .nav a { color: #ffe18b; text-decoration: none; margin-right: 18px; }
+
+    /* 中间区域：左浮动侧边栏 + 右侧内容自适应 */
+    .body-wrap { overflow: hidden; background: #fffdf8; }
+    .aside { float: left; width: 200px; min-height: 220px; background: #e9f0ef; border-right: 1px dashed #c9d6dd; }
+    .main { margin-left: 200px; min-height: 220px; }
+    .aside h3, .main h3 { font-size: 15px; margin-bottom: 10px; color: #2364aa; }
+    .aside ul { list-style: none; }
+    .aside li { padding: 6px 0; border-bottom: 1px dotted #cfd9de; font-size: 13.5px; }
+
+    .footer { background: #17324d; color: #dce9ee; text-align: center; font-size: 13px; }
+
+    .note { max-width: 900px; margin-top: 24px; background: #fffdf8; border: 1px solid #d9e2e8; border-left: 4px solid #f4c95d; padding: 18px 22px; font-size: 14px; color: #5f7488; }
+    .note b { color: #17324d; }
+    footer { margin-top: 30px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第三周 · CSS 布局</h1>
+<p class="sub">用 <code>float</code> 与 <code>margin-left</code> 搭一个 header / nav / aside+main / footer 的经典页面骨架。</p>
+
+<div class="layout">
+    <div class="header">页面头部 HEADER</div>
+    <div class="nav">
+        <a href="#">首页</a><a href="#">作品</a><a href="#">关于</a><a href="#">联系</a>
+    </div>
+    <div class="body-wrap">
+        <div class="aside">
+            <h3>侧边栏 ASIDE</h3>
+            <ul>
+                <li>float: left 定宽 200px</li>
+                <li>高度由内容撑开</li>
+                <li>右边界用虚线分隔</li>
+                <li>不参与右侧文字环绕</li>
+            </ul>
+        </div>
+        <div class="main">
+            <h3>主内容区 MAIN</h3>
+            <p>右侧不浮动，改用 <code>margin-left: 200px</code> 让出侧边栏的宽度。这样主区宽度会随窗口自适应，比给主区也设 float + 定宽更省事。</p>
+            <p style="margin-top:10px;">父容器 <code>.body-wrap</code> 加了 <code>overflow: hidden</code>，用来触发 BFC 清除内部浮动，否则父元素高度会塌陷成 0，下面的 footer 会顶上来。</p>
+        </div>
+    </div>
+    <div class="footer">页面底部 FOOTER</div>
+</div>
+
+<div class="note">
+    <b>这一步的坑：</b>浮动元素会脱离文档流，父元素量不到它的高度。三种常见解法——父元素 <code>overflow: hidden</code>、末尾加空 <code>div</code> 配 <code>clear: both</code>、或用 <code>::after</code> 伪元素清除。本页用第一种，代码最少。
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+</body>
+</html>

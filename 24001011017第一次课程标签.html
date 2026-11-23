@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>24001011017第一次课程标签</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.8; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    .doc { max-width: 860px; margin: 0 auto; background: #fffdf8; border: 1px solid #d9e2e8; padding: 30px 34px; }
+    h1 { font-size: 26px; border-bottom: 3px solid #f4c95d; padding-bottom: 10px; margin-bottom: 6px; }
+    h2 { font-size: 20px; color: #2364aa; margin: 26px 0 10px; }
+    h3 { font-size: 17px; margin: 18px 0 8px; }
+    h4, h5, h6 { font-size: 15px; margin: 14px 0 6px; color: #5f7488; }
+    p { margin-bottom: 10px; font-size: 15px; }
+    ul, ol { margin: 10px 0 14px 26px; font-size: 15px; }
+    li { margin-bottom: 5px; }
+    a { color: #2364aa; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+    th, td { border: 1px solid #d9e2e8; padding: 8px 12px; text-align: left; }
+    th { background: #e9f0ef; }
+    blockquote { border-left: 4px solid #2364aa; background: #eef4fa; padding: 12px 18px; margin: 14px 0; font-size: 14.5px; color: #40506a; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+    pre { background: #10182a; color: #dfe6f5; padding: 14px 18px; border-radius: 8px; overflow-x: auto; font-size: 13px; margin: 12px 0; }
+    hr { border: 0; border-top: 1px dashed #b9c8cf; margin: 22px 0; }
+    .tag-note { background: rgba(244,201,93,.2); border-left: 4px solid #f4c95d; padding: 12px 16px; font-size: 13.5px; color: #5f7488; margin: 12px 0; }
+    form .row { margin-bottom: 12px; }
+    label { display: inline-block; min-width: 90px; font-size: 14px; }
+    input[type=text], input[type=password], input[type=email], select, textarea { padding: 7px 10px; border: 1px solid #b9c8cf; border-radius: 5px; font-size: 14px; font-family: inherit; }
+    footer { max-width: 860px; margin: 26px auto 0; color: #5f7488; font-size: 13px; text-align: center; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+
+<div class="doc">
+    <h1>24001011017 第一次课程标签</h1>
+    <p style="color:#5f7488;">宋博 · 《高级网页设计》第一周课堂练习 · 把 HTML 常用标签各写一遍，看它们在页面上长什么样。</p>
+
+    <div class="tag-note">本页每一节都对应一类标签。左边看效果，下面的 <code>&lt;pre&gt;</code> 里是写法本身。</div>
+
+    <h2>一、标题标签 h1 ~ h6</h2>
+    <h1>h1 一级标题（一个页面只应有一个）</h1>
+    <h2>h2 二级标题</h2>
+    <h3>h3 三级标题</h3>
+    <h4>h4 四级标题</h4>
+    <h5>h5 五级标题</h5>
+    <h6>h6 六级标题</h6>
+    <pre>&lt;h1&gt;一级标题&lt;/h1&gt;
+&lt;h2&gt;二级标题&lt;/h2&gt;
+...
+&lt;h6&gt;六级标题&lt;/h6&gt;</pre>
+
+    <h2>二、段落与文本格式</h2>
+    <p>这是一个普通段落。段落之间的空白由 <code>&lt;p&gt;</code> 标签自带的外边距决定，不是靠敲回车。</p>
+    <p><b>b 加粗</b> · <strong>strong 语义强调</strong> · <i>i 斜体</i> · <em>em 着重</em></p>
+    <p><u>u 下划线</u> · <s>s 删除线</s> · <mark>mark 高亮</mark> · <small>small 小字</small></p>
+    <p>上标与下标：水的化学式 H<sub>2</sub>O，2 的 10 次方写作 2<sup>10</sup>。</p>
+    <p>空格与换行实体：这里&nbsp;&nbsp;&nbsp;有三个不换行空格，下面是强制换行<br>换行后的第二行。</p>
+
+    <h2>三、列表</h2>
+    <h3>无序列表 ul</h3>
+    <ul>
+        <li>HTML —— 结构</li>
+        <li>CSS —— 表现</li>
+        <li>JavaScript —— 行为</li>
+    </ul>
+    <h3>有序列表 ol</h3>
+    <ol>
+        <li>先写好语义结构</li>
+        <li>再套样式美化</li>
+        <li>最后加交互逻辑</li>
+    </ol>
+    <h3>嵌套列表</h3>
+    <ul>
+        <li>前端三件套
+            <ul>
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+            </ul>
+        </li>
+        <li>开发工具
+            <ul>
+                <li>VSCode</li>
+                <li>Chrome DevTools</li>
+            </ul>
+        </li>
+    </ul>
+    <h3>自定义列表 dl</h3>
+    <dl>
+        <dt><b>块级元素</b></dt>
+        <dd>独占一行，可以设宽高，如 div、p、h1、ul。</dd>
+        <dt><b>行内元素</b></dt>
+        <dd>不换行，宽高由内容决定，如 span、a、b。</dd>
+    </dl>
+
+    <h2>四、超链接与图片</h2>
+    <p>
+        <a href="index.html">回到作品目录（同目录相对路径）</a> ·
+        <a href="html_basic001.html">我的第一个网页</a> ·
+        <a href="#top" title="title 属性会显示成悬停提示">页内锚点跳转</a>
+    </p>
+    <p><code>target="_blank"</code> 在新标签页打开；<code>href="#id"</code> 跳到页内锚点；<code>href="mailto:..."</code> 唤起邮件客户端。</p>
+    <p>图片标签必须写 <code>alt</code>，图挂了或读屏软件时靠它：</p>
+    <img src="img/1.jpg" alt="课堂练习配图" width="240" style="border-radius:8px;">
+    <pre>&lt;a href="index.html"&gt;目录&lt;/a&gt;
+&lt;img src="img/1.jpg" alt="描述文字" width="240"&gt;</pre>
+
+    <h2>五、表格</h2>
+    <table>
+        <thead>
+            <tr><th>学号</th><th>姓名</th><th>课程</th><th>成绩</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>24001011017</td><td>宋博</td><td>高级网页设计</td><td>88</td></tr>
+            <tr><td>24001011018</td><td>同学甲</td><td>高级网页设计</td><td>92</td></tr>
+            <tr><td>24001011020</td><td>同学乙</td><td>高级网页设计</td><td>79</td></tr>
+        </tbody>
+        <tfoot>
+            <tr><td colspan="3">平均分</td><td>86.3</td></tr>
+        </tfoot>
+    </table>
+    <p><code>colspan</code> 横向合并单元格，<code>rowspan</code> 纵向合并。语义上分成 thead / tbody / tfoot 三段。</p>
+
+    <h2>六、块级容器与语义标签</h2>
+    <p><code>div</code> 是最通用的块级容器，本身没有任何含义，只用来分组和挂样式；<code>span</code> 是行内容器，用来给一小段文字单独上色。</p>
+    <p>HTML5 提供了一批<b>语义标签</b>，效果和 div 一样，但机器和人都能读懂结构：</p>
+    <pre>&lt;header&gt;页头&lt;/header&gt;
+&lt;nav&gt;导航&lt;/nav&gt;
+&lt;main&gt;
+  &lt;section&gt;一个主题区块&lt;/section&gt;
+  &lt;article&gt;一篇独立内容&lt;/article&gt;
+  &lt;aside&gt;侧边补充&lt;/aside&gt;
+&lt;/main&gt;
+&lt;footer&gt;页脚&lt;/footer&gt;</pre>
+    <blockquote>能用语义标签就别用 div。搜索引擎和无障碍设备依赖它们理解页面结构。</blockquote>
+
+    <hr>
+
+    <h2>七、表单</h2>
+    <form action="#" method="get">
+        <div class="row"><label for="f1">文本框</label><input type="text" id="f1" name="uname" placeholder="请输入姓名" value="宋博"></div>
+        <div class="row"><label for="f2">密码框</label><input type="password" id="f2" name="pwd" placeholder="请输入密码"></div>
+        <div class="row"><label for="f3">邮箱</label><input type="email" id="f3" name="mail" placeholder="name@example.com"></div>
+        <div class="row"><label for="f4">数字</label><input type="number" id="f4" name="age" min="1" max="120" value="20"></div>
+        <div class="row"><label>单选框</label>
+            <input type="radio" name="sex" value="m" id="r1" checked><label for="r1" style="min-width:auto;">男</label>
+            <input type="radio" name="sex" value="f" id="r2"><label for="r2" style="min-width:auto;">女</label>
+            <span style="color:#5f7488;font-size:13px;">（同 name 才互斥）</span>
+        </div>
+        <div class="row"><label>复选框</label>
+            <input type="checkbox" id="c1" checked><label for="c1" style="min-width:auto;">HTML</label>
+            <input type="checkbox" id="c2"><label for="c2" style="min-width:auto;">CSS</label>
+            <input type="checkbox" id="c3" checked><label for="c3" style="min-width:auto;">JS</label>
+        </div>
+        <div class="row"><label for="f5">下拉框</label>
+            <select id="f5" name="grade">
+                <option value="1">大一</option>
+                <option value="2" selected>大二</option>
+                <option value="3">大三</option>
+            </select>
+        </div>
+        <div class="row"><label for="f6">多行文本</label><br>
+            <textarea id="f6" name="intro" rows="3" cols="40" placeholder="写点自我介绍">这是 textarea 的默认内容。</textarea>
+        </div>
+        <div class="row"><label for="f7">文件上传</label><input type="file" id="f7" name="file"></div>
+        <div class="row"><label for="f8">日期</label><input type="date" id="f8" name="day"></div>
+        <div class="row">
+            <button type="submit">提交按钮</button>
+            <button type="reset" style="margin-left:8px;">重置</button>
+        </div>
+    </form>
+    <div class="tag-note">
+        <b>label 的 for 要等于控件的 id</b>，这样点文字就能聚焦输入框，对读屏用户和无障碍访问很重要。<br>
+        HTML5 新增的 input 类型还有 <code>tel</code>、<code>url</code>、<code>search</code>、<code>range</code>、<code>color</code>，配合 <code>required</code>、<code>pattern</code>、<code>min/max</code> 能做原生校验。
+    </div>
+
+    <h2>八、转义字符</h2>
+    <p>想在页面上显示尖括号本身，得用实体：<code>&amp;lt;</code> 显示成 &lt;，<code>&amp;gt;</code> 显示成 &gt;，<code>&amp;amp;</code> 显示成 &amp;。</p>
+    <pre>&lt;p&gt;这一行写在 pre 里，  空格
+和换行都会原样保留，并且用等宽字体显示。&lt;/p&gt;</pre>
+
+    <hr>
+    <p style="text-align:center;color:#5f7488;font-size:14px;">以上覆盖了第一周课堂讲到的全部标签类型。</p>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+</body>
+</html>

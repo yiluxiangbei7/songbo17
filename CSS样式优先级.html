@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS 样式优先级 | 宋博</title>
+<link rel="stylesheet" href="style_priority.css">
+<style>
+    /* 内部样式表：与外部样式表冲突时，后加载的覆盖先加载的 */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.8; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 26px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+
+    .panel { max-width: 820px; background: #fffdf8; border: 1px solid #d9e2e8; padding: 20px 24px; margin-bottom: 22px; }
+    .panel h2 { font-size: 17px; color: #2364aa; margin-bottom: 12px; }
+    .demo-line { padding: 8px 0; border-bottom: 1px dotted #d9e2e8; font-size: 14.5px; }
+    .demo-line:last-child { border-bottom: 0; }
+    .who { color: #5f7488; font-size: 12.5px; }
+
+    /* ---- 权重对比：同一元素被四条规则同时命中 ---- */
+    #target { color: #17324d; }                 /* 0,1,0,0  id */
+    .box { color: #2364aa; }                    /* 0,0,1,0  class */
+    p { color: #d97a3c; }                       /* 0,0,0,1  标签 */
+    .panel .box { color: #2f8f6b; }             /* 0,0,2,0  两个 class，权重更高 */
+
+    /* ---- !important 例外 ---- */
+    .imp { color: #b28a28 !important; }
+
+    /* ---- 继承 ---- */
+    .inherit-box { color: #2364aa; }
+    .inherit-box .no { color: initial; }        /* 强制回到初始值，不继承 */
+
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    th, td { border: 1px solid #d9e2e8; padding: 8px 10px; text-align: left; }
+    th { background: #e9f0ef; color: #17324d; }
+    td.win { background: rgba(244,201,93,.25); font-weight: 700; }
+    footer { margin-top: 30px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>CSS 样式优先级</h1>
+<p class="sub">层叠（Cascade）三原则：先比权重，权重相同比出现顺序，<code>!important</code> 是唯一的例外。</p>
+
+<div class="panel">
+    <h2>一、权重计算：四位数字 (行内, id, class, 标签)</h2>
+    <p class="demo-line">
+        下面这行文字同时被 4 条规则命中，最终显示<b>绿色</b>。
+        <span class="who">id 规则(0,1,0,0)？不，它设的是黑色但被更具体的选择器压过？看表格。</span>
+    </p>
+    <p id="target" class="box">我被 #target / .box / p / .panel .box 四条规则同时选中</p>
+    <p class="who" style="margin-top:8px;">
+        实际生效的是 <code>.panel .box</code>（权重 0,0,2,0）。<br>
+        但 <code>#target</code> 权重是 0,1,0,0，比它高——所以最终颜色其实是 <b>id 规则的 #17324d 深墨色</b>。
+        这正是权重的意义：数字大者胜，与书写顺序无关。
+    </p>
+</div>
+
+<div class="panel">
+    <h2>二、权重对照表</h2>
+    <table>
+        <tr><th>选择器写法</th><th>行内</th><th>id</th><th>class</th><th>标签</th><th>权重值</th></tr>
+        <tr><td><code>p</code></td><td>0</td><td>0</td><td>0</td><td>1</td><td>0,0,0,1</td></tr>
+        <tr><td><code>.box</code></td><td>0</td><td>0</td><td>1</td><td>0</td><td>0,0,1,0</td></tr>
+        <tr><td><code>.panel .box</code></td><td>0</td><td>0</td><td>2</td><td>0</td><td>0,0,2,0</td></tr>
+        <tr><td><code>#target</code></td><td>0</td><td>1</td><td>0</td><td>0</td><td class="win">0,1,0,0 ✓</td></tr>
+        <tr><td><code>style="..."</code> 行内</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1,0,0,0</td></tr>
+        <tr><td><code>!important</code></td><td colspan="4">不参与比较，直接置顶</td><td class="win">最高</td></tr>
+    </table>
+</div>
+
+<div class="panel">
+    <h2>三、同权重比顺序：后写的赢</h2>
+    <p class="demo-line">本页 <code>&lt;link&gt;</code> 引入的外部样式表在前，<code>&lt;style&gt;</code> 内部样式表在后。两者权重相同时，内部样式表的规则生效。</p>
+    <p class="demo-line"><span class="who">这也是为什么浏览器默认样式总被我们覆盖——它的权重最低且最先加载。</span></p>
+</div>
+
+<div class="panel">
+    <h2>四、!important 与继承</h2>
+    <p class="demo-line imp">这行用了 <code>!important</code>，显示金色，压过了所有普通规则。</p>
+    <div class="inherit-box">
+        <p class="demo-line">颜色可以从父元素继承下来（color 是可继承属性）。</p>
+        <p class="demo-line no">这行写了 <code>color: initial</code>，拒绝继承，回到浏览器默认的黑色。</p>
+    </div>
+    <p class="who" style="margin-top:10px;">可继承的多是文字类属性：color、font-*、line-height、text-align。盒模型属性（width、margin、border）默认不继承。</p>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第九周 · 事件 | 宋博</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 24px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+    .panel { max-width: 880px; background: #fffdf8; border: 1px solid #d9e2e8; padding: 20px 24px; margin-bottom: 20px; }
+    .panel h2 { font-size: 17px; color: #2364aa; margin-bottom: 10px; }
+    .panel p { font-size: 14px; color: #5f7488; margin-bottom: 8px; }
+    .console { background: #10182a; color: #dfe6f5; border-radius: 8px; padding: 14px 18px; font-family: Consolas, Menlo, monospace; font-size: 13.5px; line-height: 1.9; white-space: pre-wrap; margin-top: 10px; max-height: 260px; overflow-y: auto; }
+    .ok { color: #7ee0a8; } .warn { color: #ffd98a; } .err { color: #ff9d94; }
+    button.act { background: #2364aa; color: #fff; border: 0; border-radius: 6px; padding: 9px 18px; font-size: 14px; cursor: pointer; margin: 4px 6px 4px 0; }
+    button.act:hover { background: #17476d; }
+    button.act.o { background: #d97a3c; }
+
+    /* 事件冒泡演示的嵌套盒子 */
+    .nest { border: 2px solid #2364aa; border-radius: 8px; padding: 18px; margin-top: 10px; cursor: pointer; background: #eef4fa; }
+    .nest.mid { border-color: #d97a3c; background: #fdf3ea; }
+    .nest.inner { border-color: #2f8f6b; background: #edf7f2; text-align: center; font-size: 14px; }
+    .nest small { display: block; font-size: 12px; color: #5f7488; margin-bottom: 6px; }
+
+    .field { width: 100%; padding: 10px 12px; border: 1px solid #b9c8cf; border-radius: 6px; font-size: 14px; background: #fff; margin-bottom: 8px; }
+    .dyn-list { list-style: none; margin-top: 10px; }
+    .dyn-list li { background: #e9f0ef; border-radius: 6px; padding: 10px 14px; margin-bottom: 8px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
+    .dyn-list li span.rm { color: #d97a3c; cursor: pointer; font-weight: 700; }
+    footer { margin-top: 28px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第九周 · 事件</h1>
+<p class="sub">事件绑定三方式、event 对象、冒泡与捕获、事件委托、阻止默认行为，以及常用鼠标键盘表单事件。</p>
+
+<div class="panel">
+    <h2>一、三种绑定方式</h2>
+    <p>① HTML 属性 <code>onclick="..."</code>；② DOM 属性 <code>el.onclick = fn</code>（同名会覆盖）；③ <code>addEventListener</code>（可绑多个，推荐）。</p>
+    <button class="act" id="bind1">我绑了两个 click</button>
+    <button class="act o" id="bind2">onclick 覆盖演示</button>
+    <div class="console" id="o1"></div>
+</div>
+
+<div class="panel">
+    <h2>二、event 对象</h2>
+    <p>在下面的输入框里打字、移动鼠标，观察 event 上能拿到什么信息。</p>
+    <input type="text" class="field" id="evField" placeholder="在这里输入或点击，看 event 对象的内容">
+    <div class="console" id="o2"></div>
+</div>
+
+<div class="panel">
+    <h2>三、冒泡与捕获</h2>
+    <p>点最里面的绿框，事件会依次经过三层。默认是<b>冒泡</b>（从内到外）；<code>addEventListener</code> 第三个参数传 <code>true</code> 则变成捕获（从外到内）。</p>
+    <div class="nest" id="n1"><small>第 1 层 · outer</small>
+        <div class="nest mid" id="n2"><small>第 2 层 · middle</small>
+            <div class="nest inner" id="n3">第 3 层 · inner（点我）</div>
+        </div>
+    </div>
+    <button class="act o" id="stopBtn">下次点击时 stopPropagation</button>
+    <div class="console" id="o3"></div>
+</div>
+
+<div class="panel">
+    <h2>四、事件委托（代理）</h2>
+    <p>不给每个 li 单独绑事件，而是绑在父级 ul 上，靠 <code>e.target</code> 判断到底点了谁。<b>动态新增的元素自动就有事件</b>，这是委托最大的好处。</p>
+    <button class="act" id="addBtn">新增一项</button>
+    <ul class="dyn-list" id="dynList">
+        <li>已有项目 A <span class="rm">删除</span></li>
+        <li>已有项目 B <span class="rm">删除</span></li>
+    </ul>
+    <div class="console" id="o4"></div>
+</div>
+
+<div class="panel">
+    <h2>五、阻止默认行为</h2>
+    <p>下面的链接和表单都会被 <code>preventDefault()</code> 拦下来，不会真的跳转或提交。</p>
+    <a href="https://example.com" id="fakeLink" style="color:#2364aa;">这是一个会被拦截的链接</a>
+    <form id="fakeForm" style="margin-top:10px;">
+        <input type="text" class="field" id="formInput" placeholder="输入内容后点提交">
+        <button class="act" type="submit">提交（被拦截）</button>
+    </form>
+    <div class="console" id="o5"></div>
+</div>
+
+<div class="panel">
+    <h2>六、常用事件速查</h2>
+    <div class="console">鼠标：click  dblclick  mouseenter/mouseleave（不冒泡）  mouseover/mouseout（冒泡）  mousemove
+键盘：keydown（按下即触发，可重复）  keyup  ←keypress 已废弃
+表单：input（每次值变化）  change（失焦或回车后）  focus/blur（不冒泡，可用 focusin/focusout 代替）  submit
+文档：DOMContentLoaded（DOM 就绪，不等图片）  load（全部资源加载完）  scroll  resize
+其他：transitionend  animationend  touchstart / touchmove / touchend</div>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+
+<script>
+    function printer(id, keep) {
+        var el = document.getElementById(id);
+        if (!keep) el.textContent = '';
+        return function (text, cls) {
+            var d = document.createElement('div');
+            if (cls) d.className = cls;
+            d.textContent = text;
+            el.appendChild(d);
+            el.scrollTop = el.scrollHeight;
+        };
+    }
+
+    // 一、绑定方式
+    var p1 = printer('o1');
+    var b1 = document.getElementById('bind1');
+    b1.addEventListener('click', function () { p1('第一个 addEventListener 触发', 'ok'); });
+    b1.addEventListener('click', function () { p1('第二个 addEventListener 也触发了 —— 两者共存', 'ok'); });
+    var b2 = document.getElementById('bind2');
+    b2.onclick = function () { p1('onclick 第一次赋值', 'warn'); };
+    b2.onclick = function () { p1('onclick 被第二次赋值覆盖了，第一次的永远不再执行', 'err'); };
+
+    // 二、event 对象
+    var p2 = printer('o2');
+    var field = document.getElementById('evField');
+    field.addEventListener('click', function (e) {
+        p2('--- click 事件 ---');
+        p2('e.type        = ' + e.type);
+        p2('e.target      = <' + e.target.tagName.toLowerCase() + '> id="' + e.target.id + '"');
+        p2('e.currentTarget = 绑定事件的元素本身，等价于 this');
+        p2('坐标 clientX/Y = ' + e.clientX + ', ' + e.clientY + '（相对视口）');
+        p2('坐标 pageX/Y   = ' + e.pageX + ', ' + e.pageY + '（相对整个文档，含滚动）');
+    });
+    field.addEventListener('input', function (e) {
+        p2('input 事件：当前值 = "' + e.target.value + '"，长度 ' + e.target.value.length, 'ok');
+    });
+    field.addEventListener('keydown', function (e) {
+        p2('keydown：e.key = "' + e.key + '"，e.code = "' + e.code + '"，是否按着 Ctrl = ' + e.ctrlKey, 'warn');
+    });
+
+    // 三、冒泡与捕获
+    var p3 = printer('o3');
+    var doStop = false;
+    document.getElementById('stopBtn').onclick = function () {
+        doStop = !doStop;
+        this.textContent = doStop ? '已开启 stopPropagation（再点关闭）' : '下次点击时 stopPropagation';
+        p3('stopPropagation 开关 → ' + (doStop ? '开启' : '关闭'), 'warn');
+    };
+    document.getElementById('n1').addEventListener('click', function () { p3('③ 冒泡到第 1 层 outer'); });
+    document.getElementById('n2').addEventListener('click', function () { p3('② 冒泡到第 2 层 middle'); });
+    document.getElementById('n3').addEventListener('click', function (e) {
+        p3('--- 点击第 3 层 ---');
+        p3('① 触发第 3 层 inner（最内层先响应）', 'ok');
+        if (doStop) { e.stopPropagation(); p3('调用了 e.stopPropagation()，事件到此为止，不会再往上冒泡', 'err'); }
+    });
+    // 捕获阶段
+    document.getElementById('n1').addEventListener('click', function () { p3('（捕获阶段）outer 先听到，第三个参数为 true', 'warn'); }, true);
+
+    // 四、事件委托
+    var p4 = printer('o4');
+    var list = document.getElementById('dynList');
+    var seq = 2;
+    list.addEventListener('click', function (e) {
+        var t = e.target;
+        if (t.classList.contains('rm')) {
+            p4('点了「删除」，移除：' + t.parentElement.textContent.replace('删除', '').trim(), 'warn');
+            t.parentElement.remove();
+        } else if (t.tagName === 'LI') {
+            p4('点了列表项本身：' + t.textContent.replace('删除', '').trim(), 'ok');
+        } else {
+            p4('点的不是 li 也不是删除按钮，忽略');
+        }
+    });
+    document.getElementById('addBtn').onclick = function () {
+        seq++;
+        var li = document.createElement('li');
+        li.innerHTML = '动态新增项目 ' + seq + ' <span class="rm">删除</span>';
+        list.appendChild(li);
+        p4('新增了一项。它没有单独绑事件，但因为父级 ul 上有委托，照样能点。', 'ok');
+    };
+
+    // 五、阻止默认
+    var p5 = printer('o5');
+    document.getElementById('fakeLink').addEventListener('click', function (e) {
+        e.preventDefault();
+        p5('preventDefault 拦下了链接跳转，页面没有离开', 'err');
+    });
+    document.getElementById('fakeForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        p5('拦下了表单提交，拿到内容："' + document.getElementById('formInput').value + '"', 'ok');
+        p5('实际项目里这里通常改成用 fetch 发 AJAX 请求。');
+    });
+</script>
+</body>
+</html>

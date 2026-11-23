@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第十周 · 参数 | 宋博</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 24px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+    .panel { max-width: 900px; background: #fffdf8; border: 1px solid #d9e2e8; padding: 20px 24px; margin-bottom: 20px; }
+    .panel h2 { font-size: 17px; color: #2364aa; margin-bottom: 10px; }
+    .panel p { font-size: 14px; color: #5f7488; margin-bottom: 8px; }
+    .console { background: #10182a; color: #dfe6f5; border-radius: 8px; padding: 14px 18px; font-family: Consolas, Menlo, monospace; font-size: 13.5px; line-height: 1.95; white-space: pre-wrap; margin-top: 10px; }
+    .ok { color: #7ee0a8; } .warn { color: #ffd98a; } .err { color: #ff9d94; }
+    button.act { background: #2364aa; color: #fff; border: 0; border-radius: 6px; padding: 9px 18px; font-size: 14px; cursor: pointer; margin: 4px 6px 4px 0; }
+    button.act:hover { background: #17476d; }
+    button.act.o { background: #d97a3c; } button.act.o:hover { background: #b9632c; }
+    footer { margin-top: 28px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第十周 · 参数</h1>
+<p class="sub">形参与实参、默认值、arguments 对象、剩余参数 <code>...</code>、参数按值传递，以及回调与立即执行函数。</p>
+
+<div class="panel">
+    <h2>一、形参与实参：个数不匹配会怎样</h2>
+    <p>JS 不检查参数个数。少传的自动是 <code>undefined</code>，多传的直接被忽略，都不报错。</p>
+    <button class="act" id="b1">运行参数匹配</button>
+    <div class="console" id="o1"></div>
+</div>
+
+<div class="panel">
+    <h2>二、默认参数</h2>
+    <p>ES6 起可以直接在形参上写默认值。只有实参是 <code>undefined</code>（或干脆没传）时才用默认值，传 <code>null</code> 不会触发。</p>
+    <button class="act" id="b2">运行默认参数</button>
+    <div class="console" id="o2"></div>
+</div>
+
+<div class="panel">
+    <h2>三、arguments 对象</h2>
+    <p>函数内部自带的类数组，装着所有实参。箭头函数<b>没有</b> arguments。</p>
+    <button class="act" id="b3">运行 arguments</button>
+    <div class="console" id="o3"></div>
+</div>
+
+<div class="panel">
+    <h2>四、剩余参数 ...rest</h2>
+    <p>ES6 的现代写法，收进一个<b>真数组</b>，能用所有数组方法。必须放在参数列表最后。</p>
+    <button class="act" id="b4">运行剩余参数</button>
+    <div class="console" id="o4"></div>
+</div>
+
+<div class="panel">
+    <h2>五、参数是按值传递</h2>
+    <p>基本类型传的是值的副本，改不动外面；引用类型传的是「地址的副本」，改内容会影响外面，但整体重新赋值不会。</p>
+    <button class="act o" id="b5">运行传值演示</button>
+    <div class="console" id="o5"></div>
+</div>
+
+<div class="panel">
+    <h2>六、解构参数与配置对象</h2>
+    <p>参数一多，用「位置传参」很容易记错顺序。改成传一个配置对象，可读性和可扩展性都好得多。</p>
+    <button class="act" id="b6">运行解构参数</button>
+    <div class="console" id="o6"></div>
+</div>
+
+<div class="panel">
+    <h2>七、函数作为参数：回调</h2>
+    <button class="act" id="b7">运行回调</button>
+    <div class="console" id="o7"></div>
+</div>
+
+<div class="panel">
+    <h2>八、立即执行函数 IIFE</h2>
+    <p>定义完立刻执行，用来造一个独立作用域，避免变量污染全局。经典写法是外面套一层括号。</p>
+    <button class="act" id="b8">运行 IIFE</button>
+    <div class="console" id="o8"></div>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+
+<script>
+    function printer(id) {
+        var el = document.getElementById(id);
+        el.textContent = '';
+        return function (text, cls) {
+            var d = document.createElement('div');
+            if (cls) d.className = cls;
+            d.textContent = text;
+            el.appendChild(d);
+        };
+    }
+
+    // 一、形参实参
+    document.getElementById('b1').onclick = function () {
+        var p = printer('o1');
+        function intro(name, age) { return name + '，' + age + '岁'; }
+        p('function intro(name, age)  —— name 和 age 叫「形参」，是占位符');
+        p('intro("宋博", 20)  —— 传进去的 "宋博" 和 20 叫「实参」');
+        p('  → ' + intro('宋博', 20), 'ok');
+        p('');
+        p('少传一个： intro("宋博")  → ' + intro('宋博'), 'warn');
+        p('  age 变成 undefined，不报错。所以关键参数要自己做校验。');
+        p('多传一个： intro("宋博", 20, "多余")  → ' + intro('宋博', 20, '多余'));
+        p('  多余的实参被忽略，形参里没有对应的名字接它（但 arguments 里能看到）。');
+        p('');
+        p('function 的 length 属性是「形参个数」： intro.length = ' + intro.length);
+        p('arguments.length 是「实参个数」，两者可能不相等。', 'ok');
+    };
+
+    // 二、默认参数
+    document.getElementById('b2').onclick = function () {
+        var p = printer('o2');
+        function greet(name, prefix) {
+            if (prefix === undefined) prefix = '同学';   // ES5 老办法
+            return prefix + ' ' + name;
+        }
+        function greet2(name = '同学', prefix = '你好') {
+            return prefix + ' ' + name;               // ES6 新办法
+        }
+        p('ES5 写法： if (prefix === undefined) prefix = "同学";');
+        p('ES6 写法： function greet2(name = "同学", prefix = "你好")');
+        p('');
+        p('greet2()                → ' + greet2(), 'ok');
+        p('greet2("宋博")           → ' + greet2('宋博'), 'ok');
+        p('greet2("宋博", "您好")    → ' + greet2('宋博', '您好'));
+        p('');
+        p('传 undefined 会触发默认值： greet2(undefined, "hi") → ' + greet2(undefined, 'hi'), 'warn');
+        p('传 null 不会触发：        greet2(null, "hi")       → ' + greet2(null, 'hi'), 'err');
+        p('');
+        p('默认值可以是表达式，每次调用都重新求值：');
+        function stamp(t = Date.now()) { return t; }
+        p('  stamp() 第一次 → ' + stamp());
+        p('  stamp() 第二次 → ' + stamp() + '   ← 两次不同，说明不是定义时算好的');
+        p('');
+        p('默认参数也能引用前面的参数： function f(a, b = a * 2) {}', 'ok');
+    };
+
+    // 三、arguments
+    document.getElementById('b3').onclick = function () {
+        var p = printer('o3');
+        function sumOld() {
+            var total = 0;
+            for (var i = 0; i < arguments.length; i++) total += arguments[i];
+            return { result: total, count: arguments.length, type: typeof arguments, isArr: Array.isArray(arguments) };
+        }
+        var r = sumOld(1, 2, 3, 4, 5);
+        p('function sumOld() { ... arguments ... }   形参列表是空的');
+        p('sumOld(1,2,3,4,5) → 和 = ' + r.result + '，实参个数 = ' + r.count);
+        p('typeof arguments = ' + r.type + '，Array.isArray(arguments) = ' + r.isArr, 'warn');
+        p('');
+        p('arguments 是「类数组」：有 length 和下标，但没有 map / forEach 等数组方法。');
+        p('要转成真数组： Array.from(arguments)  或  [].slice.call(arguments)', 'ok');
+        p('');
+        p('arguments.callee 指向函数自身，可用于匿名函数递归，但严格模式下被禁用。', 'err');
+        p('箭头函数没有自己的 arguments，写出来会拿到外层函数的，很容易出错。', 'err');
+    };
+
+    // 四、剩余参数
+    document.getElementById('b4').onclick = function () {
+        var p = printer('o4');
+        function sum(...nums) { return nums.reduce(function (a, b) { return a + b; }, 0); }
+        function intro(who, ...hobbies) { return who + ' 的爱好：' + hobbies.join('、'); }
+        p('function sum(...nums) { return nums.reduce((a,b) => a+b, 0); }');
+        p('sum(1,2,3,4,5) → ' + sum(1, 2, 3, 4, 5), 'ok');
+        p('sum()          → ' + sum() + '   ← 没传参时 nums 是空数组 []，不是 undefined，很安全', 'ok');
+        p('');
+        p('剩余参数前面还能有普通形参： function intro(who, ...hobbies)');
+        p('intro("宋博", "编程", "摄影", "篮球") → ' + intro('宋博', '编程', '摄影', '篮球'));
+        p('');
+        p('Array.isArray(nums) = ' + Array.isArray([1, 2]) + '   ← 剩余参数收进的是真数组，能直接用数组方法', 'ok');
+        p('');
+        p('展开运算符是反方向的操作：把数组拆开传进去');
+        var arr = [1, 2, 3];
+        p('  Math.max(' + JSON.stringify(arr) + ')     = ' + Math.max(arr) + '   ← 直接传数组是 NaN', 'err');
+        p('  Math.max(...' + JSON.stringify(arr) + ')   = ' + Math.max.apply(null, arr) + '   ← 用 ... 展开才对', 'ok');
+        p('');
+        p('记忆： ... 在「定义处」是收集（剩余参数），在「调用处」是拆开（展开运算符）。', 'warn');
+    };
+
+    // 五、按值传递
+    document.getElementById('b5').onclick = function () {
+        var p = printer('o5');
+        var n = 10;
+        function changeNum(x) { x = 999; }
+        changeNum(n);
+        p('基本类型：');
+        p('  var n = 10; changeNum(n);  函数里把 x 改成 999');
+        p('  函数外 n 仍然是 ' + n + '  ← 传的是副本，改不到外面', 'ok');
+        p('');
+        var obj = { name: '宋博' };
+        function changeField(o) { o.name = '被改了'; }
+        changeField(obj);
+        p('引用类型 · 改内容：');
+        p('  changeField(obj) 里执行 o.name = "被改了"');
+        p('  函数外 obj.name = ' + obj.name + '  ← 影响到了外面！', 'err');
+        p('');
+        var obj2 = { name: '宋博' };
+        function reassign(o) { o = { name: '全新对象' }; }
+        reassign(obj2);
+        p('引用类型 · 整体重新赋值：');
+        p('  reassign(obj2) 里执行 o = { name: "全新对象" }');
+        p('  函数外 obj2.name = ' + obj2.name + '  ← 没变！', 'ok');
+        p('');
+        p('解释：传进去的是「地址的副本」。改地址指向的内容，外面看得见；');
+        p('      但让副本指向一个新对象，跟原来的地址就没关系了，外面看不见。', 'warn');
+        p('');
+        p('数组同理： push 会影响外面， arr = [新数组] 不会。');
+    };
+
+    // 六、解构参数
+    document.getElementById('b6').onclick = function () {
+        var p = printer('o6');
+        // 位置传参：容易记错顺序
+        function createOld(name, age, city, grade) {
+            return name + '，' + age + '岁，' + city + '，' + grade + '年级';
+        }
+        // 配置对象 + 解构 + 默认值
+        function createNew(options) {
+            var o = options || {};
+            var name = o.name || '匿名', age = o.age || 0, city = o.city || '未知', grade = o.grade || 1;
+            return name + '，' + age + '岁，' + city + '，' + grade + '年级';
+        }
+        // ES6 解构写法
+        function createES6(_ref) {
+            var name = _ref.name === undefined ? '匿名' : _ref.name;
+            var age = _ref.age === undefined ? 0 : _ref.age;
+            var city = _ref.city === undefined ? '未知' : _ref.city;
+            return { name: name, age: age, city: city };
+        }
+        p('写法一 · 位置传参： createOld(name, age, city, grade)');
+        p('  createOld("宋博", 20, "大连", 2) → ' + createOld('宋博', 20, '大连', 2));
+        p('  调用时看不出每个值是什么含义，而且顺序错了也不会报错', 'err');
+        p('');
+        p('写法二 · 配置对象： createNew({ name, age, city, grade })');
+        p('  ' + createNew({ name: '宋博', city: '大连', age: 20, grade: 2 }), 'ok');
+        p('  可以只传需要的字段： createNew({ name: "宋博" }) → ' + createNew({ name: '宋博' }));
+        p('  顺序随意，自带名字，扩展新选项不破坏老调用', 'ok');
+        p('');
+        p('写法三 · ES6 参数解构（本页用 ES5 兼容写法模拟同样效果）：');
+        p('  function create({ name = "匿名", age = 0, city = "未知" } = {}) {}');
+        p('  → ' + JSON.stringify(createES6({ name: '宋博', city: '大连' })));
+        p('  末尾的 = {} 很关键：不传参时避免对 undefined 解构而报错', 'warn');
+        p('');
+        p('这就是 jQuery、Swiper 这些库都用配置对象的原因： Swiper("#box", { loop: true, autoplay: {} })');
+    };
+
+    // 七、回调
+    document.getElementById('b7').onclick = function () {
+        var p = printer('o7');
+        function repeat(times, action) {
+            for (var i = 1; i <= times; i++) action(i);
+        }
+        p('function repeat(times, action) { for(...) action(i); }');
+        p('  action 是一个参数，但传进来的是「函数」，由 repeat 在合适的时机调用它。');
+        p('');
+        p('repeat(3, i => console.log("第" + i + "次"))：');
+        repeat(3, function (i) { p('  第 ' + i + ' 次执行', 'ok'); });
+        p('');
+        p('传入不同的回调，repeat 本身完全不用改：');
+        repeat(2, function (i) { p('  回调 B 的第 ' + i + ' 次', 'warn'); });
+        p('');
+        p('注意传的是 repeat(3, action) 而不是 repeat(3, action()) —— 加了括号就变成「立刻执行并把返回值传进去」了。', 'err');
+        p('这就是 addEventListener("click", fn) 不能写成 fn() 的原因。');
+        p('');
+        p('map / filter / forEach / setTimeout / Promise.then 全都是回调模式。');
+    };
+
+    // 八、IIFE
+    document.getElementById('b8').onclick = function () {
+        var p = printer('o8');
+        var module = (function (global) {
+            var secret = '24001011017';          // 外部无法访问
+            return {
+                getName: function () { return '宋博'; },
+                getSecret: function () { return secret; }
+            };
+        })(window);
+        p('(function(global) { ... return {...}; })(window)');
+        p('  外面的括号把函数声明变成表达式，末尾的 () 立即调用它。');
+        p('');
+        p('module.getName()   → ' + module.getName(), 'ok');
+        p('module.getSecret() → ' + module.getSecret(), 'ok');
+        p('module.secret      → ' + module.secret + '   ← 拿不到，变量被关在函数作用域里', 'err');
+        p('');
+        p('这就是「模块模式」：用闭包做出私有变量，只暴露必要的接口。');
+        p('在 ES6 module 和 let/const 出现之前，这是避免全局变量污染的标准做法。', 'warn');
+        p('');
+        p('其他等价写法： !function(){}()  、  +function(){}()  、  (function(){}())');
+        p('参数也可以带默认值，甚至接收整个 window 对象进来，方便做压缩优化。');
+    };
+</script>
+</body>
+</html>

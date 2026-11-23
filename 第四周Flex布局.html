@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第四周 · Flex 布局 | 宋博</title>
+<style>
+    /* 练习点：flex 主轴/交叉轴对齐、flex-grow、flex-shrink、flex-basis、order、wrap */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 28px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+
+    .demo { max-width: 860px; margin-bottom: 24px; background: #fffdf8; border: 1px solid #d9e2e8; padding: 18px 20px; }
+    .demo h2 { font-size: 15.5px; color: #2364aa; margin-bottom: 3px; }
+    .demo .tip { font-size: 13px; color: #5f7488; margin-bottom: 12px; }
+    .row { display: flex; background: #e9f0ef; border: 1px dashed #b9c8cf; min-height: 78px; padding: 6px; }
+    .it { background: #2364aa; color: #fff; padding: 14px 16px; border-radius: 5px; font-size: 13.5px; margin: 4px; }
+    .it.o { background: #d97a3c; }
+    .it.g { background: #2f8f6b; }
+
+    .jc-center { justify-content: center; }
+    .jc-between { justify-content: space-between; }
+    .jc-around { justify-content: space-around; }
+    .ai-center { align-items: center; }
+    .ai-end { align-items: flex-end; }
+    .wrap { flex-wrap: wrap; }
+    .col { flex-direction: column; }
+
+    .grow2 { flex-grow: 2; }
+    .grow1 { flex-grow: 1; }
+    .basis { flex-basis: 220px; flex-grow: 0; }
+    .ord3 { order: 3; }
+    .ord1 { order: 1; }
+    .ord2 { order: 2; }
+
+    footer { margin-top: 30px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第四周 · Flex 布局</h1>
+<p class="sub">Flexbox 核心属性逐项演示：主轴方向、对齐方式、伸缩比例、排序与换行。</p>
+
+<div class="demo">
+    <h2>justify-content · 主轴对齐</h2>
+    <p class="tip">依次是 <code>flex-start</code>（默认）、<code>center</code>、<code>space-between</code>、<code>space-around</code>。</p>
+    <div class="row"><span class="it">1</span><span class="it o">2</span><span class="it g">3</span></div>
+    <div class="row jc-center"><span class="it">1</span><span class="it o">2</span><span class="it g">3</span></div>
+    <div class="row jc-between"><span class="it">1</span><span class="it o">2</span><span class="it g">3</span></div>
+    <div class="row jc-around"><span class="it">1</span><span class="it o">2</span><span class="it g">3</span></div>
+</div>
+
+<div class="demo">
+    <h2>align-items · 交叉轴对齐</h2>
+    <p class="tip">默认 <code>stretch</code> 拉满高度；<code>center</code> 垂直居中；<code>flex-end</code> 贴底。</p>
+    <div class="row ai-center"><span class="it">center</span><span class="it o" style="padding:26px 16px;">高一点</span><span class="it g">center</span></div>
+    <div class="row ai-end"><span class="it">end</span><span class="it o" style="padding:26px 16px;">高一点</span><span class="it g">end</span></div>
+</div>
+
+<div class="demo">
+    <h2>flex-grow · 分配剩余空间</h2>
+    <p class="tip">蓝块 <code>flex-grow: 2</code>，橙块和绿块各 <code>flex-grow: 1</code>，剩余空间按 2:1:1 分。</p>
+    <div class="row"><span class="it grow2">grow 2</span><span class="it o grow1">grow 1</span><span class="it g grow1">grow 1</span></div>
+</div>
+
+<div class="demo">
+    <h2>flex-basis · 起始尺寸</h2>
+    <p class="tip">蓝块设 <code>flex-basis: 220px</code> 且 <code>flex-grow: 0</code>，宽度固定不参与伸缩；其余两块平分剩下的。</p>
+    <div class="row"><span class="it basis">basis 220px</span><span class="it o grow1">grow 1</span><span class="it g grow1">grow 1</span></div>
+</div>
+
+<div class="demo">
+    <h2>order · 视觉排序</h2>
+    <p class="tip">HTML 里顺序是 A、B、C，靠 <code>order</code> 让 C 排到最前。注意这只改视觉顺序，不改 DOM 与 Tab 键焦点顺序。</p>
+    <div class="row"><span class="it ord3">A (order:3)</span><span class="it o ord2">B (order:2)</span><span class="it g ord1">C (order:1)</span></div>
+</div>
+
+<div class="demo">
+    <h2>flex-wrap + flex-direction: column</h2>
+    <p class="tip">上排 <code>flex-wrap: wrap</code>，窗口变窄时自动折行；下排 <code>flex-direction: column</code> 改成竖排，主轴变为垂直方向。</p>
+    <div class="row wrap"><span class="it" style="flex:1 1 180px;">1</span><span class="it o" style="flex:1 1 180px;">2</span><span class="it g" style="flex:1 1 180px;">3</span><span class="it" style="flex:1 1 180px;">4</span><span class="it o" style="flex:1 1 180px;">5</span></div>
+    <div class="row col" style="min-height:auto;"><span class="it">第一行</span><span class="it o">第二行</span><span class="it g">第三行</span></div>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+</body>
+</html>

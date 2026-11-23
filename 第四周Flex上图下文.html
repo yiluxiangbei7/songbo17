@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第四周 · Flex 上图下文 | 宋博</title>
+<style>
+    /* 练习点：flex-wrap 换行 + 定宽子项，做一行三张的图文卡片 */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 26px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+
+    ul.cards {
+        display: flex;
+        flex-wrap: wrap;      /* 放不下就折到下一行 */
+        gap: 20px;            /* 用 gap 代替 margin，边缘不会多出空白 */
+        list-style: none;
+        max-width: 1000px;
+    }
+    ul.cards li {
+        flex: 0 0 300px;      /* 定宽 300px，不伸不缩，一行正好三张 */
+        background: #fffdf8;
+        border: 1px solid #d9e2e8;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
+    ul.cards li:hover { transform: translateY(-5px); box-shadow: 0 18px 40px rgba(30,59,84,.14); }
+
+    .pic { display: block; width: 100%; height: 180px; object-fit: cover; }
+    .txt { padding: 16px 18px 20px; }
+    .txt h3 { font-size: 17px; margin-bottom: 6px; }
+    .txt p { font-size: 13.5px; color: #5f7488; }
+    .txt span { display: inline-block; margin-top: 12px; font-size: 12px; color: #2364aa; border: 1px solid #cfe0ea; border-radius: 999px; padding: 2px 10px; }
+
+    footer { margin-top: 32px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第四周 · Flex 上图下文</h1>
+<p class="sub">用 <code>display: flex</code> + <code>flex-wrap: wrap</code> + <code>gap</code> 排图文卡片，子项定宽 300px 做到一行三张，窗口变窄自动折行。</p>
+
+<ul class="cards">
+    <li>
+        <img class="pic" src="img/1.jpg" alt="练习图片一">
+        <div class="txt"><h3>复兴号动车组</h3><p>上图下文的典型结构：img 占满卡片宽度，下面接标题与说明文字。</p><span>flex: 0 0 300px</span></div>
+    </li>
+    <li>
+        <img class="pic" src="img/2.jpg" alt="练习图片二">
+        <div class="txt"><h3>C919 大飞机</h3><p><code>object-fit: cover</code> 让不同比例的图裁切后仍然等高，卡片不会参差不齐。</p><span>object-fit</span></div>
+    </li>
+    <li>
+        <img class="pic" src="img/3.jpg" alt="练习图片三">
+        <div class="txt"><h3>天宫空间站</h3><p>父元素 <code>overflow: hidden</code> 配合子元素圆角，图片不会顶出圆角外。</p><span>overflow</span></div>
+    </li>
+    <li>
+        <img class="pic" src="img/4.jpg" alt="练习图片四">
+        <div class="txt"><h3>奋斗者号</h3><p>第四张自动折到第二行，这就是 <code>flex-wrap: wrap</code> 的效果。</p><span>flex-wrap</span></div>
+    </li>
+    <li>
+        <img class="pic" src="img/5.jpg" alt="练习图片五">
+        <div class="txt"><h3> FAST 天眼</h3><p><code>gap: 20px</code> 同时管横行与竖列间距，不用再给 li 加 margin 去处理末列多余空白。</p><span>gap</span></div>
+    </li>
+    <li>
+        <img class="pic" src="img/6.jpg" alt="练习图片六">
+        <div class="txt"><h3>爱达·魔都号</h3><p>悬停时 <code>transform: translateY(-5px)</code> 抬起卡片，加阴影强化层次。</p><span>transform</span></div>
+    </li>
+</ul>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+</body>
+</html>

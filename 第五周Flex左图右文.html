@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第五周 · Flex 左图右文 | 宋博</title>
+<style>
+    /* 练习点：flex 横向排列 + align-items 控制垂直对齐，做图文列表 */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 26px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+
+    ul.list { list-style: none; max-width: 760px; display: flex; flex-direction: column; gap: 16px; }
+    ul.list li {
+        display: flex;              /* 横向排列：图在左，文在右 */
+        align-items: center;        /* 交叉轴居中，图与文字垂直对齐 */
+        gap: 18px;
+        background: #fffdf8;
+        border: 1px solid #d9e2e8;
+        border-radius: 8px;
+        padding: 14px 18px;
+        transition: transform .22s ease, box-shadow .22s ease;
+    }
+    ul.list li:hover { transform: translateX(5px); box-shadow: 0 14px 32px rgba(30,59,84,.12); }
+
+    .thumb { flex: 0 0 120px; height: 84px; object-fit: cover; border-radius: 5px; }
+    .info { flex: 1 1 auto; min-width: 0; }   /* min-width:0 让长文字能正常省略 */
+    .info h3 { font-size: 16px; margin-bottom: 5px; }
+    .info p { font-size: 13.5px; color: #5f7488; }
+    .info .meta { margin-top: 8px; font-size: 12px; color: #b28a28; }
+
+    /* 反向排列：图跑到右边，HTML 结构一个字都不用改 */
+    .rev { flex-direction: row-reverse; }
+
+    /* 顶端对齐变体 */
+    .top { align-items: flex-start; }
+
+    footer { margin-top: 32px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第五周 · Flex 左图右文</h1>
+<p class="sub">列表项设 <code>display: flex</code>，缩略图 <code>flex: 0 0 120px</code> 定宽不被压扁，文字区 <code>flex: 1</code> 吃掉剩余宽度。</p>
+
+<ul class="list">
+    <li>
+        <img class="thumb" src="img/1.jpg" alt="缩略图一">
+        <div class="info">
+            <h3>标准左图右文</h3>
+            <p><code>align-items: center</code> 让图片与文字在垂直方向居中对齐，两行文字也不会顶到上面去。</p>
+            <div class="meta">flex · align-items: center</div>
+        </div>
+    </li>
+    <li>
+        <img class="thumb" src="img/2.jpg" alt="缩略图二">
+        <div class="info">
+            <h3>文字很长时会自动换行</h3>
+            <p>文字区设了 <code>min-width: 0</code>，否则 flex 子项默认 <code>min-width: auto</code>，会被长单词或长串字符顶住，把图片挤出容器。这是 Flex 布局最常见的一个坑。</p>
+            <div class="meta">flex: 1 1 auto · min-width: 0</div>
+        </div>
+    </li>
+    <li class="rev">
+        <img class="thumb" src="img/3.jpg" alt="缩略图三">
+        <div class="info">
+            <h3>右图左文（反向排列）</h3>
+            <p>只加一句 <code>flex-direction: row-reverse</code>，图片就跑到了右边。HTML 里 img 依然写在前面，读屏软件的朗读顺序不变。</p>
+            <div class="meta">flex-direction: row-reverse</div>
+        </div>
+    </li>
+    <li class="top">
+        <img class="thumb" src="img/4.jpg" alt="缩略图四">
+        <div class="info">
+            <h3>顶端对齐</h3>
+            <p>把 <code>align-items</code> 换成 <code>flex-start</code>，图片和标题都贴着顶部，适合文字行数不固定的信息流列表。</p>
+            <div class="meta">align-items: flex-start</div>
+        </div>
+    </li>
+    <li>
+        <img class="thumb" src="img/5.jpg" alt="缩略图五">
+        <div class="info">
+            <h3>悬停微交互</h3>
+            <p>整行 <code>transform: translateX(5px)</code> 加阴影，鼠标移入时列表项向右轻推，提示这一行可以点击。</p>
+            <div class="meta">transition · transform</div>
+        </div>
+    </li>
+</ul>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+</body>
+</html>

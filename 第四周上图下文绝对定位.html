@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第四周 · 上图下文绝对定位 | 宋博</title>
+<style>
+    /* 练习点：父相子绝 —— 父元素 relative 建立定位上下文，子元素 absolute 相对它定位 */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 26px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+    .note { max-width: 900px; background: rgba(244,201,93,.18); border-left: 4px solid #f4c95d; padding: 14px 18px; font-size: 13.8px; color: #5f7488; margin-bottom: 26px; border-radius: 4px; }
+
+    ul.cards { list-style: none; max-width: 1000px; display: flex; flex-wrap: wrap; gap: 22px; }
+    ul.cards li {
+        position: relative;      /* 关键：父元素 relative，成为子元素 absolute 的定位参照 */
+        width: 300px;
+        background: #fffdf8;
+        border: 1px solid #d9e2e8;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
+    ul.cards li:hover { transform: translateY(-5px); box-shadow: 0 18px 40px rgba(30,59,84,.14); }
+
+    .pic-box { position: relative; }
+    .pic { display: block; width: 100%; height: 180px; object-fit: cover; }
+
+    /* 角标：绝对定位钉在图片右上角 */
+    .badge {
+        position: absolute; top: 10px; right: 10px;
+        background: rgba(23,50,77,.82); color: #ffe18b;
+        font-size: 12px; padding: 3px 10px; border-radius: 999px; letter-spacing: .5px;
+    }
+    /* 文字条：绝对定位盖在图片底部，悬停时展开 */
+    .overlay {
+        position: absolute; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(to top, rgba(16,24,42,.92), rgba(16,24,42,.35));
+        color: #fff; padding: 12px 14px;
+        transition: padding .3s ease;
+    }
+    ul.cards li:hover .overlay { padding: 22px 14px; }
+    .overlay h3 { font-size: 16px; margin-bottom: 4px; }
+    .overlay p { font-size: 12.8px; color: rgba(255,255,255,.78); }
+
+    /* 下文的普通文档流部分 */
+    .txt { padding: 14px 16px 18px; }
+    .txt p { font-size: 13.5px; color: #5f7488; }
+    .txt span { display: inline-block; margin-top: 10px; font-size: 12px; color: #2364aa; border: 1px solid #cfe0ea; border-radius: 999px; padding: 2px 10px; }
+
+    /* 四种定位方式对照 */
+    .pos-demo { max-width: 900px; margin-top: 34px; background: #fffdf8; border: 1px solid #d9e2e8; padding: 20px 24px; }
+    .pos-demo h2 { font-size: 17px; color: #2364aa; margin-bottom: 12px; }
+    .pos-row { position: relative; height: 130px; background: #e9f0ef; border: 1px dashed #b9c8cf; margin-bottom: 14px; overflow: hidden; }
+    .pos-row span.tagline { position: absolute; top: 6px; left: 8px; font-size: 12px; color: #5f7488; }
+    .sq { width: 90px; height: 62px; border-radius: 5px; color: #fff; font-size: 12px; display: grid; place-items: center; text-align: center; padding: 4px; }
+    .s-static { position: static; background: #8a97a6; margin: 30px; }
+    .s-relative { position: relative; background: #2f8f6b; top: 20px; left: 20px; margin: 10px; }
+    .s-abs { position: absolute; background: #d97a3c; bottom: 12px; right: 12px; }
+    .s-fixed-note { position: absolute; background: #2364aa; top: 34px; left: 120px; }
+    footer { margin-top: 30px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第四周 · 上图下文绝对定位</h1>
+<p class="sub">核心口诀「<b>父相子绝</b>」：父元素设 <code>position: relative</code> 当参照物，子元素设 <code>position: absolute</code> 相对它定位，脱离文档流盖在上面。</p>
+
+<div class="note">
+    为什么要父元素先 relative？因为 <code>absolute</code> 会一路往上找「最近的已定位祖先」，找不到就以浏览器窗口为基准。
+    给卡片加 <code>position: relative</code> 就把定位范围锁在这张卡片里，角标和文字条才不会跑位。
+</div>
+
+<ul class="cards">
+    <li>
+        <div class="pic-box">
+            <img class="pic" src="img/1.jpg" alt="复兴号">
+            <span class="badge">绝对定位角标</span>
+            <div class="overlay">
+                <h3>复兴号动车组</h3>
+                <p>文字条用 absolute 钉在 bottom: 0，盖在图片上而不是占据下方空间。</p>
+            </div>
+        </div>
+        <div class="txt"><p>图片下方这部分仍在正常文档流里，卡片高度由它和图片共同撑开。</p><span>上图 · 下文</span></div>
+    </li>
+    <li>
+        <div class="pic-box">
+            <img class="pic" src="img/2.jpg" alt="C919">
+            <span class="badge">top + right</span>
+            <div class="overlay">
+                <h3>C919 大飞机</h3>
+                <p>四个偏移量 top / right / bottom / left 决定它贴在参照物的哪条边上。</p>
+            </div>
+        </div>
+        <div class="txt"><p>鼠标移入时 overlay 的 padding 变大，文字条向上展开——过渡交给 transition。</p><span>hover 展开</span></div>
+    </li>
+    <li>
+        <div class="pic-box">
+            <img class="pic" src="img/3.jpg" alt="天宫">
+            <span class="badge">脱离文档流</span>
+            <div class="overlay">
+                <h3>天宫空间站</h3>
+                <p>绝对定位元素不占位置，后面的内容会当它不存在直接顶上来。</p>
+            </div>
+        </div>
+        <div class="txt"><p>父元素加了 <code>overflow: hidden</code>，配合圆角让图片和文字条都不超出卡片边界。</p><span>overflow: hidden</span></div>
+    </li>
+    <li>
+        <div class="pic-box">
+            <img class="pic" src="img/4.jpg" alt="奋斗者号">
+            <span class="badge">层级 z-index</span>
+            <div class="overlay">
+                <h3>奋斗者号</h3>
+                <p>多个绝对定位元素重叠时，用 z-index 决定谁在上面（数值大的在上）。</p>
+            </div>
+        </div>
+        <div class="txt"><p>z-index 只对已定位元素生效，static 元素设了也没用。</p><span>z-index</span></div>
+    </li>
+    <li>
+        <div class="pic-box">
+            <img class="pic" src="img/5.jpg" alt="FAST">
+            <span class="badge">left: 0 right: 0</span>
+            <div class="overlay">
+                <h3>FAST 天眼</h3>
+                <p>同时写 left: 0 和 right: 0，元素宽度就自动拉满参照物，不用算百分比。</p>
+            </div>
+        </div>
+        <div class="txt"><p>同理 <code>top: 0; bottom: 0</code> 能拉满高度；四个都写 0 再配 margin: auto 可实现绝对居中。</p><span>双向拉伸</span></div>
+    </li>
+    <li>
+        <div class="pic-box">
+            <img class="pic" src="img/6.jpg" alt="爱达魔都号">
+            <span class="badge">flex + absolute</span>
+            <div class="overlay">
+                <h3>爱达·魔都号</h3>
+                <p>外层用 flex 排三列卡片，卡片内部用绝对定位做叠加，两者分工不冲突。</p>
+            </div>
+        </div>
+        <div class="txt"><p>这是实际项目里最常见的组合：flex/grid 管整体布局，absolute 管局部叠加。</p><span>组合用法</span></div>
+    </li>
+</ul>
+
+<div class="pos-demo">
+    <h2>四种 position 取值对照</h2>
+    <div class="pos-row">
+        <span class="tagline">static（默认）：top/left 无效，按正常文档流排列</span>
+        <div class="sq s-static">static</div>
+    </div>
+    <div class="pos-row">
+        <span class="tagline">relative：相对「自己原本的位置」偏移，原位仍被保留（占着坑）</span>
+        <div class="sq s-relative">relative<br>top:20 left:20</div>
+    </div>
+    <div class="pos-row">
+        <span class="tagline">absolute：相对最近的已定位祖先偏移，脱离文档流，不占位置</span>
+        <div class="sq s-abs">absolute<br>右下</div>
+    </div>
+    <div class="pos-row">
+        <span class="tagline">fixed：相对浏览器视口定位，滚动页面也不动（本页返回按钮就是）</span>
+        <div class="sq s-fixed-note">fixed 示意<br>（真 fixed 会浮在视口上）</div>
+    </div>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+</body>
+</html>

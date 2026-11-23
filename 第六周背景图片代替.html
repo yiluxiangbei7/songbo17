@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第六周 · 背景图片替代 | 宋博</title>
+<style>
+    /* 练习点：用 background-image 替代 <img> 标签装饰列表 */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+        font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+        background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px;
+    }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 28px; }
+
+    ul { list-style: none; max-width: 560px; }
+    li {
+        /* 关键：list-style 关掉，改用背景图当项目符号 */
+        padding: 10px 0 10px 34px;
+        background-image: url("img/dot.gif");
+        background-repeat: no-repeat;
+        background-position: 6px 16px;
+        background-size: 14px 14px;
+        border-bottom: 1px dashed #d9e2e8;
+        font-size: 15px;
+    }
+    li:last-child { border-bottom: 0; }
+
+    /* 对比组：不用背景图，直接用 ::before 画一个圆点 */
+    .alt li {
+        background-image: none; padding-left: 26px; position: relative;
+    }
+    .alt li::before {
+        content: ""; position: absolute; left: 4px; top: 19px;
+        width: 8px; height: 8px; border-radius: 50%; background: #f4c95d;
+    }
+
+    .panel { background: #fffdf8; border: 1px solid #d9e2e8; padding: 22px 24px; margin-bottom: 22px; }
+    .panel h2 { font-size: 17px; margin-bottom: 12px; color: #2364aa; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+    footer { margin-top: 34px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第六周 · 背景图片替代</h1>
+<p class="sub">练习用 <code>background-image</code> 装饰列表项目符号，替代默认的圆点与 <code>&lt;img&gt;</code> 标签。</p>
+
+<div class="panel">
+    <h2>写法一：background-image 做项目符号</h2>
+    <ul>
+        <li>先 <code>list-style: none</code> 去掉默认符号</li>
+        <li>给 <code>li</code> 留出 <code>padding-left</code> 作为图标位置</li>
+        <li><code>background-position</code> 精确对齐文字基线</li>
+        <li><code>background-size</code> 控制图标大小，避免原图过大</li>
+        <li><code>background-repeat: no-repeat</code> 防止平铺</li>
+    </ul>
+</div>
+
+<div class="panel alt">
+    <h2>写法二：伪元素画符号（不请求图片）</h2>
+    <ul>
+        <li>用 <code>::before</code> 生成内容，不额外发 HTTP 请求</li>
+        <li>圆点用 <code>border-radius: 50%</code> 直接画出来</li>
+        <li>颜色改 CSS 变量即可，不用换图</li>
+        <li>适合纯色几何符号的场景</li>
+    </ul>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+</body>
+</html>

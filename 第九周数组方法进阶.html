@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第九周 · 数组方法进阶 | 宋博</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 24px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+    .panel { max-width: 920px; background: #fffdf8; border: 1px solid #d9e2e8; padding: 20px 24px; margin-bottom: 20px; }
+    .panel h2 { font-size: 17px; color: #2364aa; margin-bottom: 10px; }
+    .panel p { font-size: 14px; color: #5f7488; margin-bottom: 8px; }
+    .console { background: #10182a; color: #dfe6f5; border-radius: 8px; padding: 14px 18px; font-family: Consolas, Menlo, monospace; font-size: 13.5px; line-height: 1.95; white-space: pre-wrap; margin-top: 10px; }
+    .ok { color: #7ee0a8; } .warn { color: #ffd98a; } .err { color: #ff9d94; }
+    button.act { background: #2364aa; color: #fff; border: 0; border-radius: 6px; padding: 9px 18px; font-size: 14px; cursor: pointer; margin: 4px 6px 4px 0; }
+    button.act:hover { background: #17476d; }
+    button.act.o { background: #d97a3c; }
+    footer { margin-top: 28px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第九周 · 数组方法进阶</h1>
+<p class="sub">高阶三件套 <code>map</code> / <code>filter</code> / <code>reduce</code>，加上 every、some、flat、解构与链式调用。</p>
+
+<div class="panel">
+    <h2>练习数据</h2>
+    <p>下面所有演示都基于同一份学生成绩数组，方便对照结果。</p>
+    <div class="console" id="dataBox"></div>
+</div>
+
+<div class="panel">
+    <h2>一、map —— 一对一转换</h2>
+    <p>遍历每一项，把回调返回的值收进新数组。<b>长度不变</b>，原数组不动。</p>
+    <button class="act" id="b1">运行 map</button>
+    <div class="console" id="o1"></div>
+</div>
+
+<div class="panel">
+    <h2>二、filter —— 按条件筛选</h2>
+    <p>回调返回 true 就保留该项。<b>长度可能变短</b>。</p>
+    <button class="act" id="b2">运行 filter</button>
+    <div class="console" id="o2"></div>
+</div>
+
+<div class="panel">
+    <h2>三、reduce —— 累积成一个值</h2>
+    <p><code>reduce(回调, 初始值)</code>，回调收 (累加器, 当前项, 索引, 原数组)。它是最灵活的一个——求和、分组、去重、扁平化都能做。</p>
+    <button class="act" id="b3">运行 reduce</button>
+    <div class="console" id="o3"></div>
+</div>
+
+<div class="panel">
+    <h2>四、every / some —— 整体判断</h2>
+    <button class="act" id="b4">运行判断</button>
+    <div class="console" id="o4"></div>
+</div>
+
+<div class="panel">
+    <h2>五、链式调用：filter → map → sort</h2>
+    <p>因为它们都返回新数组，可以一路点下去，写成一条数据流水线。</p>
+    <button class="act o" id="b5">运行链式调用</button>
+    <div class="console" id="o5"></div>
+</div>
+
+<div class="panel">
+    <h2>六、flat / flatMap / 解构</h2>
+    <button class="act" id="b6">运行进阶技巧</button>
+    <div class="console" id="o6"></div>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+
+<script>
+    var students = [
+        { name: '宋博', cls: '软工1班', score: 88 },
+        { name: '李明', cls: '软工1班', score: 72 },
+        { name: '王芳', cls: '软工2班', score: 95 },
+        { name: '张伟', cls: '软工2班', score: 58 },
+        { name: '刘洋', cls: '软工1班', score: 81 }
+    ];
+    document.getElementById('dataBox').textContent = 'var students = ' + JSON.stringify(students, null, 2);
+
+    function printer(id) {
+        var el = document.getElementById(id);
+        el.textContent = '';
+        return function (text, cls) {
+            var d = document.createElement('div');
+            if (cls) d.className = cls;
+            d.textContent = text;
+            el.appendChild(d);
+        };
+    }
+
+    // 一、map
+    document.getElementById('b1').onclick = function () {
+        var p = printer('o1');
+        p('取出所有姓名： students.map(s => s.name)');
+        p('  → ' + JSON.stringify(students.map(function (s) { return s.name; })), 'ok');
+        p('');
+        p('每人加 5 分： map(s => s.score + 5)');
+        p('  → ' + JSON.stringify(students.map(function (s) { return s.score + 5; })));
+        p('');
+        p('重塑对象结构（只留需要的字段）：');
+        var reshaped = students.map(function (s) { return { 姓名: s.name, 等级: s.score >= 85 ? '优' : (s.score >= 60 ? '合格' : '不合格') }; });
+        p('  → ' + JSON.stringify(reshaped), 'ok');
+        p('');
+        p('回调的第二个参数是索引，第三个是整个数组：');
+        p('  ' + JSON.stringify(students.map(function (s, i) { return (i + 1) + '.' + s.name; })));
+        p('');
+        p('map 的返回值一定和原数组等长。如果只是想遍历不收集结果，应该用 forEach。', 'warn');
+        p('map 不会改原数组： ' + JSON.stringify(students.map(function (s) { return s.name; })) + ' 之后 students 仍是 5 个对象。', 'ok');
+    };
+
+    // 二、filter
+    document.getElementById('b2').onclick = function () {
+        var p = printer('o2');
+        p('筛出及格的： filter(s => s.score >= 60)');
+        p('  → ' + JSON.stringify(students.filter(function (s) { return s.score >= 60; }).map(function (s) { return s.name + '(' + s.score + ')'; })), 'ok');
+        p('');
+        p('筛出软工1班： filter(s => s.cls === "软工1班")');
+        p('  → ' + JSON.stringify(students.filter(function (s) { return s.cls === '软工1班'; }).map(function (s) { return s.name; })));
+        p('');
+        p('组合条件： 软工2班 且 90 分以上');
+        p('  → ' + JSON.stringify(students.filter(function (s) { return s.cls === '软工2班' && s.score >= 90; }).map(function (s) { return s.name; })));
+        p('');
+        p('用 filter 去重： [1,2,2,3,3,3].filter((x,i,arr) => arr.indexOf(x) === i)');
+        p('  → ' + JSON.stringify([1, 2, 2, 3, 3, 3].filter(function (x, i, arr) { return arr.indexOf(x) === i; })), 'ok');
+        p('  原理：只保留「首次出现位置等于当前位置」的项。');
+        p('');
+        p('filter 也用于剔除空值： [1,null,2,undefined,3].filter(Boolean)');
+        p('  → ' + JSON.stringify([1, null, 2, undefined, 3].filter(Boolean)), 'ok');
+    };
+
+    // 三、reduce
+    document.getElementById('b3').onclick = function () {
+        var p = printer('o3');
+        var total = students.reduce(function (acc, s) { return acc + s.score; }, 0);
+        p('① 求总分： reduce((acc, s) => acc + s.score, 0)');
+        p('  → ' + total + '，平均分 = ' + (total / students.length).toFixed(1), 'ok');
+        p('  第二个参数 0 是初始值。不写初始值会用第 0 项当起点，空数组时直接报错，务必写。', 'warn');
+        p('');
+        var max = students.reduce(function (a, b) { return a.score > b.score ? a : b; });
+        p('② 找最高分： reduce((a,b) => a.score > b.score ? a : b)');
+        p('  → ' + max.name + '（' + max.score + '）');
+        p('');
+        var grouped = students.reduce(function (acc, s) {
+            (acc[s.cls] = acc[s.cls] || []).push(s.name);
+            return acc;
+        }, {});
+        p('③ 按班级分组： 累加器是一个对象');
+        p('  → ' + JSON.stringify(grouped), 'ok');
+        p('');
+        var counted = ['a', 'b', 'a', 'c', 'a', 'b'].reduce(function (acc, k) {
+            acc[k] = (acc[k] || 0) + 1;
+            return acc;
+        }, {});
+        p('④ 计数统计： ["a","b","a","c","a","b"]');
+        p('  → ' + JSON.stringify(counted), 'ok');
+        p('');
+        p('⑤ 数组扁平化： reduce((acc, cur) => acc.concat(cur), [])');
+        p('  → ' + JSON.stringify([[1, 2], [3, 4]].reduce(function (a, c) { return a.concat(c); }, [])));
+        p('');
+        p('reduce 的执行顺序：初始值 → 配第0项 → 结果配第1项 → …… 每轮的返回值成为下一轮的 acc。');
+    };
+
+    // 四、every / some
+    document.getElementById('b4').onclick = function () {
+        var p = printer('o4');
+        p('every(s => s.score >= 60)  → ' + students.every(function (s) { return s.score >= 60; }) + '   ← 全部满足才 true（有一个 58 分）', 'err');
+        p('some(s => s.score >= 90)   → ' + students.some(function (s) { return s.score >= 90; }) + '   ← 有一个满足就 true', 'ok');
+        p('every(s => s.score > 0)    → ' + students.every(function (s) { return s.score > 0; }));
+        p('some(s => s.score < 0)     → ' + students.some(function (s) { return s.score < 0; }));
+        p('');
+        p('两者都是「短路」的：every 遇到第一个 false 立即停止，some 遇到第一个 true 立即停止。');
+        p('空数组上：[].every(...) 返回 true，[].some(...) 返回 false —— 数学上的「空真」。', 'warn');
+        p('');
+        p('实际应用：表单校验用 every，「至少选中一项」用 some。');
+    };
+
+    // 五、链式
+    document.getElementById('b5').onclick = function () {
+        var p = printer('o5');
+        p('需求：软工1班中及格的学生，按分数从高到低排，只要「姓名 - 分数」的字符串。');
+        p('');
+        p('students');
+        p('  .filter(s => s.cls === "软工1班" && s.score >= 60)');
+        p('  .sort((a, b) => b.score - a.score)');
+        p('  .map(s => s.name + " - " + s.score + "分")');
+        p('');
+        var result = students
+            .filter(function (s) { return s.cls === '软工1班' && s.score >= 60; })
+            .sort(function (a, b) { return b.score - a.score; })
+            .map(function (s) { return s.name + ' - ' + s.score + '分'; });
+        p('结果 → ' + JSON.stringify(result), 'ok');
+        p('');
+        p('注意：sort 会改原数组。链式调用前先用 slice() 或 [...] 复制一份更安全：', 'err');
+        p('  students.slice().filter(...).sort(...)');
+        p('');
+        p('这种写法叫「声明式」——描述要什么结果，而不是写循环控制怎么遍历。比嵌套 for 好读得多。', 'ok');
+    };
+
+    // 六、flat / flatMap / 解构
+    document.getElementById('b6').onclick = function () {
+        var p = printer('o6');
+        p('flat(深度) —— 拍平嵌套数组：');
+        p('  [1,[2,[3,[4]]]].flat()    → ' + JSON.stringify([1, [2, [3, [4]]]].flat()) + '   （默认深度 1）');
+        p('  [1,[2,[3,[4]]]].flat(2)   → ' + JSON.stringify([1, [2, [3, [4]]]].flat(2)));
+        p('  [1,[2,[3,[4]]]].flat(Infinity) → ' + JSON.stringify([1, [2, [3, [4]]]].flat(Infinity)) + '   ← 一次拍到底', 'ok');
+        p('  flat 顺便会去掉空槽： [1,,3].flat() → ' + JSON.stringify([1, , 3].flat()));
+        p('');
+        p('flatMap —— 先 map 再 flat(1)，比分开写少一次遍历：');
+        var words = ['你好世界', '高级网页'];
+        p('  words.flatMap(w => w.split("")) → ' + JSON.stringify(words.flatMap(function (w) { return w.split(''); })));
+        p('  用 flatMap 也能过滤：返回 [] 就等于丢掉该项', 'ok');
+        p('  [1,2,3,4].flatMap(x => x % 2 ? [x] : []) → ' + JSON.stringify([1, 2, 3, 4].flatMap(function (x) { return x % 2 ? [x] : []; })));
+        p('');
+        p('数组解构：');
+        var arr = ['甲', '乙', '丙', '丁'];
+        var first = arr[0], second = arr[1], rest = arr.slice(2);
+        p('  const [first, second, ...rest] = arr;');
+        p('  first = ' + first + '，second = ' + second + '，rest = ' + JSON.stringify(rest));
+        p('  跳过某项： const [, , third] = arr → ' + arr[2]);
+        p('  交换变量： [a, b] = [b, a]，不用中间变量', 'ok');
+        p('');
+        p('扩展运算符 ... 复制与合并：');
+        p('  [...arr] = ' + JSON.stringify(Array.prototype.slice.call(arr)) + '（浅复制）');
+        p('  [...arr, "戊"] = ' + JSON.stringify(arr.concat(['戊'])));
+        p('  Math.max(...[3,9,1]) = ' + Math.max.apply(null, [3, 9, 1]), 'ok');
+    };
+</script>
+</body>
+</html>

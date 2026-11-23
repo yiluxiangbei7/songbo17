@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第九周 · DOM | 宋博</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 24px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+    .panel { max-width: 920px; background: #fffdf8; border: 1px solid #d9e2e8; padding: 20px 24px; margin-bottom: 20px; }
+    .panel h2 { font-size: 17px; color: #2364aa; margin-bottom: 10px; }
+    .panel p { font-size: 14px; color: #5f7488; margin-bottom: 8px; }
+    .console { background: #10182a; color: #dfe6f5; border-radius: 8px; padding: 14px 18px; font-family: Consolas, Menlo, monospace; font-size: 13.5px; line-height: 1.95; white-space: pre-wrap; margin-top: 10px; }
+    .ok { color: #7ee0a8; } .warn { color: #ffd98a; } .err { color: #ff9d94; }
+    button.act { background: #2364aa; color: #fff; border: 0; border-radius: 6px; padding: 9px 18px; font-size: 14px; cursor: pointer; margin: 4px 6px 4px 0; }
+    button.act:hover { background: #17476d; }
+    button.act.o { background: #d97a3c; } button.act.o:hover { background: #b9632c; }
+
+    /* 供操作的沙盒区域 */
+    #sandbox { border: 2px dashed #b9c8cf; border-radius: 8px; padding: 16px; margin-top: 12px; background: #fff; min-height: 90px; }
+    #sandbox .item { background: #e9f0ef; border-left: 4px solid #2364aa; padding: 8px 14px; margin-bottom: 8px; border-radius: 4px; font-size: 14px; }
+    #sandbox .item.hot { border-left-color: #d97a3c; background: #fdf3ea; }
+    .hl { background: #ffe18b; padding: 0 3px; border-radius: 3px; }
+    input[type=text] { padding: 9px 12px; border: 1px solid #b9c8cf; border-radius: 6px; font-size: 14px; width: 100%; max-width: 340px; }
+    footer { margin-top: 28px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第九周 · DOM</h1>
+<p class="sub">文档对象模型：查找节点、读写内容与属性、增删改节点、遍历父子兄弟关系、操作样式与类名。</p>
+
+<div class="panel">
+    <h2>一、查找元素的五种方式</h2>
+    <button class="act" id="b1">运行查找</button>
+    <div class="console" id="o1"></div>
+</div>
+
+<div class="panel">
+    <h2>二、读写内容：innerHTML / textContent / value</h2>
+    <input type="text" id="txtIn" value="宋博的 DOM 练习">
+    <button class="act" id="b2">写入内容</button>
+    <button class="act o" id="b2b">用 innerHTML 写标签</button>
+    <div id="sandbox">
+        <div class="item" id="demo1">这一行的内容会被替换</div>
+    </div>
+    <div class="console" id="o2"></div>
+</div>
+
+<div class="panel">
+    <h2>三、属性操作：getAttribute / setAttribute / dataset</h2>
+    <button class="act" id="b3">运行属性演示</button>
+    <div class="console" id="o3"></div>
+</div>
+
+<div class="panel">
+    <h2>四、创建、插入、删除节点</h2>
+    <button class="act" id="b4">新增一项</button>
+    <button class="act o" id="b4b">删除最后一项</button>
+    <button class="act" id="b4c">插到最前面</button>
+    <div id="sandbox">
+        <div class="item">初始项目 A</div>
+        <div class="item">初始项目 B</div>
+    </div>
+    <div class="console" id="o4"></div>
+</div>
+
+<div class="panel">
+    <h2>五、节点关系遍历</h2>
+    <button class="act" id="b5">运行关系遍历</button>
+    <div class="console" id="o5"></div>
+</div>
+
+<div class="panel">
+    <h2>六、样式与类名操作</h2>
+    <p>操作类名用 <code>classList</code>（add / remove / toggle / contains），比直接改 className 安全——不会覆盖已有的其他类。改单条样式用 <code>el.style.xxx</code>，注意 CSS 里的连字符属性在 JS 中要转小驼峰（<code>background-color</code> → <code>backgroundColor</code>）。</p>
+    <div id="sandbox">
+        <div class="item" id="styleTarget">点下面的按钮改变我的样式</div>
+    </div>
+    <button class="act" id="b6">加 hot 类</button>
+    <button class="act" id="b6b">toggle 切换</button>
+    <button class="act o" id="b6c">直接改 style</button>
+    <button class="act" id="b6d">重置</button>
+    <div class="console" id="o6"></div>
+</div>
+
+<div class="panel">
+    <h2>七、性能提示</h2>
+    <div class="console"><span class="err">1. 不要在循环里反复操作 DOM。每次读写都可能触发重排（reflow）或重绘（repaint）。</span>
+   做法：把 HTML 拼成字符串或用 DocumentFragment 攒起来，最后一次性 append。
+
+<span class="warn">2. 读布局属性会强制同步刷新。</span>
+   offsetTop / offsetWidth / scrollTop / getComputedStyle() 这些一读取，浏览器就得先把待处理的样式算完。
+   交替「写样式 → 读尺寸 → 再写样式」会造成布局抖动（layout thrashing），应该先集中读、再集中写。
+
+<span class="ok">3. 缓存查询结果。</span>
+   var box = document.getElementById('box'); 查一次存起来，别在循环里反复 getElementById。
+
+4. querySelector 比 getElementsByClassName 灵活，但 getElementsBy* 返回的是「实时集合」，
+   DOM 变了它会自动更新；querySelectorAll 返回的是静态快照。遍历时删除元素要小心实时集合的索引错位。</div>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+
+<script>
+    function printer(id) {
+        var el = document.getElementById(id);
+        el.textContent = '';
+        return function (text, cls) {
+            var d = document.createElement('div');
+            if (cls) d.className = cls;
+            d.textContent = text;
+            el.appendChild(d);
+        };
+    }
+
+    // 一、查找
+    document.getElementById('b1').onclick = function () {
+        var p = printer('o1');
+        p('getElementById("demo1")        → 找到 ' + (document.getElementById('demo1') ? '1 个元素' : 'null') + '，返回单个元素或 null');
+        p('getElementsByTagName("button") → ' + document.getElementsByTagName('button').length + ' 个，返回实时 HTMLCollection');
+        p('getElementsByClassName("item") → ' + document.getElementsByClassName('item').length + ' 个，也是实时集合');
+        p('querySelector(".item")         → 第一个匹配的元素，支持完整 CSS 选择器语法', 'ok');
+        p('querySelectorAll(".item")      → ' + document.querySelectorAll('.item').length + ' 个，返回静态 NodeList');
+        p('');
+        p('querySelector 能写复杂选择器： document.querySelector("#sandbox .item.hot")');
+        p('找不到时 querySelector 返回 null，querySelectorAll 返回空 NodeList（不是 null），所以后者可以直接 .forEach。', 'warn');
+        p('');
+        p('NodeList 转真数组： Array.from(list) 或 [...list]，这样才能用 map / filter。', 'ok');
+    };
+
+    // 二、内容读写
+    document.getElementById('b2').onclick = function () {
+        var p = printer('o2');
+        var v = document.getElementById('txtIn').value;
+        var t = document.getElementById('demo1');
+        t.textContent = v;
+        p('textContent 写入： "' + v + '"', 'ok');
+        p('textContent 只认纯文本，写进去的尖括号会被转义，不会被当成标签执行 —— 防 XSS 更安全。');
+    };
+    document.getElementById('b2b').onclick = function () {
+        var p = printer('o2');
+        var v = document.getElementById('txtIn').value;
+        var t = document.getElementById('demo1');
+        t.innerHTML = '<b>' + v + '</b> <span class="hl">这段是 innerHTML 写的</span>';
+        p('innerHTML 写入： ' + t.innerHTML, 'warn');
+        p('innerHTML 会解析 HTML 标签，能插入结构和样式。');
+        p('风险：如果内容来自用户输入，直接用 innerHTML 会被注入脚本。这种场合必须用 textContent，或先转义。', 'err');
+        p('');
+        p('表单元素不用这两个，用 .value 读写： document.getElementById("txtIn").value');
+    };
+
+    // 三、属性
+    document.getElementById('b3').onclick = function () {
+        var p = printer('o3');
+        var el = document.createElement('div');
+        el.setAttribute('data-id', '24001011017');
+        el.setAttribute('data-role', 'student');
+        el.setAttribute('title', '鼠标悬停提示');
+        p('setAttribute("data-id", "24001011017") 已设置');
+        p('getAttribute("data-id")   → ' + el.getAttribute('data-id'));
+        p('hasAttribute("data-role") → ' + el.hasAttribute('data-role'));
+        p('removeAttribute("title")  → 移除后 hasAttribute = ' + (el.removeAttribute('title'), el.hasAttribute('title')));
+        p('');
+        p('data-* 自定义属性可以用 dataset 更方便地访问（自动转小驼峰）：', 'ok');
+        p('  el.dataset.id   → ' + el.dataset.id);
+        p('  el.dataset.role → ' + el.dataset.role);
+        p('  data-user-name 对应 el.dataset.userName');
+        p('');
+        p('常用属性也能直接点出来： a.href、img.src、input.value、el.id、el.className');
+        p('class 是 JS 保留字，所以属性名叫 className 而不是 class。', 'warn');
+    };
+
+    // 四、增删节点
+    var sandboxes = document.querySelectorAll('#sandbox');
+    var box4 = sandboxes[1];
+    var counter4 = 0;
+    var p4 = printer('o4');
+    document.getElementById('b4').onclick = function () {
+        counter4++;
+        var div = document.createElement('div');      // 1. 创建
+        div.className = 'item';
+        div.textContent = '新增项目 ' + counter4;
+        box4.appendChild(div);                        // 2. 插到末尾
+        p4('createElement + appendChild → ' + div.textContent, 'ok');
+        p4('当前子元素数：' + box4.children.length);
+    };
+    document.getElementById('b4b').onclick = function () {
+        var last = box4.lastElementChild;
+        if (!last) { p4('已经没有子元素了', 'warn'); return; }
+        var txt = last.textContent;
+        last.remove();                                // 现代写法
+        p4('el.remove() 删掉了：' + txt, 'err');
+        p4('老写法是 parent.removeChild(child)，需要拿到父节点，麻烦一些。');
+        p4('当前子元素数：' + box4.children.length);
+    };
+    document.getElementById('b4c').onclick = function () {
+        counter4++;
+        var div = document.createElement('div');
+        div.className = 'item hot';
+        div.textContent = '插到最前的 ' + counter4;
+        box4.insertBefore(div, box4.firstElementChild);   // 插到指定节点前
+        p4('insertBefore(新节点, 参考节点) → 插到了最前面', 'ok');
+        p4('现代等价写法： box4.prepend(div) 插到开头，box4.append(div) 插到末尾。');
+        p4('兄弟插入： el.before(x) / el.after(x)');
+        p4('替换： parent.replaceChild(新, 旧)  或  旧.replaceWith(新)');
+    };
+
+    // 五、节点关系
+    document.getElementById('b5').onclick = function () {
+        var p = printer('o5');
+        var demo = document.getElementById('demo1');
+        p('以 #demo1 为起点：');
+        p('  parentNode            → <' + demo.parentNode.tagName.toLowerCase() + '>');
+        p('  parentElement         → 同上，但只认元素节点');
+        p('  nextElementSibling    → ' + (demo.nextElementSibling ? '<' + demo.nextElementSibling.tagName.toLowerCase() + '>' : 'null（没有下一个元素兄弟）'));
+        p('  previousElementSibling→ ' + (demo.previousElementSibling ? '有' : 'null'));
+        p('  children              → ' + demo.children.length + ' 个元素子节点');
+        p('  childElementCount     → ' + demo.childElementCount);
+        p('');
+        p('childNodes 与 children 的区别：', 'warn');
+        p('  childNodes 包含文本节点（换行、空格也算），children 只含元素节点。');
+        p('  同理 firstChild 可能是个空白文本节点，firstElementChild 才是第一个标签。');
+        p('  实际开发基本只用带 Element 的那一组，少踩坑。', 'ok');
+        p('');
+        p('closest(".panel") —— 向上查找最近的匹配祖先： ' + (demo.closest('.panel') ? '找到了 .panel' : 'null'));
+        p('这个在事件委托里很有用： e.target.closest("li") 可以从深层子元素一路找到目标行。', 'ok');
+    };
+
+    // 六、样式
+    var target = document.getElementById('styleTarget');
+    document.getElementById('b6').onclick = function () {
+        var p = printer('o6');
+        target.classList.add('hot');
+        p('classList.add("hot") → class 现在是 "' + target.className + '"', 'ok');
+        p('add 是追加，不会覆盖已有的 item 类。这是它比 className 好用的地方。');
+    };
+    document.getElementById('b6b').onclick = function () {
+        var p = printer('o6');
+        var has = target.classList.toggle('hot');
+        p('classList.toggle("hot") → 现在' + (has ? '有' : '没有') + '这个类', 'ok');
+        p('toggle 在就删、不在就加，做「展开/收起」「选中/取消」最方便。');
+        p('classList.contains("item") → ' + target.classList.contains('item'));
+        p('classList.remove("hot") 可以单独移除。');
+    };
+    document.getElementById('b6c').onclick = function () {
+        var p = printer('o6');
+        target.style.backgroundColor = '#2364aa';
+        target.style.color = '#fff';
+        target.style.padding = '14px 18px';
+        target.style.borderRadius = '8px';
+        p('直接改 style： target.style.backgroundColor = "#2364aa"', 'warn');
+        p('读回来： ' + target.style.backgroundColor);
+        p('');
+        p('style 只能读到「行内样式」，读不到 CSS 文件里的规则。');
+        p('要拿最终生效的样式得用 getComputedStyle(el).backgroundColor', 'ok');
+        p('当前计算值： ' + getComputedStyle(target).backgroundColor);
+        p('');
+        p('CSS 变量也能读写： el.style.setProperty("--accent", "#f00") / getPropertyValue("--accent")');
+    };
+    document.getElementById('b6d').onclick = function () {
+        var p = printer('o6');
+        target.removeAttribute('style');
+        target.className = 'item';
+        p('removeAttribute("style") 清掉所有行内样式，className 重置为 "item"。', 'ok');
+    };
+</script>
+</body>
+</html>

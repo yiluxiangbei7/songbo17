@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第八周 · JavaScript | 宋博</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 24px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+
+    .panel { max-width: 840px; background: #fffdf8; border: 1px solid #d9e2e8; padding: 20px 24px; margin-bottom: 20px; }
+    .panel h2 { font-size: 17px; color: #2364aa; margin-bottom: 10px; }
+    .panel p { font-size: 14px; color: #5f7488; margin-bottom: 8px; }
+
+    /* 模拟控制台输出区 */
+    .console { background: #10182a; color: #dfe6f5; border-radius: 8px; padding: 14px 18px; font-family: Consolas, Menlo, monospace; font-size: 13.5px; line-height: 1.9; white-space: pre-wrap; margin-top: 10px; }
+    .console .ok { color: #7ee0a8; }
+    .console .warn { color: #ffd98a; }
+
+    button.act { background: #2364aa; color: #fff; border: 0; border-radius: 6px; padding: 9px 18px; font-size: 14px; cursor: pointer; margin: 4px 6px 4px 0; }
+    button.act:hover { background: #17476d; }
+    button.act.o { background: #d97a3c; } button.act.o:hover { background: #b9632c; }
+
+    #writeDemo { min-height: 40px; border: 1px dashed #b9c8cf; border-radius: 6px; padding: 10px 14px; font-size: 14px; margin-top: 10px; background: #fff; }
+    footer { margin-top: 28px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第八周 · JavaScript</h1>
+<p class="sub">JavaScript 入门：脚本的引入方式、四种输出手段、注释、语句与字面量。</p>
+
+<div class="panel">
+    <h2>一、三种输出方式</h2>
+    <p>点按钮分别触发 <code>document.write</code>、<code>innerHTML</code>、<code>console.log</code> 与 <code>alert</code>。</p>
+    <button class="act" id="btnWrite">document.write</button>
+    <button class="act" id="btnInner">innerHTML</button>
+    <button class="act o" id="btnLog">console.log</button>
+    <button class="act o" id="btnAlert">alert</button>
+    <div id="writeDemo">（输出显示在这里）</div>
+    <div class="console" id="consoleBox">// console.log 的输出会打印在这里</div>
+</div>
+
+<div class="panel">
+    <h2>二、脚本的三种引入方式</h2>
+    <p><b>行内：</b><code>&lt;button onclick="..."&gt;</code> 直接写在标签属性里，只适合一句话，难维护。</p>
+    <p><b>内部：</b><code>&lt;script&gt;</code> 写在 HTML 里，本页用的就是这种。</p>
+    <p><b>外部：</b><code>&lt;script src="js/xxx.js"&gt;</code>，可被多个页面复用，正式项目首选。</p>
+    <p style="margin-top:8px;"><b>script 标签的位置：</b>放在 <code>&lt;/body&gt;</code> 前，或用 <code>defer</code> 属性。放 <code>&lt;head&gt;</code> 里且不加 defer，脚本执行时 DOM 还没解析完，<code>getElementById</code> 会拿到 <code>null</code>。</p>
+</div>
+
+<div class="panel">
+    <h2>三、注释与语句</h2>
+    <p><code>//</code> 单行注释，<code>/* */</code> 多行注释。注释是给人看的，也是给几个月后的自己看的。</p>
+    <p>每条语句以分号结尾（ASI 机制会自动补，但显式写更安全）。JS 区分大小写，<code>log</code> 和 <code>Log</code> 是两个东西。</p>
+    <div class="console"><span class="ok">// 这是本页脚本里真实存在的注释</span>
+var greeting = "你好，宋博";   <span class="warn">// 字面量：直接写出的值</span>
+console.log(greeting);</div>
+</div>
+
+<div class="panel">
+    <h2>四、字面量与表达式</h2>
+    <p><b>字面量</b>就是「照字面写出来的值」：数字 <code>100</code>、字符串 <code>"abc"</code>、布尔 <code>true</code>、数组 <code>[1,2]</code>、对象 <code>{a:1}</code>、函数 <code>function(){}</code>。</p>
+    <p><b>表达式</b>是能算出一个值的片段。下面这个按钮把几种表达式拼在一起求值。</p>
+    <button class="act" id="btnExpr">计算表达式</button>
+    <div class="console" id="exprBox"></div>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+
+<script>
+    // ---------- 一、输出方式 ----------
+    var box = document.getElementById('consoleBox');
+    function log(text, cls) {
+        var line = document.createElement('div');
+        if (cls) line.className = cls;
+        line.textContent = text;
+        box.appendChild(line);
+        console.log(text);
+    }
+
+    document.getElementById('btnWrite').onclick = function () {
+        // document.write 在页面加载完后调用会清空整个文档，所以这里只演示说明
+        log('document.write()：页面已加载完毕后再调用会覆盖整个文档，实际开发几乎不用它。', 'warn');
+    };
+    document.getElementById('btnInner').onclick = function () {
+        document.getElementById('writeDemo').innerHTML = '<b>innerHTML</b> 写入成功，时间：' + new Date().toLocaleTimeString();
+        log('innerHTML 把内容写进了 #writeDemo 那个框里。', 'ok');
+    };
+    document.getElementById('btnLog').onclick = function () {
+        log('console.log()：只在开发者工具里可见，是调试的主力手段。', 'ok');
+    };
+    document.getElementById('btnAlert').onclick = function () {
+        alert('alert() 会阻塞后续代码，直到用户点确定。');
+        log('alert 弹过了——注意它是阻塞式的，会卡住后面的代码。', 'warn');
+    };
+
+    // ---------- 四、表达式 ----------
+    document.getElementById('btnExpr').onclick = function () {
+        var out = document.getElementById('exprBox');
+        var a = 12, b = 5;
+        out.textContent =
+            '算术：  a + b = ' + (a + b) + '，a % b = ' + (a % b) + '\n' +
+            '字符串： "宋" + "博" = ' + ('宋' + '博') + '\n' +
+            '比较：  a > b 得到 ' + (a > b) + '\n' +
+            '逻辑：  (a > b) && (b > 0) 得到 ' + ((a > b) && (b > 0)) + '\n' +
+            '三元：  a % 2 === 0 ? "偶数" : "奇数" → ' + (a % 2 === 0 ? '偶数' : '奇数') + '\n' +
+            '注意：  "5" + 3 = ' + ('5' + 3) + '（字符串拼接），"5" - 3 = ' + ('5' - 3) + '（转成数字）';
+    };
+</script>
+</body>
+</html>

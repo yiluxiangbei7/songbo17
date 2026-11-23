@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第八周 · Promise 对象 | 宋博</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 24px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+
+    .panel { max-width: 880px; background: #fffdf8; border: 1px solid #d9e2e8; padding: 20px 24px; margin-bottom: 20px; }
+    .panel h2 { font-size: 17px; color: #2364aa; margin-bottom: 10px; }
+    .panel p { font-size: 14px; color: #5f7488; margin-bottom: 8px; }
+    .console { background: #10182a; color: #dfe6f5; border-radius: 8px; padding: 14px 18px; font-family: Consolas, Menlo, monospace; font-size: 13.5px; line-height: 1.95; white-space: pre-wrap; margin-top: 10px; min-height: 40px; }
+    .ok { color: #7ee0a8; } .warn { color: #ffd98a; } .err { color: #ff9d94; }
+    button.act { background: #2364aa; color: #fff; border: 0; border-radius: 6px; padding: 9px 18px; font-size: 14px; cursor: pointer; margin: 4px 6px 4px 0; }
+    button.act:hover { background: #17476d; }
+    button.act.o { background: #d97a3c; } button.act.o:hover { background: #b9632c; }
+    button.act:disabled { background: #a8b4c0; cursor: wait; }
+    footer { margin-top: 28px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第八周 · Promise 对象</h1>
+<p class="sub">Promise 解决「回调地狱」：把异步操作的三种状态（pending / fulfilled / rejected）显式表达出来，让流程可以链式书写。</p>
+
+<div class="panel">
+    <h2>一、基本用法与三种状态</h2>
+    <p>状态一旦从 pending 变为 fulfilled 或 rejected 就<b>不可逆</b>，之后再调用 resolve / reject 都无效。</p>
+    <button class="act" id="b1">成功 resolve</button>
+    <button class="act o" id="b2">失败 reject</button>
+    <div class="console" id="o1"></div>
+</div>
+
+<div class="panel">
+    <h2>二、链式调用：消灭回调地狱</h2>
+    <p>每个 <code>then</code> 返回一个新的 Promise，所以能一直往下接。<code>return</code> 普通值会被自动包装成 resolved 状态；<code>throw</code> 则跳到后面的 <code>catch</code>。</p>
+    <button class="act" id="b3">运行三步链式请求</button>
+    <div class="console" id="o2"></div>
+</div>
+
+<div class="panel">
+    <h2>三、错误处理 catch</h2>
+    <p><code>catch</code> 能捕获链上任意环节抛出的错误，包括 then 回调里同步抛出的异常。链尾放一个 catch 是最佳实践。</p>
+    <button class="act o" id="b4">运行会出错的链</button>
+    <div class="console" id="o3"></div>
+</div>
+
+<div class="panel">
+    <h2>四、并发控制：all / race / allSettled</h2>
+    <button class="act" id="b5">Promise.all（全成才成）</button>
+    <button class="act" id="b6">Promise.race（谁快用谁）</button>
+    <button class="act" id="b7">allSettled（不管成败都要结果）</button>
+    <div class="console" id="o4"></div>
+</div>
+
+<div class="panel">
+    <h2>五、async / await 语法糖</h2>
+    <p><code>await</code> 让异步代码读起来像同步代码，错误处理直接用 <code>try...catch</code>。注意 await 只能用在 async 函数内部。</p>
+    <button class="act" id="b8">运行 async 版本</button>
+    <div class="console" id="o5"></div>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+
+<script>
+    function printer(id) {
+        var el = document.getElementById(id);
+        el.textContent = '';
+        return function (text, cls) {
+            var d = document.createElement('div');
+            if (cls) d.className = cls;
+            d.textContent = text;
+            el.appendChild(d);
+        };
+    }
+    // 模拟一个异步任务：ms 毫秒后按概率成功或失败
+    function fakeRequest(label, ms, shouldFail) {
+        return new Promise(function (resolve, reject) {
+            setTimeout(function () {
+                if (shouldFail) reject(new Error(label + ' 请求失败'));
+                else resolve(label + ' 的数据');
+            }, ms);
+        });
+    }
+
+    // 一、基本状态
+    document.getElementById('b1').onclick = function () {
+        var p = printer('o1');
+        p('new Promise(...) 创建，当前状态 pending');
+        var pr = new Promise(function (resolve) {
+            setTimeout(function () { resolve('拿到了结果'); }, 600);
+        });
+        p('调用 .then() 注册成功回调，等待中…', 'warn');
+        pr.then(function (val) { p('状态 → fulfilled，值：' + val, 'ok'); });
+    };
+    document.getElementById('b2').onclick = function () {
+        var p = printer('o1');
+        var pr = new Promise(function (resolve, reject) {
+            setTimeout(function () { reject(new Error('网络超时')); }, 600);
+        });
+        p('等待中…', 'warn');
+        pr.catch(function (err) { p('状态 → rejected，原因：' + err.message, 'err'); });
+    };
+
+    // 二、链式
+    document.getElementById('b3').onclick = function () {
+        var btn = this; btn.disabled = true;
+        var p = printer('o2');
+        p('开始：三个请求依次执行，共约 1.5 秒');
+        fakeRequest('第一步·登录', 500).then(function (d) {
+            p('1) ' + d, 'ok');
+            return fakeRequest('第二步·取列表', 500);
+        }).then(function (d) {
+            p('2) ' + d, 'ok');
+            return fakeRequest('第三步·取详情', 500);
+        }).then(function (d) {
+            p('3) ' + d, 'ok');
+            p('全部完成 —— 每一步都缩进 0 层，没有嵌套金字塔。', 'warn');
+            btn.disabled = false;
+        });
+    };
+
+    // 三、catch
+    document.getElementById('b4').onclick = function () {
+        var p = printer('o3');
+        fakeRequest('A', 400).then(function (d) {
+            p('A 成功：' + d, 'ok');
+            return fakeRequest('B', 400, true);   // 这一步会失败
+        }).then(function (d) {
+            p('B 成功：' + d);   // 不会执行
+        }).catch(function (err) {
+            p('被 catch 捕获：' + err.message, 'err');
+            p('链上后续的 then 全部跳过，直接落到 catch。');
+            return '兜底数据';
+        }).then(function (d) {
+            p('catch 之后的 then 仍会执行：' + d, 'ok');
+        });
+    };
+
+    // 四、并发
+    function runAll(p, fn) {
+        return fn(p);
+    }
+    document.getElementById('b5').onclick = function () {
+        var p = printer('o4');
+        p('Promise.all([1s, 2s, 0.5s]) — 等最慢的那个');
+        var t = Date.now();
+        Promise.all([fakeRequest('甲', 1000), fakeRequest('乙', 2000), fakeRequest('丙', 500)])
+            .then(function (arr) { p('全部完成，耗时 ' + (Date.now() - t) + 'ms', 'ok'); p('结果数组：' + JSON.stringify(arr)); });
+    };
+    document.getElementById('b6').onclick = function () {
+        var p = printer('o4');
+        p('Promise.race([1s, 2s, 0.5s]) — 只要最快的');
+        var t = Date.now();
+        Promise.race([fakeRequest('甲', 1000), fakeRequest('乙', 2000), fakeRequest('丙', 500)])
+            .then(function (v) { p('最先完成的是：' + v + '，耗时 ' + (Date.now() - t) + 'ms', 'warn'); p('race 常用于给请求加超时限制。'); });
+    };
+    document.getElementById('b7').onclick = function () {
+        var p = printer('o4');
+        p('Promise.allSettled([成功, 失败, 成功])');
+        Promise.allSettled([fakeRequest('甲', 600), fakeRequest('乙', 600, true), fakeRequest('丙', 600)])
+            .then(function (arr) {
+                arr.forEach(function (r, i) {
+                    p(i + ') ' + r.status + ' → ' + (r.status === 'fulfilled' ? r.value : r.reason.message),
+                        r.status === 'fulfilled' ? 'ok' : 'err');
+                });
+                p('allSettled 永不 reject，适合「有几个算几个」的场景。', 'warn');
+            });
+    };
+
+    // 五、async/await
+    document.getElementById('b8').onclick = function () {
+        var p = printer('o5');
+        (async function () {
+            try {
+                p('async 函数开始执行');
+                var d1 = await fakeRequest('async·第一步', 500);
+                p('await 拿到：' + d1, 'ok');
+                var d2 = await fakeRequest('async·第二步', 500);
+                p('await 拿到：' + d2, 'ok');
+                p('读起来完全是同步的顺序，但没有阻塞主线程。', 'warn');
+            } catch (e) {
+                p('出错：' + e.message, 'err');
+            }
+        })();
+    };
+</script>
+</body>
+</html>

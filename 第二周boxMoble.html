@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第二周 · Box Model | 宋博</title>
+<style>
+    /* 练习点：content / padding / border / margin 四层，以及 box-sizing 的影响 */
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin: 0 0 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 26px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+
+    .panel { max-width: 900px; background: #fffdf8; border: 1px solid #d9e2e8; padding: 20px 24px; margin-bottom: 22px; }
+    .panel h2 { font-size: 17px; color: #2364aa; margin: 0 0 12px; }
+    .panel p { font-size: 14px; color: #5f7488; margin: 0 0 8px; }
+
+    /* 用四层嵌套盒子把盒模型画出来 */
+    .layer { padding: 20px; }
+    .l-margin { background: #f6d9b8; }
+    .l-border { background: #2364aa; padding: 12px; }
+    .l-padding { background: #bfe0c8; }
+    .l-content { background: #fffdf8; text-align: center; padding: 26px 12px; font-size: 14px; }
+    .lbl { font-size: 12px; letter-spacing: 1px; margin-bottom: 6px; font-weight: 700; }
+    .l-margin .lbl { color: #8a5a1e; }
+    .l-border .lbl { color: #dce9ee; }
+    .l-padding .lbl { color: #1f5c40; }
+
+    /* box-sizing 对比：两个盒子 width 都写 300px，实际占位却不同 */
+    .cmp { display: flex; gap: 20px; flex-wrap: wrap; }
+    .boxA, .boxB { width: 300px; padding: 20px; border: 10px solid #2364aa; background: #e9f0ef; font-size: 13.5px; }
+    .boxA { box-sizing: content-box; }   /* 默认：300 + 40 + 20 = 360 实际宽 */
+    .boxB { box-sizing: border-box; }    /* width 就是最终宽度 300 */
+
+    /* margin 塌陷与合并 */
+    .mt-wrap { background: #e9f0ef; padding: 1px 0; }
+    .mt-child { background: #d97a3c; color: #fff; margin: 24px; padding: 10px; font-size: 13.5px; border-radius: 4px; }
+    .mt-sib1 { background: #2364aa; color: #fff; margin-bottom: 30px; padding: 10px; font-size: 13.5px; border-radius: 4px; }
+    .mt-sib2 { background: #2f8f6b; color: #fff; margin-top: 20px; padding: 10px; font-size: 13.5px; border-radius: 4px; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    th, td { border: 1px solid #d9e2e8; padding: 8px 10px; text-align: left; }
+    th { background: #e9f0ef; }
+    footer { margin-top: 30px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第二周 · Box Model</h1>
+<p class="sub">CSS 盒模型：每个元素都是一个矩形盒子，由内到外分成 content、padding、border、margin 四层。</p>
+
+<div class="panel">
+    <h2>一、四层结构可视化</h2>
+    <div class="layer l-margin">
+        <div class="lbl">MARGIN 外边距 · 透明，盒子与外界的距离</div>
+        <div class="l-border">
+            <div class="lbl">BORDER 边框 · 看得见的一圈</div>
+            <div class="layer l-padding">
+                <div class="lbl">PADDING 内边距 · 内容与边框之间的呼吸空间</div>
+                <div class="l-content">CONTENT 内容区<br>文字和图片待在这里</div>
+            </div>
+        </div>
+    </div>
+    <p style="margin-top:12px;">Chrome 开发者工具的 Computed 面板里就是这张图，鼠标悬停页面元素时会用同样的四种颜色标出来。</p>
+</div>
+
+<div class="panel">
+    <h2>二、box-sizing：width 到底算不算 padding 和 border</h2>
+    <p>两个盒子都写了 <code>width: 300px; padding: 20px; border: 10px solid</code>，但实际占位不同。</p>
+    <div class="cmp">
+        <div class="boxA"><b>content-box（默认）</b><br>300 只是内容区宽度。<br>实际占位 = 300 + 20×2 + 10×2 = <b>360px</b></div>
+        <div class="boxB"><b>border-box</b><br>300 是内容+padding+border 的总宽。<br>实际占位就是 <b>300px</b>，内容区自动压缩</div>
+    </div>
+    <p style="margin-top:12px;">实际项目开头都会写一句通配重置，省得每次算宽度：</p>
+    <table>
+        <tr><th>写法</th><th>含义</th></tr>
+        <tr><td><code>*, *::before, *::after { box-sizing: border-box; }</code></td><td>全站统一用 border-box，width 即最终宽度</td></tr>
+    </table>
+</div>
+
+<div class="panel">
+    <h2>三、margin 的两个坑</h2>
+    <p><b>① 相邻兄弟的垂直 margin 会合并</b>：上块 <code>margin-bottom: 30px</code>，下块 <code>margin-top: 20px</code>，中间间距不是 50px 而是取大值 30px。</p>
+    <div class="mt-wrap" style="margin-bottom:16px;">
+        <div class="mt-sib1">我 margin-bottom: 30px</div>
+        <div class="mt-sib2">我 margin-top: 20px —— 中间实际只有 30px</div>
+    </div>
+    <p><b>② 父子 margin 塌陷</b>：子元素的 <code>margin-top</code> 会「穿透」父元素，把父元素一起推下去。给父元素加 <code>padding</code>、<code>border</code> 或 <code>overflow: hidden</code> 可以阻断。</p>
+    <div class="mt-wrap">
+        <div class="mt-child">我的 margin-top 被父元素的 1px padding 挡住了，所以没有塌陷出去</div>
+    </div>
+    <p style="margin-top:12px;">横向 margin 不会合并，只有垂直方向会。</p>
+</div>
+
+<div class="panel">
+    <h2>四、margin: 0 auto 水平居中</h2>
+    <p>块级元素设了宽度之后，左右 margin 写 auto 就能水平居中。这是最经典的居中手法，本页所有 <code>.panel</code> 都是这么排的。</p>
+    <p>垂直居中不能用 auto，得靠 flex（<code>align-items: center</code>）或绝对定位 + transform。</p>
+</div>
+
+<div class="panel">
+    <h2>五、行内元素的盒模型特殊性</h2>
+    <p><code>span</code> 这类行内元素：<b>横向</b>的 padding、border、margin 都生效；<b>纵向</b>的 padding 和 border 能画出来但不影响布局（不占位置，会盖住上下行），width 和 height 设了也没用。</p>
+    <p>解决办法是改成 <code>display: inline-block</code>，它同时具备行内的「不换行」和块级的「可设宽高、纵向 margin 生效」。</p>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第九周 · 数组方法 | 宋博</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 24px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+    .panel { max-width: 900px; background: #fffdf8; border: 1px solid #d9e2e8; padding: 20px 24px; margin-bottom: 20px; }
+    .panel h2 { font-size: 17px; color: #2364aa; margin-bottom: 10px; }
+    .panel p { font-size: 14px; color: #5f7488; margin-bottom: 8px; }
+    .console { background: #10182a; color: #dfe6f5; border-radius: 8px; padding: 14px 18px; font-family: Consolas, Menlo, monospace; font-size: 13.5px; line-height: 1.95; white-space: pre-wrap; margin-top: 10px; }
+    .ok { color: #7ee0a8; } .warn { color: #ffd98a; } .err { color: #ff9d94; }
+    button.act { background: #2364aa; color: #fff; border: 0; border-radius: 6px; padding: 9px 18px; font-size: 14px; cursor: pointer; margin: 4px 6px 4px 0; }
+    button.act:hover { background: #17476d; }
+    button.act.o { background: #d97a3c; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+    th, td { border: 1px solid #d9e2e8; padding: 7px 10px; text-align: left; }
+    th { background: #e9f0ef; }
+    td.yes { background: rgba(255,157,148,.18); font-weight: 700; color: #a83a30; }
+    td.no { color: #2f8f6b; }
+    footer { margin-top: 28px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第九周 · 数组方法</h1>
+<p class="sub">增删改查、遍历、排序。重点分清<b>哪些方法会改原数组</b>——这是数组最容易出错的地方。</p>
+
+<div class="panel">
+    <h2>是否修改原数组？一表看清</h2>
+    <table>
+        <tr><th>方法</th><th>作用</th><th>返回值</th><th>改原数组</th></tr>
+        <tr><td><code>push</code> / <code>pop</code></td><td>末尾增 / 删</td><td>新长度 / 被删元素</td><td class="yes">会</td></tr>
+        <tr><td><code>unshift</code> / <code>shift</code></td><td>开头增 / 删</td><td>新长度 / 被删元素</td><td class="yes">会</td></tr>
+        <tr><td><code>splice</code></td><td>任意位置增删改</td><td>被删元素组成的数组</td><td class="yes">会</td></tr>
+        <tr><td><code>sort</code> / <code>reverse</code></td><td>排序 / 反转</td><td>排序后的同一数组</td><td class="yes">会</td></tr>
+        <tr><td><code>fill</code> / <code>copyWithin</code></td><td>填充 / 内部复制</td><td>同一数组</td><td class="yes">会</td></tr>
+        <tr><td><code>slice</code></td><td>截取片段</td><td>新数组</td><td class="no">不会</td></tr>
+        <tr><td><code>concat</code></td><td>合并</td><td>新数组</td><td class="no">不会</td></tr>
+        <tr><td><code>map</code> / <code>filter</code> / <code>reduce</code></td><td>映射 / 过滤 / 累积</td><td>新值</td><td class="no">不会</td></tr>
+        <tr><td><code>join</code> / <code>toString</code></td><td>转字符串</td><td>字符串</td><td class="no">不会</td></tr>
+        <tr><td><code>indexOf</code> / <code>includes</code> / <code>find</code></td><td>查找</td><td>索引 / 布尔 / 元素</td><td class="no">不会</td></tr>
+        <tr><td><code>forEach</code></td><td>遍历</td><td>undefined</td><td class="no">不会（除非回调里改）</td></tr>
+    </table>
+</div>
+
+<div class="panel">
+    <h2>一、增删元素</h2>
+    <button class="act" id="b1">运行增删演示</button>
+    <div class="console" id="o1"></div>
+</div>
+
+<div class="panel">
+    <h2>二、splice 万能刀</h2>
+    <p><code>splice(起点, 删除个数, 插入的元素...)</code>，一个方法搞定插入、删除、替换。</p>
+    <button class="act" id="b2">运行 splice</button>
+    <div class="console" id="o2"></div>
+</div>
+
+<div class="panel">
+    <h2>三、遍历三兄弟 forEach / for...of / 传统 for</h2>
+    <button class="act" id="b3">运行遍历对比</button>
+    <div class="console" id="o3"></div>
+</div>
+
+<div class="panel">
+    <h2>四、查找</h2>
+    <button class="act" id="b4">运行查找方法</button>
+    <div class="console" id="o4"></div>
+</div>
+
+<div class="panel">
+    <h2>五、排序 sort 的坑</h2>
+    <button class="act o" id="b5">运行排序演示</button>
+    <div class="console" id="o5"></div>
+</div>
+
+<div class="panel">
+    <h2>六、slice / concat / join</h2>
+    <button class="act" id="b6">运行不改原数组的方法</button>
+    <div class="console" id="o6"></div>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+
+<script>
+    function printer(id) {
+        var el = document.getElementById(id);
+        el.textContent = '';
+        return function (text, cls) {
+            var d = document.createElement('div');
+            if (cls) d.className = cls;
+            d.textContent = text;
+            el.appendChild(d);
+        };
+    }
+    var show = function (arr) { return JSON.stringify(arr); };
+
+    // 一、增删
+    document.getElementById('b1').onclick = function () {
+        var p = printer('o1');
+        var a = ['HTML', 'CSS', 'JS'];
+        p('初始数组： ' + show(a));
+        p('push("DOM")     → ' + a.push('DOM') + '（返回新长度）  数组 = ' + show(a), 'err');
+        p('pop()           → "' + a.pop() + '"（返回被删的）    数组 = ' + show(a), 'err');
+        p('unshift("基础") → ' + a.unshift('基础') + '              数组 = ' + show(a), 'err');
+        p('shift()         → "' + a.shift() + '"                数组 = ' + show(a), 'err');
+        p('');
+        p('标红的方法都会直接改动原数组，赋值给别的变量也没用——它们是同一个引用。', 'warn');
+        p('想保留原数组，先复制一份： var b = a.slice();  或  var b = [...a];', 'ok');
+    };
+
+    // 二、splice
+    document.getElementById('b2').onclick = function () {
+        var p = printer('o2');
+        var a = [1, 2, 3, 4, 5];
+        p('初始： ' + show(a));
+        var del = a.splice(1, 2);
+        p('删除  splice(1, 2)          → 被删 ' + show(del) + '，剩下 ' + show(a), 'err');
+        a = [1, 2, 3, 4, 5];
+        a.splice(2, 0, 'a', 'b');
+        p('插入  splice(2, 0, "a","b") → ' + show(a) + '   ← 第二个参数给 0 就是纯插入', 'err');
+        a = [1, 2, 3, 4, 5];
+        a.splice(1, 1, 'X');
+        p('替换  splice(1, 1, "X")     → ' + show(a) + '   ← 删一个再插一个', 'err');
+        a = [1, 2, 3, 4, 5];
+        p('负数起点 splice(-2)         → 删掉 ' + show(a.splice(-2)) + '，剩下 ' + show(a));
+        p('');
+        p('对比 slice：slice 只是「读」，splice 是「改」。名字差一个字母，行为完全相反。', 'warn');
+    };
+
+    // 三、遍历
+    document.getElementById('b3').onclick = function () {
+        var p = printer('o3');
+        var a = ['甲', '乙', '丙'];
+        p('forEach —— 回调收到 (元素, 索引, 整个数组)：');
+        var collected = [];
+        a.forEach(function (item, i, arr) { collected.push(i + ':' + item); });
+        p('  结果 ' + show(collected));
+        p('  forEach 没有返回值，也不能用 break 中断（只能 return 跳过当次）', 'warn');
+        p('');
+        p('for...of —— 直接拿元素，可以用 break / continue / return：');
+        var out = [];
+        for (var v of a) { out.push(v); if (v === '乙') { out.push('(break)'); break; } }
+        p('  结果 ' + show(out), 'ok');
+        p('');
+        p('传统 for —— 唯一能拿到索引又能中断的写法，性能也最好：');
+        var out2 = [];
+        for (var i = 0; i < a.length; i++) { out2.push(i + '→' + a[i]); }
+        p('  结果 ' + show(out2));
+        p('');
+        p('for...in 遍历的是「键」，用在数组上会拿到字符串索引，还会带出原型链上的属性，不推荐。', 'err');
+    };
+
+    // 四、查找
+    document.getElementById('b4').onclick = function () {
+        var p = printer('o4');
+        var nums = [5, 12, 8, 130, 44];
+        p('数组： ' + show(nums));
+        p('indexOf(8)      = ' + nums.indexOf(8) + '   （没有则 -1）');
+        p('includes(12)    = ' + nums.includes(12) + '   ← 判断存在性用它最直观', 'ok');
+        p('includes(NaN)   = ' + [NaN].includes(NaN) + '   ← indexOf 在这里失效，includes 能正确识别', 'ok');
+        p('find(x => x>10) = ' + nums.find(function (x) { return x > 10; }) + '   （返回第一个满足条件的元素）');
+        p('findIndex(...)  = ' + nums.findIndex(function (x) { return x > 10; }) + '   （返回它的索引）');
+        p('lastIndexOf(8)  = ' + nums.lastIndexOf(8));
+        p('');
+        var students = [{ name: '宋博', score: 88 }, { name: '同学甲', score: 72 }];
+        p('对象数组用 find 按属性查：');
+        var hit = students.find(function (s) { return s.name === '宋博'; });
+        p('  ' + JSON.stringify(hit), 'ok');
+    };
+
+    // 五、排序
+    document.getElementById('b5').onclick = function () {
+        var p = printer('o5');
+        var nums = [10, 9, 100, 1];
+        p('原数组： ' + show(nums));
+        var sorted = nums.slice().sort();
+        p('sort() 不传参数     → ' + show(sorted), 'err');
+        p('为什么 100 排在 9 前面？因为默认按「字符串 Unicode 顺序」比较，"100" < "9"。');
+        p('');
+        p('正确写法 —— 传比较函数：');
+        p('  升序 sort((a,b) => a - b) → ' + show(nums.slice().sort(function (a, b) { return a - b; })), 'ok');
+        p('  降序 sort((a,b) => b - a) → ' + show(nums.slice().sort(function (a, b) { return b - a; })), 'ok');
+        p('');
+        var words = ['banana', 'Apple', 'cherry'];
+        p('字符串排序用 localeCompare： ' + show(words.slice().sort(function (a, b) { return a.localeCompare(b); })));
+        p('');
+        var stus = [{ n: '甲', s: 72 }, { n: '乙', s: 95 }, { n: '丙', s: 81 }];
+        p('对象数组按属性排序（按分数降序）：');
+        p('  ' + JSON.stringify(stus.slice().sort(function (a, b) { return b.s - a.s; })), 'ok');
+        p('');
+        p('reverse() 也会改原数组： ' + show([1, 2, 3].reverse()), 'err');
+    };
+
+    // 六、不改原数组的
+    document.getElementById('b6').onclick = function () {
+        var p = printer('o6');
+        var a = [1, 2, 3, 4, 5];
+        p('原数组： ' + show(a));
+        p('slice(1, 3)   → ' + show(a.slice(1, 3)) + '   （含头不含尾）');
+        p('slice(-2)     → ' + show(a.slice(-2)) + '   （取末尾两个）');
+        p('slice()       → ' + show(a.slice()) + '   ← 不传参就是浅复制', 'ok');
+        p('原数组没变    → ' + show(a), 'ok');
+        p('');
+        p('concat([6,7]) → ' + show(a.concat([6, 7])));
+        p('展开运算符     → ' + show([...a, 6, 7]) + '   ← 更现代的写法', 'ok');
+        p('');
+        p('join("-")     → "' + a.join('-') + '"');
+        p('join("")      → "' + a.join('') + '"');
+        p('toString()    → "' + a.toString() + '"   （等价于 join(",")）');
+        p('');
+        p('Array.isArray(a) = ' + Array.isArray(a) + '   ← 判断数组的可靠方法（typeof 会返回 object）', 'warn');
+        p('Array.from("abc") = ' + show(Array.from('abc')) + '   ← 把类数组/可迭代对象转成真数组');
+    };
+</script>
+</body>
+</html>

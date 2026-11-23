@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第四周 · Flex 自适应宽度 | 宋博</title>
+<style>
+    /* 练习点：flex-grow / flex-shrink / flex-basis 三值简写，做真正自适应的栏宽 */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 26px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+
+    .demo { max-width: 900px; margin-bottom: 24px; background: #fffdf8; border: 1px solid #d9e2e8; padding: 18px 20px; }
+    .demo h2 { font-size: 15.5px; color: #2364aa; margin-bottom: 3px; }
+    .demo .tip { font-size: 13px; color: #5f7488; margin-bottom: 12px; }
+    .row { display: flex; gap: 10px; }
+    .cell { padding: 18px 12px; border-radius: 6px; color: #fff; font-size: 13px; text-align: center; }
+    .b { background: #2364aa; } .o { background: #d97a3c; } .g { background: #2f8f6b; } .y { background: #b28a28; }
+
+    /* 侧栏定宽，主区吃掉全部剩余宽度 —— 最常见的后台布局 */
+    .fixed-side .cell:nth-child(1) { flex: 0 0 200px; }
+    .fixed-side .cell:nth-child(2) { flex: 1 1 auto; }
+
+    /* 按 2:1:1 比例分配 */
+    .ratio .b { flex: 2 1 0; } .ratio .o { flex: 1 1 0; } .ratio .g { flex: 1 1 0; }
+
+    /* 允许收缩：内容多时自动压缩，不会撑破容器 */
+    .shrink .cell { flex: 1 1 120px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* 内容自适应 + 换行 */
+    .auto .cell { flex: 1 1 180px; }
+    .auto { flex-wrap: wrap; }
+
+    footer { margin-top: 30px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第四周 · Flex 自适应宽度</h1>
+<p class="sub">重点搞清 <code>flex: grow shrink basis</code> 三个值分别管什么，把浏览器窗口拖宽拖窄看效果。</p>
+
+<div class="demo">
+    <h2>定宽侧栏 + 自适应主区</h2>
+    <p class="tip">侧栏 <code>flex: 0 0 200px</code> 死死占住 200px；主区 <code>flex: 1 1 auto</code> 吃掉所有剩余空间。拖动窗口只有主区在变。</p>
+    <div class="row fixed-side"><div class="cell b">侧栏 200px 固定</div><div class="cell o">主区 flex: 1 1 auto（自适应）</div></div>
+</div>
+
+<div class="demo">
+    <h2>按比例分配 2 : 1 : 1</h2>
+    <p class="tip">三块都设 <code>flex-basis: 0</code>，宽度完全由 <code>flex-grow</code> 决定，于是严格按 2:1:1 分。若 basis 不为 0，比例会被内容起始宽度干扰。</p>
+    <div class="row ratio"><div class="cell b">grow 2</div><div class="cell o">grow 1</div><div class="cell g">grow 1</div></div>
+</div>
+
+<div class="demo">
+    <h2>允许收缩 + 文字省略</h2>
+    <p class="tip"><code>flex-shrink: 1</code> 让块在空间不足时被压缩。配 <code>min-width: 0</code> 才能让 <code>text-overflow: ellipsis</code> 生效——flex 子项默认 <code>min-width: auto</code>，会被内容顶住不肯缩。</p>
+    <div class="row shrink"><div class="cell b">这是一段很长的说明文字用来演示省略号效果</div><div class="cell o">第二块同样很长的一段文字</div><div class="cell g">第三块也是长文字</div><div class="cell y">第四块</div></div>
+</div>
+
+<div class="demo">
+    <h2>内容自适应 + 自动换行</h2>
+    <p class="tip">每块 <code>flex: 1 1 180px</code>：以 180px 为基准，能长能缩；父级加 <code>flex-wrap: wrap</code>，窄屏时自动堆到下一行，不需要写媒体查询。</p>
+    <div class="row auto"><div class="cell b">A</div><div class="cell o">B</div><div class="cell g">C</div><div class="cell y">D</div><div class="cell b">E</div></div>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+</body>
+</html>

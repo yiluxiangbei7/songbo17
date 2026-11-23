@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第八周 · 媒体查询 | 宋博</title>
+<style>
+    /* 练习点：@media 断点切换布局，移动优先写法 */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 24px 16px; }
+    .back { display: inline-block; margin-bottom: 18px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 24px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 20px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+
+    /* 当前断点指示条：内容随媒体查询变化，一眼看出命中了哪一档 */
+    .badge { display: inline-block; padding: 7px 16px; border-radius: 999px; font-size: 13.5px; font-weight: 700; color: #fff; background: #d97a3c; margin-bottom: 22px; }
+    .badge::after { content: "手机 (<600px) · 1 列"; }
+
+    /* 移动优先：默认单列 */
+    .grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .cell { background: #fffdf8; border: 1px solid #d9e2e8; border-left: 4px solid #2364aa; padding: 16px 18px; border-radius: 6px; }
+    .cell h3 { font-size: 15.5px; margin-bottom: 5px; }
+    .cell p { font-size: 13.5px; color: #5f7488; }
+
+    /* 导航：窄屏竖排 */
+    .menu { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+    .menu a { background: #e9f0ef; padding: 10px 14px; border-radius: 6px; font-size: 14px; color: #17324d; text-decoration: none; text-align: center; }
+    .menu a:hover { background: #2364aa; color: #fff; }
+
+    /* ---- 平板 ≥600px：2 列 ---- */
+    @media (min-width: 600px) {
+        body { padding: 32px 20px; }
+        .badge { background: #2f8f6b; }
+        .badge::after { content: "平板 (600–899px) · 2 列"; }
+        .grid { grid-template-columns: repeat(2, 1fr); }
+        .menu { flex-direction: row; flex-wrap: wrap; }
+        .menu a { flex: 1 1 auto; }
+    }
+
+    /* ---- 桌面 ≥900px：3 列 ---- */
+    @media (min-width: 900px) {
+        .badge { background: #2364aa; }
+        .badge::after { content: "桌面 (900–1199px) · 3 列"; }
+        .grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* ---- 大屏 ≥1200px：4 列 ---- */
+    @media (min-width: 1200px) {
+        .badge { background: #b28a28; }
+        .badge::after { content: "大屏 (≥1200px) · 4 列"; }
+        .grid { grid-template-columns: repeat(4, 1fr); }
+        h1 { font-size: 30px; }
+    }
+
+    /* ---- 按方向：竖屏时给提示 ---- */
+    .orient { display: none; }
+    @media (orientation: portrait) {
+        .orient { display: block; background: rgba(244,201,93,.25); border-left: 4px solid #f4c95d; padding: 12px 16px; font-size: 13.5px; color: #5f7488; margin-bottom: 22px; border-radius: 4px; }
+    }
+
+    /* ---- 尊重用户的减少动效偏好 ---- */
+    @media (prefers-reduced-motion: reduce) {
+        * { transition: none !important; animation: none !important; }
+    }
+
+    footer { margin-top: 28px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第八周 · 媒体查询</h1>
+<p class="sub">拖动浏览器窗口改变宽度，下面的列数、色条文字都会跟着变。写法是<b>移动优先</b>：默认给最小屏，再用 <code>min-width</code> 逐级增强。</p>
+
+<span class="badge"></span>
+
+<div class="orient">当前是竖屏（<code>orientation: portrait</code>），这段提示只在竖屏下出现。</div>
+
+<nav class="menu">
+    <a href="#">首页</a><a href="#">作品</a><a href="#">笔记</a><a href="#">关于</a>
+</nav>
+
+<div class="grid">
+    <div class="cell"><h3>断点 600px</h3><p>手机到平板，1 列变 2 列，导航从竖排改横排。</p></div>
+    <div class="cell"><h3>断点 900px</h3><p>平板到桌面，2 列变 3 列。</p></div>
+    <div class="cell"><h3>断点 1200px</h3><p>大屏，3 列变 4 列，标题字号也放大。</p></div>
+    <div class="cell"><h3>移动优先</h3><p>基础样式写给小屏，媒体查询只做增量覆盖，代码更少。</p></div>
+    <div class="cell"><h3>min-width 顺序</h3><p>从小到大写，后写的覆盖前面的；反过来写会被小屏规则盖掉。</p></div>
+    <div class="cell"><h3>orientation</h3><p>按横竖屏切换，与宽度无关。</p></div>
+    <div class="cell"><h3>prefers-reduced-motion</h3><p>系统开启「减少动态效果」时关掉全部动画。</p></div>
+    <div class="cell"><h3>viewport 必写</h3><p>没有 <code>meta viewport</code>，手机会按 980px 渲染，媒体查询全部失效。</p></div>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第八周 · 变量提升与数值处理 | 宋博</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f5f1e9; color: #17324d; line-height: 1.7; padding: 32px 20px; }
+    .back { display: inline-block; margin-bottom: 22px; color: #2364aa; font-size: 14px; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .sub { color: #5f7488; font-size: 14px; margin-bottom: 24px; }
+    code { background: #eef3f7; padding: 1px 6px; border-radius: 4px; font-size: 13px; }
+
+    .panel { max-width: 880px; background: #fffdf8; border: 1px solid #d9e2e8; padding: 20px 24px; margin-bottom: 20px; }
+    .panel h2 { font-size: 17px; color: #2364aa; margin-bottom: 10px; }
+    .panel p { font-size: 14px; color: #5f7488; margin-bottom: 8px; }
+    .console { background: #10182a; color: #dfe6f5; border-radius: 8px; padding: 14px 18px; font-family: Consolas, Menlo, monospace; font-size: 13.5px; line-height: 1.95; white-space: pre-wrap; margin-top: 10px; }
+    .ok { color: #7ee0a8; } .warn { color: #ffd98a; } .err { color: #ff9d94; }
+    button.act { background: #2364aa; color: #fff; border: 0; border-radius: 6px; padding: 9px 18px; font-size: 14px; cursor: pointer; margin: 4px 6px 4px 0; }
+    button.act:hover { background: #17476d; }
+    button.act.o { background: #d97a3c; } button.act.o:hover { background: #b9632c; }
+
+    .try { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+    input[type=text] { flex: 1 1 200px; padding: 9px 12px; border: 1px solid #b9c8cf; border-radius: 6px; font-size: 14px; background: #fff; }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin-top: 10px; }
+    th, td { border: 1px solid #d9e2e8; padding: 7px 10px; text-align: left; }
+    th { background: #e9f0ef; }
+    footer { margin-top: 28px; color: #5f7488; font-size: 13px; }
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← 返回作品目录</a>
+<h1>第八周 · 变量提升与数值处理</h1>
+<p class="sub">上半部分讲 <code>hoisting</code> 提升机制，下半部分讲字符串转数字、精度丢失与 <code>Math</code> 取整。</p>
+
+<div class="panel">
+    <h2>一、变量提升 hoisting</h2>
+    <p>JS 在执行前会把 <code>var</code> 声明和函数声明「搬」到作用域顶部。所以可以在声明前访问 <code>var</code> 变量（得到 undefined），但不能访问 <code>let</code>/<code>const</code>（暂时性死区，直接报错）。</p>
+    <button class="act" id="b1">运行提升演示</button>
+    <div class="console" id="o1"></div>
+</div>
+
+<div class="panel">
+    <h2>二、字符串转数字</h2>
+    <p>三种转换方式各有脾气，输入内容试试它们的差别。</p>
+    <div class="try">
+        <input type="text" id="numInput" value="3.14159" placeholder="输入一个值，如 42 / 3.14 / 12px / abc / 空">
+        <button class="act o" id="b2">转换</button>
+    </div>
+    <div class="console" id="o2"></div>
+</div>
+
+<div class="panel">
+    <h2>三、精度丢失与取整</h2>
+    <button class="act" id="b3">运行数值处理</button>
+    <div class="console" id="o3"></div>
+    <table>
+        <tr><th>方法</th><th>行为</th><th>对 -3.7</th><th>对 3.2</th></tr>
+        <tr><td><code>Math.floor</code></td><td>向下取整（往小的方向）</td><td>-4</td><td>3</td></tr>
+        <tr><td><code>Math.ceil</code></td><td>向上取整（往大的方向）</td><td>-3</td><td>4</td></tr>
+        <tr><td><code>Math.round</code></td><td>四舍五入</td><td>-4</td><td>3</td></tr>
+        <tr><td><code>Math.trunc</code></td><td>直接砍掉小数部分</td><td>-3</td><td>3</td></tr>
+        <tr><td><code>parseInt</code></td><td>解析到第一个非数字字符为止</td><td>-3</td><td>3</td></tr>
+        <tr><td><code>toFixed(2)</code></td><td>保留两位小数，返回<b>字符串</b></td><td>"-3.70"</td><td>"3.20"</td></tr>
+    </table>
+</div>
+
+<div class="panel">
+    <h2>四、Math 常用方法</h2>
+    <button class="act" id="b4">生成随机数与极值</button>
+    <div class="console" id="o4"></div>
+</div>
+
+<footer>宋博 · 24001011017 · 《高级网页设计》课堂实践</footer>
+
+<script>
+    function printer(id) {
+        var el = document.getElementById(id);
+        el.textContent = '';
+        return function (text, cls) {
+            var d = document.createElement('div');
+            if (cls) d.className = cls;
+            d.textContent = text;
+            el.appendChild(d);
+        };
+    }
+
+    // 一、提升
+    document.getElementById('b1').onclick = function () {
+        var p = printer('o1');
+        p('代码顺序是「先打印 a，再声明 a」：');
+        p('  console.log(a);  →  ' + a, 'warn');
+        p('  var a = 10;');
+        p('  console.log(a);  →  ' + a, 'ok');
+        p('');
+        p('引擎实际执行的是：');
+        p('  var a;           // 声明被提到顶部');
+        p('  console.log(a);  // undefined');
+        p('  a = 10;          // 赋值留在原地');
+        p('  console.log(a);  // 10');
+        p('');
+        p('函数声明整体提升，可以在定义前调用：', 'ok');
+        p('  sayHi() → ' + sayHi());
+        p('');
+        p('但函数表达式只提升变量名，不提升函数体：', 'err');
+        p('  var fn = function(){}; 在赋值前调用 fn() 会报 "fn is not a function"');
+        p('let / const 也提升，但在声明语句之前访问会抛 ReferenceError（暂时性死区 TDZ）。', 'warn');
+
+        function sayHi() { return '你好，宋博'; }
+    };
+    var a = 10;
+
+    // 二、字符串转数字
+    document.getElementById('b2').onclick = function () {
+        var p = printer('o2');
+        var s = document.getElementById('numInput').value;
+        p('输入原值： "' + s + '"  （typeof = ' + typeof s + '）');
+        p('');
+        p('Number("' + s + '")     → ' + Number(s) + '   ← 整体必须都是数字，否则 NaN');
+        p('parseInt("' + s + '")   → ' + parseInt(s) + '   ← 从头解析，遇到非数字就停');
+        p('parseFloat("' + s + '") → ' + parseFloat(s) + '   ← 同上，但保留小数');
+        p('+"'+s+'"（一元加号）   → ' + (+s) + '   ← 等价于 Number()，最简洁');
+        p('');
+        p('isNaN 判断：isNaN(' + Number(s) + ') → ' + isNaN(Number(s)));
+        p('Number.isNaN 更严格，不会先做类型转换：Number.isNaN("' + s + '") → ' + Number.isNaN(s), 'ok');
+        p('');
+        p('parseInt 的第二个参数是进制：parseInt("1010", 2) = ' + parseInt('1010', 2), 'warn');
+        p('parseInt("18px") = ' + parseInt('18px') + '  ← 能取出数字，但 Number("18px") 是 NaN');
+    };
+
+    // 三、数值处理
+    document.getElementById('b3').onclick = function () {
+        var p = printer('o3');
+        p('经典精度问题：0.1 + 0.2 = ' + (0.1 + 0.2), 'err');
+        p('因为 JS 用 IEEE 754 双精度浮点数存小数，0.1 在二进制里是无限循环的。');
+        p('判断相等不能直接 ==，要用差值：Math.abs(0.1+0.2 - 0.3) < Number.EPSILON → ' + (Math.abs(0.1 + 0.2 - 0.3) < Number.EPSILON), 'ok');
+        p('金额计算常用办法：先转成整数分再算 → (0.1*10 + 0.2*10)/10 = ' + ((0.1 * 10 + 0.2 * 10) / 10));
+        p('');
+        p('toFixed 返回字符串，不是数字：(3.14159).toFixed(2) = "' + (3.14159).toFixed(2) + '"  typeof = ' + typeof (3.14159).toFixed(2), 'warn');
+        p('需要数字就再转一次：Number((3.14159).toFixed(2)) = ' + Number((3.14159).toFixed(2)));
+        p('');
+        p('取整对照，以 -3.7 为例：');
+        p('  Math.floor(-3.7) = ' + Math.floor(-3.7) + '   Math.ceil(-3.7) = ' + Math.ceil(-3.7));
+        p('  Math.round(-3.7) = ' + Math.round(-3.7) + '   Math.trunc(-3.7) = ' + Math.trunc(-3.7));
+        p('');
+        p('~~ 双位取反也能取整（仅对 32 位整数安全）：~~3.7 = ' + (~~3.7));
+        p('Infinity 与 NaN：1/0 = ' + (1 / 0) + '，0/0 = ' + (0 / 0) + '，NaN !== NaN → ' + (NaN !== NaN), 'err');
+    };
+
+    // 四、Math
+    document.getElementById('b4').onclick = function () {
+        var p = printer('o4');
+        var nums = [7, 23, -5, 42, 18];
+        p('数组 ' + JSON.stringify(nums));
+        p('  Math.max(...) = ' + Math.max.apply(null, nums) + '   Math.min(...) = ' + Math.min.apply(null, nums));
+        p('  Math.max(nums) 直接传数组会得到 ' + Math.max(nums) + '，必须用展开或 apply', 'warn');
+        p('');
+        p('Math.random()  = ' + Math.random() + '   ← [0,1) 区间');
+        p('Math.PI        = ' + Math.PI);
+        p('Math.abs(-9)   = ' + Math.abs(-9));
+        p('Math.pow(2,10) = ' + Math.pow(2, 10) + '   （也可写 2 ** 10）');
+        p('Math.sqrt(144) = ' + Math.sqrt(144));
+        p('');
+        p('生成 [min,max] 区间随机整数的通用公式：');
+        p('  Math.floor(Math.random() * (max - min + 1)) + min');
+        var rolls = [];
+        for (var i = 0; i < 8; i++) { rolls.push(Math.floor(Math.random() * (10 - 1 + 1)) + 1); }
+        p('  掷 8 次 1~10： ' + rolls.join(', '), 'ok');
+    };
+</script>
+</body>
+</html>
