@@ -1,0 +1,14 @@
+{
+    "name": "llm-app-songbo17-backend",
+    "version": "1.0.0",
+    "description": "宋博（24001011017）《高级网页设计I》LLM应用设计实验：Express 中间层，转发大模型请求",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.5",
+        "express": "^4.19.2"
+    }
+}

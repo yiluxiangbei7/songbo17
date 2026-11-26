@@ -1,0 +1,240 @@
+/*
+  作者：宋博
+  建立时间：2026-11-23
+  使用模型：GLM-5.3-Flash
+  功能名称：AI 聊天助手样式（frontend/css/style.css）
+  简介：浅橄榄纸底配朱红油墨的课程风格，聊天气泡区分用户与模型，含加载与响应式适配。
+*/
+
+/* ===== 基础变量 ===== */
+:root {
+    --sjs-paper: #f0f2e6;        /* 页面底色：浅橄榄绿纸 */
+    --sjs-card: #fdfcf6;         /* 卡片底色 */
+    --sjs-ink: #2f3228;          /* 主文字 */
+    --sjs-muted: #7d806e;        /* 次级文字 */
+    --sjs-red: #c14a33;          /* 朱红油墨强调 */
+    --sjs-user-bubble: #c14a33;  /* 用户气泡底色 */
+    --sjs-bot-bubble: #fdfcf6;   /* 模型气泡底色 */
+    --sjs-line: #dfe1cb;         /* 分隔线 */
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    color: var(--sjs-ink);
+    background: var(--sjs-paper);
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    line-height: 1.7;
+}
+
+/* ===== 顶栏 ===== */
+.sjs_topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 24px;
+    background: var(--sjs-card);
+    border-bottom: 1px solid var(--sjs-line);
+}
+
+.sjs_brand { display: flex; align-items: center; gap: 12px; }
+
+.sjs_brand_mark { width: 12px; height: 12px; background: var(--sjs-red); }
+
+.sjs_brand_text { display: flex; flex-direction: column; line-height: 1.4; }
+
+.sjs_brand_text strong { font-size: 16px; }
+
+.sjs_brand_text em {
+    font-style: normal;
+    color: var(--sjs-muted);
+    font-size: 12px;
+}
+
+.sjs_clearbtn {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid var(--sjs-line);
+    border-radius: 3px;
+    color: var(--sjs-muted);
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: color 150ms ease, border-color 150ms ease;
+}
+
+.sjs_clearbtn:hover { color: var(--sjs-red); border-color: var(--sjs-red); }
+
+/* ===== 消息区 ===== */
+.sjs_chat { flex: 1; overflow-y: auto; padding: 24px 16px 12px; }
+
+.sjs_messages {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* 欢迎卡片 */
+.sjs_welcome {
+    margin: 24px auto;
+    max-width: 560px;
+    padding: 22px 26px;
+    background: var(--sjs-card);
+    border: 1px dashed var(--sjs-line);
+    text-align: center;
+}
+
+.sjs_welcome_title { margin: 0 0 8px; font-size: 18px; font-weight: 700; }
+
+.sjs_welcome_text { margin: 0; color: var(--sjs-muted); font-size: 14px; }
+
+.sjs_welcome kbd {
+    padding: 1px 6px;
+    border: 1px solid var(--sjs-line);
+    border-radius: 3px;
+    background: var(--sjs-paper);
+    font-family: inherit;
+    font-size: 12px;
+}
+
+/* 单条消息行 */
+.sjs_row { display: flex; gap: 10px; align-items: flex-start; }
+
+.sjs_row.sjs_user { flex-direction: row-reverse; }   /* 用户消息靠右 */
+
+.sjs_avatar {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.sjs_user .sjs_avatar { background: var(--sjs-red); }
+
+.sjs_bot .sjs_avatar { background: #7d806e; }
+
+/* 气泡 */
+.sjs_bubble {
+    max-width: 72%;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 15px;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+.sjs_user .sjs_bubble { background: var(--sjs-user-bubble); color: #fff8ef; border-bottom-right-radius: 3px; }
+
+.sjs_bot .sjs_bubble {
+    background: var(--sjs-bot-bubble);
+    border: 1px solid var(--sjs-line);
+    border-bottom-left-radius: 3px;
+}
+
+/* 轮次标签：显示第几轮，便于看出多轮上下文 */
+.sjs_roundtag {
+    max-width: 860px;
+    margin: 2px auto 0;
+    color: var(--sjs-muted);
+    font-size: 11px;
+    text-align: center;
+    letter-spacing: 0.1em;
+}
+
+/* 加载中动画 */
+.sjs_loading { display: inline-flex; gap: 5px; align-items: center; }
+
+.sjs_loading i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--sjs-muted);
+    animation: sjs_blink 1.2s infinite ease-in-out;
+}
+
+.sjs_loading i:nth-child(2) { animation-delay: 0.2s; }
+.sjs_loading i:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes sjs_blink {
+    0%, 70%, 100% { opacity: 0.25; }
+    35% { opacity: 1; }
+}
+
+/* 错误提示气泡 */
+.sjs_bubble.sjs_error { border-color: var(--sjs-red); color: var(--sjs-red); }
+
+/* ===== 输入区 ===== */
+.sjs_inputbar { padding: 12px 16px 16px; background: var(--sjs-card); border-top: 1px solid var(--sjs-line); }
+
+.sjs_inputwrap {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.sjs_input {
+    flex: 1;
+    resize: none;
+    padding: 12px 14px;
+    border: 1px solid var(--sjs-line);
+    border-radius: 8px;
+    background: var(--sjs-paper);
+    color: var(--sjs-ink);
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.6;
+    max-height: 140px;
+    outline: none;
+    transition: border-color 150ms ease;
+}
+
+.sjs_input:focus { border-color: var(--sjs-red); }
+
+.sjs_send {
+    flex: none;
+    padding: 12px 24px;
+    background: var(--sjs-red);
+    border: none;
+    border-radius: 8px;
+    color: #fff8ef;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 150ms ease, opacity 150ms ease;
+}
+
+.sjs_send:hover { background: #a63b28; }
+
+.sjs_send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.sjs_hint {
+    max-width: 860px;
+    margin: 8px auto 0;
+    color: var(--sjs-muted);
+    font-size: 12px;
+    text-align: center;
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 640px) {
+    .sjs_topbar { padding: 12px 16px; }
+    .sjs_brand_text em { display: none; }
+    .sjs_bubble { max-width: 86%; }
+}

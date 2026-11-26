@@ -19,6 +19,13 @@ Desktop.ini
 # 本地工具配置
 .claude/
 
+# 依赖与凭据（llm 子项目，严禁提交密钥）
+node_modules/
+**/node_modules/
+.env
+**/.env
+backend/.env
+
 # 日志与临时文件
 *.log
 *.tmp

@@ -1,0 +1,54 @@
+<!--
+  作者：宋博
+  建立时间：2026-11-23
+  使用模型：GLM-5.3-Flash
+  功能名称：AI 聊天助手主页（frontend/index.html）
+  简介：LLM应用设计实验的聊天界面，消息气泡区分用户与模型，支持 Enter 发送、
+        Shift+Enter 换行、发送中加载状态；所有请求与响应数据均打印到浏览器控制台。
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="宋博（24001011017）的 LLM 应用设计实验：浏览器 AI 聊天界面">
+    <title>宋博 songbo17 ｜ AI 聊天助手</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 顶栏 -->
+    <header class="sjs_topbar">
+        <div class="sjs_brand">
+            <span class="sjs_brand_mark"></span>
+            <div class="sjs_brand_text">
+                <strong>AI 聊天助手</strong>
+                <em>高级网页设计 I · LLM 应用设计 · 宋博 songbo17</em>
+            </div>
+        </div>
+        <button class="sjs_clearbtn" id="sjs_clearbtn" type="button" title="清空当前对话，重新开始">清空对话</button>
+    </header>
+
+    <!-- 消息展示区 -->
+    <main class="sjs_chat" id="sjs_chat">
+        <div class="sjs_messages" id="sjs_messages">
+            <!-- 欢迎提示（JS 会在首轮对话后保留该元素于顶部） -->
+            <div class="sjs_welcome" id="sjs_welcome">
+                <p class="sjs_welcome_title">你好，我是小宋 🤖</p>
+                <p class="sjs_welcome_text">这是《高级网页设计 I》LLM 应用设计实验的聊天界面。和我多聊几轮吧——我会记住前面聊过的内容（比如你先告诉我你的名字，再问我叫什么）。<br>按 <kbd>Enter</kbd> 发送，<kbd>Shift</kbd> + <kbd>Enter</kbd> 换行。</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- 输入区 -->
+    <footer class="sjs_inputbar">
+        <div class="sjs_inputwrap">
+            <textarea class="sjs_input" id="sjs_input" rows="1"
+                      placeholder="输入消息，Enter 发送，Shift+Enter 换行…"></textarea>
+            <button class="sjs_send" id="sjs_send" type="button">发送</button>
+        </div>
+        <p class="sjs_hint" id="sjs_hint">所有发送与接收的数据都会打印在浏览器控制台（F12 查看），作为实验证据。</p>
+    </footer>
+
+    <script src="js/chat.js"></script>
+</body>
+</html>
