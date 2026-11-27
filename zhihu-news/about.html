@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!--
+  文件名: about.html
+  作者: 宋博 (24001011017)
+  创建时间: 2026-11-27
+  功能说明: 知乎新闻 · 关于页——项目介绍、技术架构、页面清单、
+            JavaScript 效果与动画清单（与报告一致，便于答辩展示）
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于本项目 · 知乎新闻 ｜ 宋博 songbo17 24001011017</title>
+    <link rel="stylesheet" href="css/songbo.css">
+</head>
+<body>
+    <header id="songbo_header"></header>
+
+    <main class="songbo_main">
+        <div class="songbo_about_card">
+            <h1 style="font-size:22px;">关于「知乎新闻」</h1>
+            <p>本项目是《高级网页设计I》三级项目，模仿知乎（课程题库 15 号）制作的新闻资讯网站（PC 端）。
+               数据全部存放在 Supabase 云数据库（PostgreSQL），前端通过 RESTful 接口异步加载，
+               实现了新闻浏览、话题筛选、关键词搜索、收藏、登录注册、后台管理与数据仪表盘完整闭环。</p>
+
+            <h2>技术架构</h2>
+            <ul>
+                <li>前端：原生 HTML5 / CSS3 / JavaScript（ES6+），无框架、无 UI 组件库、无 CDN</li>
+                <li>后端：路径 B（BAAS）—— Supabase RESTful API + Auth 认证 + RLS 行级安全</li>
+                <li>图表：ECharts（本地引入 js/lib/echarts.min.js，非 CDN）</li>
+                <li>LLM：DeepSeek 大模型 AI 摘要，通过 Express 中间层转发，密钥不出服务端</li>
+                <li>图标：本地 SVG 素材（新闻封面 4 张、话题图标 5 张）</li>
+            </ul>
+
+            <h2>页面清单（前台 8 页 + 后台 2 页）</h2>
+            <ul>
+                <li>index.html 首页（一级）：轮播图、话题导航、今日热榜</li>
+                <li>list.html 栏目/列表页（二级）：话题 tab 筛选、关键词过滤、分页</li>
+                <li>detail.html 内容/详情页（三级）：URL 传参 ?id=N、评论、收藏、AI 摘要</li>
+                <li>login.html / register.html 登录注册：正则校验、bcrypt 加密、token 保持</li>
+                <li>profile.html 个人中心：用户信息、我的收藏（本地+云端）</li>
+                <li>search.html 搜索结果页：模糊搜索、搜索历史</li>
+                <li>about.html 关于页：本页</li>
+                <li>admin.html 后台管理：3 实体增删改查 + 搜索 + 分页（需登录）</li>
+                <li>dashboard.html 仪表盘：ECharts 图表，接口真实数据驱动（需登录）</li>
+            </ul>
+
+            <h2>JavaScript 效果清单（7 个）</h2>
+            <ul>
+                <li>① 轮播图：首页精选新闻自动播放（4s）+ 指示点/箭头手动切换</li>
+                <li>② tab 选项卡：列表页话题筛选，点击切换高亮并过滤数据</li>
+                <li>③ 搜索过滤：列表页输入框 input 事件实时过滤标题/摘要</li>
+                <li>④ 客户端分页：列表页每页 4 条，页码/上一页/下一页切换</li>
+                <li>⑤ 表单校验：登录/注册页正则校验邮箱、密码强度、两次一致性</li>
+                <li>⑥ 滚动监听：导航吸顶阴影 + 返回顶部按钮显隐（scroll 事件）</li>
+                <li>⑦ 本地存储：搜索历史（最多 8 条）与新闻收藏（localStorage）</li>
+            </ul>
+
+            <h2>动画清单（3 处，覆盖 3 种实现方式）</h2>
+            <ul>
+                <li>① transition：新闻卡片 hover 上浮 + 导航吸顶阴影（0.3s ease）</li>
+                <li>② animation：轮播指示点呼吸光晕（songbo_breath，1.5s infinite）+ 弹窗弹出 songbo_pop（0.25s ease）</li>
+                <li>③ canvas：首页粒子连线背景（requestAnimationFrame 逐帧绘制）</li>
+            </ul>
+
+            <h2>作者信息</h2>
+            <p>宋博 · 学号 24001011017 · 计算机科学与技术专业 · 2026 年 11 月<br>
+               GitHub / Gitee：songbo17 ｜ 开发辅助：WorkBuddy（GLM 大模型）AI 编程工具</p>
+        </div>
+    </main>
+
+    <footer id="songbo_footer"></footer>
+
+    <script src="js/songbo_config.js"></script>
+    <script src="js/songbo_api.js"></script>
+    <script src="js/songbo_auth.js"></script>
+    <script src="js/songbo_common.js"></script>
+</body>
+</html>

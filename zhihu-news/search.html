@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--
+  文件名: search.html
+  作者: 宋博 (24001011017)
+  创建时间: 2026-11-27
+  功能说明: 知乎新闻 · 搜索结果页——关键词搜索接口（PostgREST or=ilike 模糊匹配
+            标题/摘要/正文），搜索历史存 localStorage（JS效果⑦本地存储）
+  数据来源: Supabase REST API（news 表关键词搜索）
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索 · 知乎新闻 ｜ 宋博 songbo17 24001011017</title>
+    <link rel="stylesheet" href="css/songbo.css">
+</head>
+<body>
+    <header id="songbo_header"></header>
+
+    <main class="songbo_main">
+        <div class="songbo_search_bar">
+            <input type="text" id="songbo_kw" placeholder="搜索新闻标题 / 摘要 / 正文关键词，回车搜索">
+            <button class="songbo_btn" id="songbo_btn_search">搜索</button>
+            <button class="songbo_btn songbo_btn_ghost" id="songbo_btn_clear">清空历史</button>
+        </div>
+
+        <div id="songbo_history_box">
+            <div class="songbo_section_title">搜索历史</div>
+            <div class="songbo_history" id="songbo_history"></div>
+        </div>
+
+        <div id="songbo_result_list" class="songbo_news_list">
+            <div class="songbo_status">输入关键词开始搜索～</div>
+        </div>
+    </main>
+
+    <footer id="songbo_footer"></footer>
+
+    <script src="js/songbo_config.js"></script>
+    <script src="js/songbo_api.js"></script>
+    <script src="js/songbo_auth.js"></script>
+    <script src="js/songbo_common.js"></script>
+    <script src="js/songbo_search.js"></script>
+</body>
+</html>
