@@ -1,0 +1,365 @@
+/* ============================================================
+   文件名: songbo.css
+   作者: 宋博 (24001011017)
+   创建时间: 2026-11-27
+   功能说明: 知乎新闻全站公共样式表（所有页面引用同一份）——
+             知乎蓝白配色、卡片布局、表单、后台表格、图表页、
+             动画（transition 悬停 / animation 呼吸 / canvas 粒子容器）
+   ============================================================ */
+
+:root {
+    --songbo-bg: #f6f6f8;            /* 页面底色：浅灰 */
+    --songbo-card: #ffffff;          /* 卡片底：纯白 */
+    --songbo-blue: #0084ff;          /* 知乎蓝：主色 */
+    --songbo-blue-deep: #0062c4;     /* 深蓝：悬停 */
+    --songbo-ink: #1a1a1a;           /* 正文黑 */
+    --songbo-ink-2: #646464;         /* 次要文字灰 */
+    --songbo-line: #ebebeb;          /* 分隔线 */
+    --songbo-orange: #ff8a3d;        /* 热度橙 */
+    --songbo-green: #00a854;         /* 成功绿 */
+    --songbo-red: #f1403c;           /* 警示红 */
+    --songbo-radius: 12px;
+    --songbo-shadow: 0 2px 10px rgba(26, 26, 26, .06);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: var(--songbo-bg);
+    color: var(--songbo-ink);
+    font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+}
+
+/* ============ 顶部导航（滚动监听：吸顶） ============ */
+.songbo_nav {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(255, 255, 255, .92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--songbo-line);
+    transition: box-shadow .3s ease;              /* 动画①transition：吸顶阴影 */
+}
+.songbo_nav.songbo_shadow { box-shadow: 0 2px 12px rgba(0, 132, 255, .12); }
+.songbo_nav_inner {
+    max-width: 1080px; margin: 0 auto; padding: 14px 20px;
+    display: flex; align-items: center; gap: 22px;
+}
+.songbo_logo {
+    display: flex; align-items: baseline; gap: 8px;
+    font-size: 22px; font-weight: 700; color: var(--songbo-blue);
+    text-decoration: none; letter-spacing: 1px;
+}
+.songbo_logo small { font-size: 12px; font-weight: 400; color: var(--songbo-ink-2); letter-spacing: 2px; }
+.songbo_nav_links { display: flex; gap: 18px; font-size: 15px; }
+.songbo_nav_links a { color: var(--songbo-ink-2); text-decoration: none; transition: color .2s; }
+.songbo_nav_links a:hover { color: var(--songbo-blue); }
+.songbo_nav_links a.songbo_on { color: var(--songbo-blue); font-weight: 600; }
+.songbo_nav_user { margin-left: auto; font-size: 13px; color: var(--songbo-ink-2); display: flex; gap: 14px; align-items: center; }
+.songbo_nav_user b { color: var(--songbo-ink); }
+.songbo_nav_user a { color: var(--songbo-blue); text-decoration: none; }
+
+/* ============ 页头横幅 / 英雄区 ============ */
+.songbo_hero {
+    max-width: 1080px; margin: 24px auto 0; padding: 34px 20px;
+    background: linear-gradient(135deg, #e8f3ff 0%, #f2f8ff 55%, #eef1f6 100%);
+    border-radius: var(--songbo-radius);
+    border: 1px solid #e3eefc;
+}
+.songbo_hero h1 { font-size: 26px; letter-spacing: 1px; }
+.songbo_hero h1 span { color: var(--songbo-blue); }
+.songbo_hero p { color: var(--songbo-ink-2); margin-top: 6px; font-size: 14px; }
+.songbo_hero_meta { margin-top: 14px; font-size: 13px; color: var(--songbo-ink-2); }
+.songbo_hero_meta b { color: var(--songbo-blue); }
+
+/* ============ canvas 粒子背景（动画③） ============ */
+.songbo_canvas_wrap { position: relative; overflow: hidden; }
+#songbo_canvas { position: absolute; inset: 0; pointer-events: none; }
+
+/* ============ 主体容器 ============ */
+.songbo_main { max-width: 1080px; margin: 20px auto; padding: 0 20px; width: 100%; flex: 1; }
+
+/* ============ 轮播图（JS效果①） ============ */
+.songbo_carousel {
+    position: relative; border-radius: var(--songbo-radius); overflow: hidden;
+    height: 300px; box-shadow: var(--songbo-shadow); background: #dcecff;
+}
+.songbo_carousel_slide {
+    position: absolute; inset: 0; opacity: 0; transition: opacity .6s ease;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 56px; background: linear-gradient(120deg, #0a67d0, #0084ff 55%, #38b6ff);
+    color: #fff; cursor: pointer;
+}
+.songbo_carousel_slide.songbo_active { opacity: 1; }
+.songbo_carousel_slide h2 { font-size: 26px; text-shadow: 0 2px 8px rgba(0,0,0,.2); max-width: 560px; }
+.songbo_carousel_slide p { margin-top: 10px; font-size: 14px; opacity: .92; max-width: 560px; }
+.songbo_carousel_slide img { width: 200px; height: 150px; object-fit: cover; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,.25); }
+.songbo_carousel_dots { position: absolute; bottom: 14px; left: 0; right: 0; display: flex; justify-content: center; gap: 10px; }
+.songbo_carousel_dots i {
+    width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.45);
+    cursor: pointer; transition: width .3s ease;
+}
+.songbo_carousel_dots i.songbo_active {
+    width: 24px; border-radius: 5px; background: #fff;
+    animation: songbo_breath 1.5s ease-in-out infinite;   /* 动画②animation：指示点呼吸 */
+}
+@keyframes songbo_breath {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,.55); }
+    50%      { box-shadow: 0 0 0 6px rgba(255,255,255,0); }
+}
+.songbo_carousel_arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 36px; height: 36px; border-radius: 50%; border: none;
+    background: rgba(255,255,255,.25); color: #fff; font-size: 18px;
+    cursor: pointer; transition: background .2s;
+}
+.songbo_carousel_arrow:hover { background: rgba(255,255,255,.45); }
+.songbo_arrow_prev { left: 14px; }
+.songbo_arrow_next { right: 14px; }
+
+/* ============ 话题筛选条（tab 选项卡 JS效果②） ============ */
+.songbo_topics_bar { display: flex; gap: 10px; flex-wrap: wrap; margin: 4px 0 16px; }
+.songbo_topic_chip {
+    padding: 6px 16px; border-radius: 999px; background: #fff;
+    border: 1px solid var(--songbo-line); font-size: 14px; color: var(--songbo-ink-2);
+    cursor: pointer; user-select: none; transition: all .25s ease;
+}
+.songbo_topic_chip:hover { border-color: var(--songbo-blue); color: var(--songbo-blue); }
+.songbo_topic_chip.songbo_active { background: var(--songbo-blue); border-color: var(--songbo-blue); color: #fff; font-weight: 600; }
+
+/* ============ 新闻卡片列表 ============ */
+.songbo_news_list { display: flex; flex-direction: column; gap: 14px; }
+.songbo_news_card {
+    display: flex; background: var(--songbo-card); border-radius: var(--songbo-radius);
+    overflow: hidden; box-shadow: var(--songbo-shadow); cursor: pointer;
+    transition: transform .3s ease, box-shadow .3s ease;   /* 动画①transition：卡片悬停 */
+}
+.songbo_news_card:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(0, 132, 255, .14); }
+.songbo_news_body { flex: 1; padding: 18px 22px; min-width: 0; }
+.songbo_news_title { font-size: 18px; font-weight: 700; }
+.songbo_news_card:hover .songbo_news_title { color: var(--songbo-blue); }
+.songbo_news_summary { font-size: 14px; color: var(--songbo-ink-2); margin-top: 6px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.songbo_news_foot { margin-top: 12px; display: flex; gap: 14px; font-size: 12px; color: var(--songbo-ink-2); align-items: center; }
+.songbo_tag { background: #e8f3ff; color: var(--songbo-blue); padding: 2px 10px; border-radius: 4px; font-weight: 600; }
+.songbo_hot { color: var(--songbo-orange); }
+.songbo_news_cover { width: 210px; height: 150px; object-fit: cover; flex-shrink: 0; }
+
+/* ============ 状态提示 / 加载 ============ */
+.songbo_status { text-align: center; color: var(--songbo-ink-2); padding: 40px 0; font-size: 14px; }
+
+/* ============ 分页（JS效果③） ============ */
+.songbo_pager { display: flex; justify-content: center; gap: 8px; margin: 22px 0 8px; }
+.songbo_pager button {
+    min-width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--songbo-line);
+    background: #fff; color: var(--songbo-ink-2); cursor: pointer; transition: all .2s;
+}
+.songbo_pager button:hover { border-color: var(--songbo-blue); color: var(--songbo-blue); }
+.songbo_pager button.songbo_active { background: var(--songbo-blue); border-color: var(--songbo-blue); color: #fff; font-weight: 700; }
+.songbo_pager button:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ============ 搜索框（JS效果④） ============ */
+.songbo_search_bar { display: flex; gap: 10px; margin-bottom: 16px; }
+.songbo_search_bar input {
+    flex: 1; height: 42px; border-radius: 10px; border: 1px solid var(--songbo-line);
+    padding: 0 16px; font-size: 14px; outline: none; transition: border .2s, box-shadow .2s;
+}
+.songbo_search_bar input:focus { border-color: var(--songbo-blue); box-shadow: 0 0 0 3px rgba(0,132,255,.12); }
+.songbo_btn {
+    height: 42px; padding: 0 22px; border-radius: 10px; border: none;
+    background: var(--songbo-blue); color: #fff; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: background .2s, transform .2s;
+}
+.songbo_btn:hover { background: var(--songbo-blue-deep); }
+.songbo_btn:active { transform: scale(.97); }
+.songbo_btn_ghost { background: #fff; color: var(--songbo-blue); border: 1px solid var(--songbo-blue); }
+.songbo_btn_ghost:hover { background: #e8f3ff; }
+.songbo_btn_danger { background: var(--songbo-red); }
+.songbo_btn_danger:hover { background: #d23a36; }
+.songbo_btn_small { height: 30px; padding: 0 12px; font-size: 12px; border-radius: 7px; }
+
+/* 搜索历史 */
+.songbo_history { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 16px; }
+.songbo_history span {
+    background: #fff; border: 1px solid var(--songbo-line); border-radius: 999px;
+    padding: 4px 14px; font-size: 13px; color: var(--songbo-ink-2); cursor: pointer; transition: all .2s;
+}
+.songbo_history span:hover { color: var(--songbo-blue); border-color: var(--songbo-blue); }
+
+/* ============ 详情页 ============ */
+.songbo_detail {
+    background: var(--songbo-card); border-radius: var(--songbo-radius);
+    padding: 34px 40px; box-shadow: var(--songbo-shadow);
+}
+.songbo_detail h1 { font-size: 24px; line-height: 1.4; }
+.songbo_detail_meta { margin: 12px 0 20px; font-size: 13px; color: var(--songbo-ink-2); display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+.songbo_detail_content { font-size: 15px; line-height: 1.9; color: #333; white-space: pre-wrap; }
+.songbo_detail_cover { width: 100%; max-height: 340px; object-fit: cover; border-radius: 10px; margin: 18px 0; }
+.songbo_detail_actions { display: flex; gap: 12px; margin-top: 24px; }
+.songbo_fav_on { background: var(--songbo-orange) !important; }
+
+.songbo_cmt_title { margin: 26px 0 12px; font-size: 16px; font-weight: 700; border-left: 4px solid var(--songbo-blue); padding-left: 10px; }
+.songbo_cmt_item { background: #f8fafd; border-radius: 10px; padding: 14px 18px; margin-bottom: 10px; }
+.songbo_cmt_head { display: flex; gap: 14px; font-size: 13px; color: var(--songbo-ink-2); margin-bottom: 6px; }
+.songbo_cmt_head b { color: var(--songbo-ink); font-size: 14px; }
+.songbo_cmt_content { font-size: 14px; color: #333; }
+
+/* AI 摘要卡片 */
+.songbo_ai_card {
+    margin-top: 20px; border-radius: 10px; padding: 18px 22px;
+    background: linear-gradient(135deg, #f0f7ff, #f7f2ff); border: 1px dashed #b8d4ff;
+}
+.songbo_ai_card h3 { font-size: 15px; color: var(--songbo-blue); margin-bottom: 8px; }
+.songbo_ai_card p { font-size: 14px; color: #333; line-height: 1.8; }
+.songbo_ai_loading { color: var(--songbo-ink-2); font-size: 13px; }
+
+/* 相关推荐 */
+.songbo_rel_list { display: flex; flex-direction: column; gap: 8px; }
+.songbo_rel_item {
+    padding: 10px 14px; border-radius: 8px; background: #f8fafd;
+    font-size: 14px; cursor: pointer; transition: all .2s;
+}
+.songbo_rel_item:hover { background: #e8f3ff; color: var(--songbo-blue); }
+
+/* ============ 表单页（登录/注册，JS效果⑤表单校验） ============ */
+.songbo_form_card {
+    max-width: 420px; margin: 44px auto; background: var(--songbo-card);
+    border-radius: var(--songbo-radius); padding: 36px 34px; box-shadow: var(--songbo-shadow);
+}
+.songbo_form_card h1 { font-size: 22px; text-align: center; margin-bottom: 6px; }
+.songbo_form_card .songbo_form_sub { text-align: center; font-size: 13px; color: var(--songbo-ink-2); margin-bottom: 24px; }
+.songbo_field { margin-bottom: 18px; }
+.songbo_field label { display: block; font-size: 13px; color: var(--songbo-ink-2); margin-bottom: 6px; }
+.songbo_field input {
+    width: 100%; height: 44px; border-radius: 10px; border: 1px solid var(--songbo-line);
+    padding: 0 14px; font-size: 14px; outline: none; transition: border .2s, box-shadow .2s;
+}
+.songbo_field input:focus { border-color: var(--songbo-blue); box-shadow: 0 0 0 3px rgba(0,132,255,.12); }
+.songbo_field input.songbo_err { border-color: var(--songbo-red); }
+.songbo_field_msg { font-size: 12px; color: var(--songbo-red); margin-top: 4px; min-height: 16px; }
+.songbo_form_submit { width: 100%; height: 46px; font-size: 15px; }
+.songbo_form_foot { text-align: center; font-size: 13px; color: var(--songbo-ink-2); margin-top: 16px; }
+.songbo_form_foot a { color: var(--songbo-blue); text-decoration: none; }
+.songbo_form_tip { text-align: center; font-size: 13px; margin-bottom: 14px; min-height: 18px; }
+.songbo_form_tip.songbo_ok { color: var(--songbo-green); }
+.songbo_form_tip.songbo_bad { color: var(--songbo-red); }
+
+/* ============ 个人中心 ============ */
+.songbo_profile_head {
+    display: flex; align-items: center; gap: 18px; background: var(--songbo-card);
+    border-radius: var(--songbo-radius); padding: 26px 30px; box-shadow: var(--songbo-shadow);
+}
+.songbo_avatar {
+    width: 64px; height: 64px; border-radius: 50%; background: var(--songbo-blue);
+    color: #fff; font-size: 26px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+}
+.songbo_profile_head h2 { font-size: 20px; }
+.songbo_profile_head p { font-size: 13px; color: var(--songbo-ink-2); margin-top: 4px; }
+.songbo_section_title { font-size: 16px; font-weight: 700; margin: 24px 0 12px; border-left: 4px solid var(--songbo-blue); padding-left: 10px; }
+.songbo_fav_card {
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--songbo-card); border-radius: 10px; padding: 14px 20px;
+    margin-bottom: 10px; box-shadow: var(--songbo-shadow); cursor: pointer; transition: transform .2s;
+}
+.songbo_fav_card:hover { transform: translateX(4px); }
+.songbo_fav_card b { font-size: 15px; }
+.songbo_fav_card span { font-size: 12px; color: var(--songbo-ink-2); }
+
+/* ============ 后台管理（admin.html） ============ */
+.songbo_admin_tabs { display: flex; gap: 10px; margin-bottom: 16px; }
+.songbo_admin_panel { background: var(--songbo-card); border-radius: var(--songbo-radius); padding: 22px 24px; box-shadow: var(--songbo-shadow); }
+.songbo_admin_toolbar { display: flex; gap: 10px; margin-bottom: 14px; align-items: center; }
+.songbo_admin_toolbar input {
+    height: 36px; border-radius: 8px; border: 1px solid var(--songbo-line);
+    padding: 0 12px; font-size: 13px; outline: none; width: 240px;
+}
+.songbo_admin_toolbar input:focus { border-color: var(--songbo-blue); }
+.songbo_admin_toolbar .songbo_spacer { flex: 1; }
+.songbo_table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.songbo_table th {
+    background: #f2f7fe; color: var(--songbo-ink-2); text-align: left;
+    padding: 10px 12px; font-weight: 600; border-bottom: 1px solid var(--songbo-line);
+}
+.songbo_table td { padding: 10px 12px; border-bottom: 1px solid #f2f2f2; }
+.songbo_table tr { transition: background .15s; }
+.songbo_table tbody tr:hover { background: #f8fafd; }
+.songbo_table td.songbo_op { white-space: nowrap; }
+.songbo_table td.songbo_op button { margin-right: 6px; }
+.songbo_cell_title { max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* 弹层（新增/编辑表单） */
+.songbo_mask {
+    position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 50;
+    display: none; align-items: center; justify-content: center;
+}
+.songbo_mask.songbo_show { display: flex; }
+.songbo_modal {
+    background: #fff; border-radius: 14px; padding: 26px 28px; width: 460px; max-height: 84vh;
+    overflow-y: auto; box-shadow: 0 12px 40px rgba(0,0,0,.18); animation: songbo_pop .25s ease;
+}
+@keyframes songbo_pop { from { transform: translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+.songbo_modal h2 { font-size: 17px; margin-bottom: 16px; }
+.songbo_modal_foot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+.songbo_modal_close {
+    position: absolute; top: 10px; right: 14px; border: none; background: none;
+    font-size: 18px; color: #999; cursor: pointer;
+}
+.songbo_modal { position: relative; }
+.songbo_textarea {
+    width: 100%; min-height: 90px; border-radius: 10px; border: 1px solid var(--songbo-line);
+    padding: 10px 12px; font-size: 13px; font-family: inherit; outline: none; resize: vertical;
+}
+.songbo_textarea:focus { border-color: var(--songbo-blue); }
+
+/* ============ 仪表盘（dashboard.html，ECharts） ============ */
+.songbo_chart_grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.songbo_chart_card {
+    background: var(--songbo-card); border-radius: var(--songbo-radius);
+    padding: 20px 22px; box-shadow: var(--songbo-shadow);
+}
+.songbo_chart_card h3 { font-size: 15px; margin-bottom: 4px; }
+.songbo_chart_card p { font-size: 12px; color: var(--songbo-ink-2); margin-bottom: 8px; }
+.songbo_chart_box { width: 100%; height: 300px; }
+.songbo_stat_row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 16px; }
+.songbo_stat_card {
+    background: var(--songbo-card); border-radius: var(--songbo-radius);
+    padding: 18px 22px; box-shadow: var(--songbo-shadow);
+}
+.songbo_stat_card b { font-size: 26px; color: var(--songbo-blue); }
+.songbo_stat_card span { display: block; font-size: 12px; color: var(--songbo-ink-2); margin-top: 4px; }
+
+/* ============ Toast 轻提示 ============ */
+#songbo_toast {
+    position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
+    background: rgba(26,26,26,.86); color: #fff; padding: 10px 22px;
+    border-radius: 999px; font-size: 13px; z-index: 99;
+    opacity: 0; pointer-events: none; transition: opacity .3s ease;
+}
+#songbo_toast.songbo_show { opacity: 1; }
+
+/* ============ 返回顶部按钮（滚动监听 JS效果） ============ */
+#songbo_backtop {
+    position: fixed; right: 26px; bottom: 40px; width: 44px; height: 44px;
+    border-radius: 50%; border: none; background: var(--songbo-blue); color: #fff;
+    font-size: 18px; cursor: pointer; box-shadow: 0 4px 14px rgba(0,132,255,.35);
+    opacity: 0; pointer-events: none; transition: opacity .3s ease, transform .2s;
+    z-index: 30;
+}
+#songbo_backtop.songbo_show { opacity: 1; pointer-events: auto; }
+#songbo_backtop:hover { transform: translateY(-3px); }
+
+/* ============ 页脚 ============ */
+.songbo_footer {
+    margin-top: 34px; padding: 20px; text-align: center;
+    font-size: 13px; color: var(--songbo-ink-2); border-top: 1px solid var(--songbo-line);
+    background: #fff;
+}
+.songbo_footer b { color: var(--songbo-ink); }
+
+/* ============ 关于页 ============ */
+.songbo_about_card { background: var(--songbo-card); border-radius: var(--songbo-radius); padding: 30px 36px; box-shadow: var(--songbo-shadow); }
+.songbo_about_card h2 { font-size: 17px; margin: 18px 0 8px; color: var(--songbo-blue); }
+.songbo_about_card p, .songbo_about_card li { font-size: 14px; color: #333; line-height: 1.9; }
+.songbo_about_card ul { padding-left: 22px; }

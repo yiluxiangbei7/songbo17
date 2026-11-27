@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 336 216">
+  <rect width="336" height="216" fill="#1d2a3a"/>
+  <text x="60" y="86" font-size="26" fill="#7ee0a3" font-family="monospace">&lt;/&gt;</text>
+  <text x="140" y="120" font-size="22" fill="#ffd479" font-family="monospace">fn code()</text>
+  <text x="60" y="156" font-size="22" fill="#9db7d3" font-family="monospace">return open_source</text>
+  <rect x="228" y="52" width="72" height="64" rx="10" fill="#0084ff" opacity=".9"/>
+  <path d="M246 84l14-14m-14 26h44" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <text x="168" y="198" text-anchor="middle" font-size="16" fill="#9db7d3" font-family="sans-serif">代码 · 开源</text>
+</svg>
