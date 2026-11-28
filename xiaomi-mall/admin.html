@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理 - 小米商城</title>
+    <link rel="stylesheet" href="css/songbo.css">
+</head>
+<body>
+    <header id="songbo_header"></header>
+
+    <main class="songbo_wrap" style="margin-top:18px;">
+        <div class="songbo_panel">
+            <h3>商品运营后台</h3>
+            <p style="color:#999;font-size:12px;">分类 / 商品 / 订单 三实体增删改查 + 搜索 + 分页（数据全部走 Supabase REST 接口，写操作需登录 JWT）</p>
+        </div>
+
+        <!-- 实体切换 tab（JS效果：选项卡） -->
+        <div class="songbo_admin_tabs">
+            <button class="songbo_active" data-tab="products">商品管理</button>
+            <button data-tab="categories">分类管理</button>
+            <button data-tab="orders">订单管理</button>
+        </div>
+
+        <!-- 工具条：搜索 + 新增 -->
+        <div class="songbo_admin_bar" style="background:#fff;border-radius:0 10px 10px 10px;padding:12px 14px;">
+            <input class="songbo_input" id="songbo_admin_kw" placeholder="输入关键词搜索…" style="width:240px;">
+            <button class="songbo_btn" id="songbo_admin_add" style="padding:7px 20px;font-size:13px;">+ 新增</button>
+            <span style="margin-left:auto;color:#999;font-size:12px;" id="songbo_admin_count"></span>
+        </div>
+
+        <table class="songbo_table" id="songbo_admin_table">
+            <thead></thead>
+            <tbody><tr><td class="songbo_loading" colspan="8">数据加载中…</td></tr></tbody>
+        </table>
+        <div class="songbo_pager" id="songbo_admin_pager"></div>
+    </main>
+
+    <!-- 通用编辑弹窗 -->
+    <div class="songbo_modal_mask" id="songbo_admin_mask">
+        <div class="songbo_modal" style="width:520px;">
+            <h3 id="songbo_admin_modal_title">编辑</h3>
+            <div id="songbo_admin_form"></div>
+            <div class="songbo_modal_foot">
+                <button class="songbo_btn songbo_btn_ghost" id="songbo_admin_cancel">取消</button>
+                <button class="songbo_btn" id="songbo_admin_save">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <footer id="songbo_footer"></footer>
+
+    <script src="js/songbo_config.js"></script>
+    <script src="js/songbo_api.js"></script>
+    <script src="js/songbo_auth.js"></script>
+    <script src="js/songbo_common.js"></script>
+    <script src="js/songbo_admin.js"></script>
+</body>
+</html>
