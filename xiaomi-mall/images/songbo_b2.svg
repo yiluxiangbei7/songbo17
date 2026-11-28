@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 480">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#2b6de8"/><stop offset="1" stop-color="#1a4fc0"/></linearGradient></defs>
+<rect width="1600" height="480" fill="url(#g)"/>
+<circle cx="1300" cy="110" r="180" fill="#ffffff" opacity="0.10"/>
+<circle cx="1450" cy="330" r="120" fill="#ffffff" opacity="0.12"/>
+<circle cx="180" cy="420" r="150" fill="#ffffff" opacity="0.08"/>
+<g transform="translate(1120,110)">
+<rect x="0" y="0" width="380" height="230" rx="14" fill="#101418"/>
+<rect x="10" y="10" width="360" height="196" rx="8" fill="#28456e"/>
+<path d="M40 150 L140 60 L230 130 L320 70" stroke="#5fd0ff" stroke-width="10" fill="none" stroke-linecap="round"/>
+<rect x="160" y="230" width="60" height="16" fill="#20242a"/><rect x="120" y="246" width="140" height="10" rx="5" fill="#20242a"/>
+</g>
+<text x="120" y="205" font-family="Microsoft YaHei" font-size="58" font-weight="bold" fill="#ffffff">智能家电焕新季</text>
+<text x="122" y="268" font-family="Microsoft YaHei" font-size="26" fill="#ffffff" opacity="0.92">空调 · 电视 · 净水器 爆款直降 300 元起</text>
+<rect x="122" y="310" width="170" height="52" rx="26" fill="#ffffff"/>
+<text x="207" y="345" text-anchor="middle" font-family="Microsoft YaHei" font-size="22" fill="#2b6de8" font-weight="bold">立即选购</text>
+</svg>

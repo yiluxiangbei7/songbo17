@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+<rect width="600" height="600" fill="#f7f7f9"/>
+<circle cx="480" cy="130" r="90" fill="#ff6700" opacity="0.10"/>
+<g transform="translate(180,180)">
+<rect x="0" y="0" width="240" height="200" rx="28" fill="#f2f3f7"/>
+<rect x="12" y="12" width="216" height="176" rx="20" fill="#ffffff"/>
+<circle cx="120" cy="100" r="20" fill="#ffcf6b"/>
+<text x="120" y="107" text-anchor="middle" font-family="Arial" font-size="16" fill="#c98f1b" font-weight="bold">MI</text>
+</g>
+<g transform="translate(150,120) rotate(-20)"><path d="M0 30 a30 30 0 1 1 60 0 v30 a14 14 0 0 1 -14 14 h-32 a14 14 0 0 1 -14 -14 z" fill="#e8e9ee"/></g>
+<g transform="translate(390,110) rotate(20)"><path d="M0 30 a30 30 0 1 1 60 0 v30 a14 14 0 0 1 -14 14 h-32 a14 14 0 0 1 -14 -14 z" fill="#e8e9ee"/></g>
+</svg>

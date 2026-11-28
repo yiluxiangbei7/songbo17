@@ -1,0 +1,328 @@
+/**
+ * 文件名: songbo.css
+ * 作者: 宋博 (24001011017)
+ * 创建时间: 2026-11-28
+ * 功能说明: 全站唯一公共样式表（姓名全拼命名，评分项）——小米商城橙主题。
+ *           所有页面统一引入，覆盖：导航/页脚/轮播/商品卡片/表单/后台表格/
+ *           仪表盘/购物车/Toast/返回顶部/动画（transition+animation 两种）。
+ */
+
+/* ========== 1. 变量与基础 ========== */
+:root {
+    --songbo_orange: #ff6700;        /* 小米主橙 */
+    --songbo_orange_dark: #e65c00;
+    --songbo_orange_light: #fff3ec;
+    --songbo_text: #333333;
+    --songbo_gray: #999999;
+    --songbo_line: #e8e8e8;
+    --songbo_bg: #f5f6f8;
+    --songbo_white: #ffffff;
+    --songbo_green: #00a854;
+    --songbo_red: #e53935;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    color: var(--songbo_text);
+    background: var(--songbo_bg);
+    font-size: 14px;
+}
+a { text-decoration: none; color: inherit; }
+img { display: block; max-width: 100%; }
+ul { list-style: none; }
+button { font-family: inherit; cursor: pointer; }
+.songbo_wrap { width: 1200px; max-width: 94%; margin: 0 auto; }
+
+/* ========== 2. 页头导航 ========== */
+.songbo_nav {
+    background: var(--songbo_white);
+    border-bottom: 1px solid var(--songbo_line);
+    position: sticky; top: 0; z-index: 100;
+    transition: box-shadow .3s ease;      /* 动画①：吸顶阴影 transition */
+}
+.songbo_nav.songbo_shadow { box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+.songbo_nav_inner {
+    width: 1200px; max-width: 94%; margin: 0 auto;
+    height: 56px; display: flex; align-items: center; gap: 28px;
+}
+.songbo_logo {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 20px; font-weight: bold; color: var(--songbo_orange);
+}
+.songbo_logo img { width: 34px; height: 34px; }
+.songbo_logo small { font-size: 12px; color: var(--songbo_gray); font-weight: normal; margin-top: 6px; }
+.songbo_nav_links { display: flex; gap: 6px; flex: 1; }
+.songbo_nav_links a {
+    padding: 6px 14px; border-radius: 4px; color: var(--songbo_text);
+    transition: all .2s ease;                 /* 动画① */
+}
+.songbo_nav_links a:hover, .songbo_nav_links a.songbo_on {
+    color: var(--songbo_orange); background: var(--songbo_orange_light);
+}
+.songbo_nav_user { display: flex; gap: 10px; align-items: center; }
+.songbo_nav_user a {
+    padding: 6px 14px; border-radius: 18px; font-size: 13px;
+    border: 1px solid var(--songbo_line); transition: all .2s ease;
+}
+.songbo_nav_user a:hover { border-color: var(--songbo_orange); color: var(--songbo_orange); }
+/* 购物车徽标 */
+.songbo_cart_link { position: relative; }
+#songbo_cart_count {
+    position: absolute; top: -7px; right: -7px; min-width: 18px; height: 18px;
+    background: var(--songbo_red); color: #fff; border-radius: 9px;
+    font-size: 11px; line-height: 18px; text-align: center; padding: 0 4px;
+    animation: songbo_pop .3s ease;          /* 动画②：徽标弹入 animation */
+}
+
+/* ========== 3. 首页：轮播 ========== */
+.songbo_banner { position: relative; overflow: hidden; border-radius: 0 0 12px 12px; }
+.songbo_banner_list { display: flex; transition: transform .6s ease; }
+.songbo_banner_list img { width: 100%; flex-shrink: 0; }
+.songbo_banner_dots {
+    position: absolute; bottom: 14px; left: 0; right: 0;
+    display: flex; justify-content: center; gap: 10px;
+}
+.songbo_banner_dots span {
+    width: 10px; height: 10px; border-radius: 5px;
+    background: rgba(255,255,255,.5); transition: all .3s ease;
+}
+.songbo_banner_dots span.songbo_active {
+    width: 26px; background: #fff;
+    animation: songbo_breath 2s ease infinite;   /* 动画③：指示点呼吸 animation */
+}
+/* 轮播左右箭头 */
+.songbo_banner_arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 40px; height: 60px; background: rgba(0,0,0,.25); color: #fff;
+    border: none; font-size: 22px; border-radius: 4px;
+    opacity: 0; transition: opacity .3s ease;
+}
+.songbo_banner:hover .songbo_banner_arrow { opacity: 1; }
+.songbo_banner_arrow.songbo_prev { left: 10px; }
+.songbo_banner_arrow.songbo_next { right: 10px; }
+
+/* ========== 4. 首页：分类导航 ========== */
+.songbo_cat_grid {
+    display: grid; grid-template-columns: repeat(8, 1fr); gap: 14px;
+    margin: 22px auto;
+}
+.songbo_cat_item {
+    background: var(--songbo_white); border-radius: 10px; padding: 16px 8px;
+    text-align: center; border: 1px solid transparent;
+    transition: all .25s ease;                /* 动画① */
+}
+.songbo_cat_item:hover { transform: translateY(-4px); border-color: var(--songbo_orange); box-shadow: 0 8px 20px rgba(255,103,0,.12); }
+.songbo_cat_item img { width: 44px; height: 44px; margin: 0 auto 8px; }
+.songbo_cat_item p { font-size: 13px; }
+
+/* ========== 5. 区块标题与商品卡片 ========== */
+.songbo_section { margin: 30px auto; }
+.songbo_sec_head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+.songbo_sec_head h2 { font-size: 22px; }
+.songbo_sec_head h2::before { content: ""; display: inline-block; width: 4px; height: 18px; background: var(--songbo_orange); margin-right: 10px; border-radius: 2px; }
+.songbo_sec_head a { font-size: 13px; color: var(--songbo_gray); }
+.songbo_sec_head a:hover { color: var(--songbo_orange); }
+.songbo_goods_grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.songbo_card {
+    background: var(--songbo_white); border-radius: 10px; overflow: hidden;
+    border: 1px solid var(--songbo_line);
+    transition: all .3s ease;                 /* 动画①：卡片悬停 transition */
+}
+.songbo_card:hover { transform: translateY(-6px); box-shadow: 0 12px 28px rgba(0,0,0,.10); border-color: transparent; }
+.songbo_card .songbo_thumb { height: 200px; display: flex; align-items: center; justify-content: center; background: #fafafa; padding: 12px; }
+.songbo_card .songbo_thumb img { max-height: 176px; }
+.songbo_card_body { padding: 14px; }
+.songbo_card_body h3 { font-size: 15px; line-height: 1.4; margin-bottom: 6px; }
+.songbo_card_body .songbo_brief { font-size: 12px; color: var(--songbo_gray); margin-bottom: 10px; min-height: 32px; }
+.songbo_price_row { display: flex; align-items: baseline; gap: 8px; }
+.songbo_price { color: var(--songbo_orange); font-size: 20px; font-weight: bold; }
+.songbo_price::before { content: "¥"; font-size: 13px; }
+.songbo_old_price { color: var(--songbo_gray); font-size: 12px; text-decoration: line-through; }
+.songbo_tags { margin-top: 10px; display: flex; gap: 6px; }
+.songbo_tag { font-size: 11px; padding: 2px 8px; border-radius: 3px; background: var(--songbo_orange_light); color: var(--songbo_orange); }
+.songbo_tag.songbo_tag_hot { background: #fdeaea; color: var(--songbo_red); }
+
+/* ========== 6. 列表页工具条 ========== */
+.songbo_toolbar {
+    background: var(--songbo_white); border-radius: 10px; padding: 14px 16px;
+    display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 16px;
+}
+.songbo_chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.songbo_chip {
+    padding: 5px 14px; border-radius: 16px; background: #f2f3f5;
+    font-size: 13px; transition: all .2s ease;
+}
+.songbo_chip:hover, .songbo_chip.songbo_active { background: var(--songbo_orange); color: #fff; }
+.songbo_select, .songbo_input {
+    padding: 6px 10px; border: 1px solid var(--songbo_line); border-radius: 6px;
+    font-size: 13px; background: #fff; color: var(--songbo_text);
+}
+.songbo_input:focus, .songbo_select:focus { outline: none; border-color: var(--songbo_orange); }
+/* 分页 */
+.songbo_pager { display: flex; justify-content: center; gap: 8px; margin: 24px 0; }
+.songbo_pager button {
+    min-width: 34px; height: 34px; border: 1px solid var(--songbo_line);
+    background: #fff; border-radius: 6px; font-size: 13px; transition: all .2s ease;
+}
+.songbo_pager button.songbo_active { background: var(--songbo_orange); border-color: var(--songbo_orange); color: #fff; }
+.songbo_pager button:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ========== 7. 详情页 ========== */
+.songbo_detail { display: grid; grid-template-columns: 460px 1fr; gap: 26px; background: #fff; border-radius: 12px; padding: 26px; }
+.songbo_detail_img { background: #fafafa; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.songbo_detail_img img { max-height: 380px; }
+.songbo_detail_info h1 { font-size: 24px; margin-bottom: 10px; }
+.songbo_detail_info .songbo_brief { color: var(--songbo_orange); font-size: 13px; margin-bottom: 16px; }
+.songbo_price_box { background: var(--songbo_orange_light); padding: 16px; border-radius: 8px; margin-bottom: 16px; }
+.songbo_price_box .songbo_price { font-size: 28px; }
+.songbo_spec_table { width: 100%; border-collapse: collapse; margin: 14px 0 18px; font-size: 13px; }
+.songbo_spec_table td { border: 1px solid var(--songbo_line); padding: 8px 10px; }
+.songbo_spec_table td:first-child { width: 110px; color: var(--songbo_gray); background: #fafafa; }
+.songbo_btn {
+    display: inline-block; padding: 11px 34px; border-radius: 6px; border: none;
+    background: var(--songbo_orange); color: #fff; font-size: 15px;
+    transition: all .2s ease;
+}
+.songbo_btn:hover { background: var(--songbo_orange_dark); transform: translateY(-2px); }
+.songbo_btn.songbo_btn_ghost { background: #fff; color: var(--songbo_orange); border: 1px solid var(--songbo_orange); }
+.songbo_btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+/* AI 助手卡片 */
+.songbo_ai_card { margin-top: 18px; border: 1px dashed var(--songbo_orange); border-radius: 10px; padding: 14px; background: #fffdf9; }
+.songbo_ai_card h4 { font-size: 14px; margin-bottom: 10px; color: var(--songbo_orange); }
+.songbo_ai_row { display: flex; gap: 8px; margin-bottom: 10px; }
+.songbo_ai_out { font-size: 13px; line-height: 1.7; color: var(--songbo_text); white-space: pre-wrap; }
+
+/* ========== 8. 购物车 ========== */
+.songbo_cart_table { width: 100%; background: #fff; border-radius: 10px; border-collapse: collapse; }
+.songbo_cart_table th, .songbo_cart_table td { padding: 14px 12px; border-bottom: 1px solid var(--songbo_line); text-align: center; font-size: 13px; }
+.songbo_cart_table th { background: #fafafa; }
+.songbo_cart_table img { width: 56px; height: 56px; margin: 0 auto; }
+.songbo_qty { display: inline-flex; align-items: center; gap: 4px; }
+.songbo_qty button { width: 26px; height: 26px; border: 1px solid var(--songbo_line); background: #fff; border-radius: 4px; }
+.songbo_qty input { width: 40px; height: 26px; text-align: center; border: 1px solid var(--songbo_line); border-radius: 4px; }
+.songbo_cart_foot {
+    display: flex; justify-content: flex-end; align-items: center; gap: 18px;
+    background: #fff; border-radius: 10px; margin-top: 14px; padding: 14px 20px;
+}
+.songbo_link_danger { color: var(--songbo_red); font-size: 12px; }
+.songbo_link_danger:hover { text-decoration: underline; }
+.songbo_empty { text-align: center; color: var(--songbo_gray); padding: 70px 0; background: #fff; border-radius: 10px; }
+.songbo_empty img { width: 120px; margin: 0 auto 14px; opacity: .7; }
+
+/* ========== 9. 表单页（登录/注册/下单弹窗） ========== */
+.songbo_form_card {
+    width: 400px; margin: 50px auto; background: #fff; border-radius: 12px;
+    padding: 34px 30px; border: 1px solid var(--songbo_line);
+}
+.songbo_form_card h2 { text-align: center; margin-bottom: 24px; font-size: 20px; }
+.songbo_field { margin-bottom: 16px; }
+.songbo_field label { display: block; font-size: 13px; margin-bottom: 6px; color: #666; }
+.songbo_field input, .songbo_field textarea, .songbo_field select {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--songbo_line);
+    border-radius: 6px; font-size: 14px; transition: border-color .2s ease;
+}
+.songbo_field input:focus, .songbo_field textarea:focus { outline: none; border-color: var(--songbo_orange); }
+.songbo_field .songbo_err { color: var(--songbo_red); font-size: 12px; margin-top: 4px; min-height: 14px; display: block; }
+.songbo_form_card .songbo_btn { width: 100%; }
+.songbo_form_foot { text-align: center; margin-top: 16px; font-size: 13px; color: var(--songbo_gray); }
+.songbo_form_foot a { color: var(--songbo_orange); }
+
+/* ========== 10. 个人中心 / 通用面板 ========== */
+.songbo_panel { background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+.songbo_panel h3 { font-size: 16px; margin-bottom: 14px; }
+.songbo_panel h3::before { content: ""; display: inline-block; width: 4px; height: 15px; background: var(--songbo_orange); margin-right: 8px; border-radius: 2px; }
+.songbo_user_head { display: flex; align-items: center; gap: 14px; }
+.songbo_avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--songbo_orange); color: #fff; font-size: 22px; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+
+/* ========== 11. 后台管理 ========== */
+.songbo_admin_tabs { display: flex; gap: 0; margin-bottom: 0; }
+.songbo_admin_tabs button {
+    padding: 10px 26px; border: none; background: #e9eaee; font-size: 14px;
+    border-radius: 8px 8px 0 0; transition: all .2s ease;
+}
+.songbo_admin_tabs button.songbo_active { background: #fff; color: var(--songbo_orange); font-weight: bold; }
+.songbo_admin_bar { display: flex; gap: 10px; margin-bottom: 12px; align-items: center; }
+.songbo_table { width: 100%; background: #fff; border-radius: 0 10px 10px 10px; border-collapse: collapse; overflow: hidden; }
+.songbo_table th, .songbo_table td { padding: 11px 12px; border-bottom: 1px solid var(--songbo_line); text-align: center; font-size: 13px; }
+.songbo_table th { background: #fafafa; font-weight: bold; }
+.songbo_table tr:hover td { background: #fffaf6; }
+.songbo_table img { width: 44px; height: 44px; margin: 0 auto; }
+.songbo_op_btn { padding: 4px 10px; border: 1px solid var(--songbo_line); background: #fff; border-radius: 4px; font-size: 12px; margin: 0 2px; transition: all .2s ease; }
+.songbo_op_btn:hover { border-color: var(--songbo_orange); color: var(--songbo_orange); }
+.songbo_op_btn.songbo_del { color: var(--songbo_red); }
+.songbo_op_btn.songbo_del:hover { border-color: var(--songbo_red); }
+/* 弹窗 */
+.songbo_modal_mask { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; z-index: 200; }
+.songbo_modal_mask.songbo_show { display: flex; align-items: center; justify-content: center; }
+.songbo_modal { width: 480px; background: #fff; border-radius: 12px; padding: 26px; animation: songbo_pop .25s ease; }
+.songbo_modal h3 { margin-bottom: 18px; }
+.songbo_modal_foot { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
+/* 状态徽章 */
+.songbo_status { padding: 3px 10px; border-radius: 12px; font-size: 12px; }
+.songbo_status.songbo_paid { background: #e8f7ee; color: var(--songbo_green); }
+.songbo_status.songbo_wait { background: #fff7e6; color: #d48806; }
+.songbo_status.songbo_done { background: #e6f4ff; color: #1677ff; }
+.songbo_status.songbo_cancel { background: #fdeaea; color: var(--songbo_red); }
+
+/* ========== 12. 仪表盘 ========== */
+.songbo_stat_grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+.songbo_stat_card {
+    background: #fff; border-radius: 10px; padding: 20px;
+    border-left: 4px solid var(--songbo_orange);
+    transition: all .25s ease;
+}
+.songbo_stat_card:hover { transform: translateY(-4px); box-shadow: 0 10px 22px rgba(0,0,0,.08); }
+.songbo_stat_card b { font-size: 28px; display: block; margin-top: 6px; }
+.songbo_stat_card span { color: var(--songbo_gray); font-size: 13px; }
+.songbo_chart_grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.songbo_chart_box { background: #fff; border-radius: 10px; padding: 18px; }
+.songbo_chart_box h4 { font-size: 15px; margin-bottom: 10px; }
+.songbo_chart_box .songbo_chart { width: 100%; height: 320px; }
+
+/* ========== 13. 关于页 / 手风琴 ========== */
+.songbo_about_hero { background: linear-gradient(135deg, #ff9a3c, #ff6700); border-radius: 12px; color: #fff; padding: 46px 40px; margin: 24px auto; }
+.songbo_about_hero h1 { font-size: 28px; margin-bottom: 10px; }
+.songbo_faq_item { background: #fff; border-radius: 8px; margin-bottom: 10px; overflow: hidden; border: 1px solid var(--songbo_line); }
+.songbo_faq_q { padding: 14px 18px; cursor: pointer; display: flex; justify-content: space-between; font-size: 14px; }
+.songbo_faq_q::after { content: "+"; color: var(--songbo_orange); font-weight: bold; transition: transform .3s ease; }
+.songbo_faq_item.songbo_open .songbo_faq_q::after { transform: rotate(45deg); }
+.songbo_faq_a { max-height: 0; overflow: hidden; transition: max-height .35s ease; color: #666; font-size: 13px; line-height: 1.8; }
+.songbo_faq_item.songbo_open .songbo_faq_a { max-height: 220px; }
+.songbo_faq_a div { padding: 0 18px 14px; }
+
+/* ========== 14. Toast / 返回顶部 / 动画 ========== */
+#songbo_toast {
+    position: fixed; top: 76px; left: 50%; transform: translateX(-50%) translateY(-16px);
+    background: rgba(26,26,26,.88); color: #fff; padding: 10px 24px; border-radius: 6px;
+    font-size: 13px; opacity: 0; pointer-events: none; z-index: 300;
+    transition: all .3s ease;                    /* 动画① */
+}
+#songbo_toast.songbo_show { opacity: 1; transform: translateX(-50%) translateY(0); }
+#songbo_backtop {
+    position: fixed; right: 26px; bottom: 40px; width: 46px; height: 46px;
+    border-radius: 50%; border: none; background: var(--songbo_orange); color: #fff;
+    font-size: 18px; opacity: 0; pointer-events: none; z-index: 150;
+    transition: all .3s ease;
+}
+#songbo_backtop.songbo_show { opacity: 1; pointer-events: auto; }
+#songbo_backtop:hover { background: var(--songbo_orange_dark); transform: translateY(-3px); }
+@keyframes songbo_breath { 0%,100% { opacity: .5; } 50% { opacity: 1; } }
+@keyframes songbo_pop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.songbo_loading { text-align: center; color: var(--songbo_gray); padding: 40px; }
+
+/* ========== 15. 页脚 ========== */
+.songbo_footer {
+    margin-top: 40px; background: #26282b; color: #9ca0a6;
+    text-align: center; padding: 22px; font-size: 13px; line-height: 1.8;
+}
+.songbo_footer b { color: #ff8f4d; }
+
+/* ========== 16. 响应式（辅助） ========== */
+@media (max-width: 900px) {
+    .songbo_goods_grid { grid-template-columns: repeat(2, 1fr); }
+    .songbo_cat_grid { grid-template-columns: repeat(4, 1fr); }
+    .songbo_detail { grid-template-columns: 1fr; }
+    .songbo_stat_grid, .songbo_chart_grid { grid-template-columns: 1fr; }
+    .songbo_nav_inner { gap: 12px; }
+}

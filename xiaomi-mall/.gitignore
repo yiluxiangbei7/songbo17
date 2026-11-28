@@ -1,0 +1,7 @@
+# 依赖与密钥
+node_modules/
+backend-llm/.env
+
+# 系统杂项
+.DS_Store
+Thumbs.db

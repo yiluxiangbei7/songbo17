@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 480">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#ff8a1e"/><stop offset="1" stop-color="#ff6700"/></linearGradient></defs>
+<rect width="1600" height="480" fill="url(#g)"/>
+<circle cx="1300" cy="110" r="180" fill="#ffffff" opacity="0.10"/>
+<circle cx="1450" cy="330" r="120" fill="#ffffff" opacity="0.12"/>
+<circle cx="180" cy="420" r="150" fill="#ffffff" opacity="0.08"/>
+<g transform="translate(1150,90) rotate(8)">
+<rect x="0" y="0" width="230" height="330" rx="34" fill="#1d2530"/>
+<rect x="10" y="10" width="210" height="310" rx="26" fill="#31405a"/>
+<circle cx="115" cy="52" r="30" fill="#1d2530"/><circle cx="115" cy="52" r="18" fill="#57c4ff"/>
+<circle cx="115" cy="170" r="66" fill="#223049"/><circle cx="115" cy="170" r="34" fill="#ffb35c" opacity="0.9"/>
+</g>
+<text x="120" y="205" font-family="Microsoft YaHei" font-size="58" font-weight="bold" fill="#ffffff">小米15 Ultra 系列</text>
+<text x="122" y="268" font-family="Microsoft YaHei" font-size="26" fill="#ffffff" opacity="0.92">徕卡影像 · 骁龙8至尊版 · 6000mAh 续航</text>
+<rect x="122" y="310" width="170" height="52" rx="26" fill="#ffffff"/>
+<text x="207" y="345" text-anchor="middle" font-family="Microsoft YaHei" font-size="22" fill="#ff8a1e" font-weight="bold">立即选购</text>
+</svg>
