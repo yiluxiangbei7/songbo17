@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于 - 小米商城</title>
+    <link rel="stylesheet" href="css/songbo.css">
+</head>
+<body>
+    <header id="songbo_header"></header>
+
+    <main class="songbo_wrap">
+        <!-- 品牌介绍 -->
+        <div class="songbo_about_hero">
+            <h1>关于本商城</h1>
+            <p>本项目为《高级网页设计I》三级课程作品（题库 34 号 · 小米商城），由计算机24010班 宋博（24001011017）制作。</p>
+            <p style="margin-top:8px;opacity:.9;">技术栈：原生 HTML/CSS/JS + Supabase（BAAS）+ DeepSeek AI 选购助手 + ECharts 数据仪表盘，全程本地资源、无第三方框架。</p>
+        </div>
+
+        <!-- 项目亮点 -->
+        <section class="songbo_section">
+            <div class="songbo_sec_head"><h2>项目亮点</h2></div>
+            <div class="songbo_goods_grid" style="grid-template-columns:repeat(3,1fr);">
+                <div class="songbo_card"><div class="songbo_card_body">
+                    <h3>☁️ BAAS 云数据库</h3>
+                    <p class="songbo_brief">Supabase 三表（分类/商品/订单）+ RLS 行级安全：匿名只读、登录可写、订单按用户隔离。</p>
+                </div></div>
+                <div class="songbo_card"><div class="songbo_card_body">
+                    <h3>🔐 安全鉴权</h3>
+                    <p class="songbo_brief">Supabase Auth 密码 bcrypt 加密存储，JWT 保持登录态，后台/下单未登录自动拦截。</p>
+                </div></div>
+                <div class="songbo_card"><div class="songbo_card_body">
+                    <h3>🤖 AI 选购助手</h3>
+                    <p class="songbo_brief">DeepSeek 大模型经 Express 中间层接入，按预算和用途推荐商品，密钥不出服务端。</p>
+                </div></div>
+                <div class="songbo_card"><div class="songbo_card_body">
+                    <h3>📊 数据仪表盘</h3>
+                    <p class="songbo_brief">ECharts 本地渲染：分类占比饼图、销量 TOP 条形图、价格分布折线图，数据全部来自真实接口。</p>
+                </div></div>
+                <div class="songbo_card"><div class="songbo_card_body">
+                    <h3>🛒 完整购物链路</h3>
+                    <p class="songbo_brief">浏览 → 加购（localStorage）→ 结算下单 → 库存扣减 → 我的订单 → 取消订单，闭环完整。</p>
+                </div></div>
+                <div class="songbo_card"><div class="songbo_card_body">
+                    <h3>🎨 纯手写动画</h3>
+                    <p class="songbo_brief">transition 悬停、animation 指示点呼吸、canvas 粒子连线三种动画方式全覆盖。</p>
+                </div></div>
+            </div>
+        </section>
+
+        <!-- FAQ 手风琴（JS效果：手风琴展开收起） -->
+        <section class="songbo_section">
+            <div class="songbo_sec_head"><h2>常见问题 FAQ</h2></div>
+            <div id="songbo_faq">
+                <div class="songbo_faq_item songbo_open">
+                    <div class="songbo_faq_q">这个网站用了哪些技术？是模板套的吗？</div>
+                    <div class="songbo_faq_a"><div>不是模板。页面结构、样式、脚本全部从零手写：CSS 只有一个 songbo.css 公共表，JS 每页一个独立脚本；唯一的第三方库是按指导书允许的 ECharts（本地引入，用于仪表盘）。</div></div>
+                </div>
+                <div class="songbo_faq_item">
+                    <div class="songbo_faq_q">商品数据和订单存在哪里？</div>
+                    <div class="songbo_faq_a"><div>存在 Supabase 云数据库（PostgreSQL）。分类/商品两张表匿名可读；订单表开启 RLS 行级安全，未登录写操作返回 42501 被拦截，登录后只能读写自己的订单。</div></div>
+                </div>
+                <div class="songbo_faq_item">
+                    <div class="songbo_faq_q">密码是明文保存的吗？</div>
+                    <div class="songbo_faq_a"><div>不是。注册/登录使用 Supabase Auth 服务，密码在云端以 bcrypt 哈希存储，前端不落任何明文；登录凭证是 JWT token，保存在 localStorage 实现刷新不掉线。</div></div>
+                </div>
+                <div class="songbo_faq_item">
+                    <div class="songbo_faq_q">AI 选购助手的密钥会不会泄露？</div>
+                    <div class="songbo_faq_a"><div>不会。DeepSeek API Key 只保存在 Express 中间层的 .env 文件里（已加入 .gitignore 不入库），前端只请求 localhost:3007 的自有接口，密钥永不进入浏览器。</div></div>
+                </div>
+                <div class="songbo_faq_item">
+                    <div class="songbo_faq_q">如何进入后台管理和数据大屏？</div>
+                    <div class="songbo_faq_a"><div>先登录（测试账号 songbo17@test.com / songbo123），再访问 admin.html 与 dashboard.html。未登录访问会被页面守卫拦截并跳转登录页。</div></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="songbo_footer"></footer>
+
+    <script src="js/songbo_config.js"></script>
+    <script src="js/songbo_api.js"></script>
+    <script src="js/songbo_auth.js"></script>
+    <script src="js/songbo_common.js"></script>
+    <script>
+        /* 关于页：FAQ 手风琴（JS效果：展开/收起互斥） */
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("#songbo_faq .songbo_faq_q").forEach(q => {
+                q.addEventListener("click", () => {
+                    const songbo_item = q.parentElement;
+                    const songbo_open = songbo_item.classList.contains("songbo_open");
+                    document.querySelectorAll("#songbo_faq .songbo_faq_item").forEach(i => i.classList.remove("songbo_open"));
+                    if (!songbo_open) songbo_item.classList.add("songbo_open");
+                });
+            });
+        });
+    </script>
+</body>
+</html>

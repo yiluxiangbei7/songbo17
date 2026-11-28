@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册 - 小米商城</title>
+    <link rel="stylesheet" href="css/songbo.css">
+</head>
+<body>
+    <header id="songbo_header"></header>
+
+    <main>
+        <div class="songbo_form_card">
+            <h2>注册小米商城账号</h2>
+            <div class="songbo_field">
+                <label>邮箱</label>
+                <input type="text" id="songbo_reg_email" placeholder="用于登录的邮箱地址">
+                <span class="songbo_err" id="songbo_reg_email_err"></span>
+            </div>
+            <div class="songbo_field">
+                <label>密码（至少 6 位，含字母）</label>
+                <input type="password" id="songbo_reg_pwd" placeholder="设置登录密码">
+                <span class="songbo_err" id="songbo_reg_pwd_err"></span>
+            </div>
+            <div class="songbo_field">
+                <label>确认密码</label>
+                <input type="password" id="songbo_reg_pwd2" placeholder="再次输入密码">
+                <span class="songbo_err" id="songbo_reg_pwd2_err"></span>
+            </div>
+            <button class="songbo_btn" id="songbo_reg_btn">注 册</button>
+            <p class="songbo_form_foot">已有账号？<a href="login.html">直接登录</a></p>
+        </div>
+    </main>
+
+    <footer id="songbo_footer"></footer>
+
+    <script src="js/songbo_config.js"></script>
+    <script src="js/songbo_api.js"></script>
+    <script src="js/songbo_auth.js"></script>
+    <script src="js/songbo_common.js"></script>
+    <script src="js/songbo_register.js"></script>
+</body>
+</html>

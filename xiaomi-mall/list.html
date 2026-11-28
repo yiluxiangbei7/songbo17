@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全部商品 - 小米商城</title>
+    <link rel="stylesheet" href="css/songbo.css">
+</head>
+<body>
+    <header id="songbo_header"></header>
+
+    <main class="songbo_wrap" style="margin-top:18px;">
+        <!-- 工具条：分类tab / 价格区间 / 排序 / 搜索（JS效果：tab+过滤+排序） -->
+        <div class="songbo_toolbar">
+            <div class="songbo_chips" id="songbo_cat_chips">
+                <span class="songbo_chip songbo_active" data-cat="0">全部</span>
+            </div>
+            <div style="display:flex;gap:10px;margin-left:auto;flex-wrap:wrap;">
+                <select class="songbo_select" id="songbo_price_sel">
+                    <option value="0">全部价格</option>
+                    <option value="0-999">¥1000 以下</option>
+                    <option value="1000-2999">¥1000 - 2999</option>
+                    <option value="3000-4999">¥3000 - 4999</option>
+                    <option value="5000-99999">¥5000 以上</option>
+                </select>
+                <select class="songbo_select" id="songbo_sort_sel">
+                    <option value="default">默认排序</option>
+                    <option value="price_asc">价格从低到高</option>
+                    <option value="price_desc">价格从高到低</option>
+                    <option value="sales_desc">销量优先</option>
+                </select>
+                <input class="songbo_input" id="songbo_kw_input" type="text" placeholder="搜索商品名称/关键词" style="width:200px;">
+            </div>
+        </div>
+
+        <div class="songbo_goods_grid" id="songbo_list_grid">
+            <div class="songbo_loading">商品加载中…</div>
+        </div>
+        <div id="songbo_list_empty"></div>
+
+        <!-- 分页（JS效果：客户端分页） -->
+        <div class="songbo_pager" id="songbo_pager"></div>
+    </main>
+
+    <footer id="songbo_footer"></footer>
+
+    <script src="js/songbo_config.js"></script>
+    <script src="js/songbo_api.js"></script>
+    <script src="js/songbo_auth.js"></script>
+    <script src="js/songbo_common.js"></script>
+    <script src="js/songbo_list.js"></script>
+</body>
+</html>

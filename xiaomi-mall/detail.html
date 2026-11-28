@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品详情 - 小米商城</title>
+    <link rel="stylesheet" href="css/songbo.css">
+</head>
+<body>
+    <header id="songbo_header"></header>
+
+    <main class="songbo_wrap" style="margin-top:18px;">
+        <div class="songbo_detail" id="songbo_detail_box">
+            <div class="songbo_loading" style="grid-column:1/-1;">商品详情加载中…</div>
+        </div>
+
+        <!-- AI 选购助手（LLM 调用评分项：经 Express 中间层调 DeepSeek，密钥不出服务端） -->
+        <div class="songbo_ai_card">
+            <h4>🤖 AI 选购助手（DeepSeek 驱动）</h4>
+            <div class="songbo_ai_row">
+                <input class="songbo_input" id="songbo_ai_budget" placeholder="预算，如 3000 元" style="width:170px;">
+                <input class="songbo_input" id="songbo_ai_usage" placeholder="主要用途，如 玩游戏、拍视频" style="flex:1;">
+                <button class="songbo_btn" id="songbo_ai_btn" style="padding:8px 22px;">问一问</button>
+            </div>
+            <div class="songbo_ai_out" id="songbo_ai_out">输入预算和用途，AI 会从本店在售商品中为你推荐并说明理由。</div>
+        </div>
+    </main>
+
+    <!-- 立即购买下单弹窗 -->
+    <div class="songbo_modal_mask" id="songbo_buy_mask">
+        <div class="songbo_modal">
+            <h3>确认订单</h3>
+            <div class="songbo_field">
+                <label>商品</label>
+                <input id="songbo_buy_name" readonly>
+            </div>
+            <div class="songbo_field">
+                <label>数量</label>
+                <input id="songbo_buy_qty" type="number" min="1" value="1">
+            </div>
+            <div class="songbo_field">
+                <label>收货人</label>
+                <input id="songbo_buy_receiver" placeholder="请输入收货人姓名">
+                <span class="songbo_err" id="songbo_buy_receiver_err"></span>
+            </div>
+            <div class="songbo_field">
+                <label>手机号</label>
+                <input id="songbo_buy_phone" placeholder="11 位手机号">
+                <span class="songbo_err" id="songbo_buy_phone_err"></span>
+            </div>
+            <div class="songbo_field">
+                <label>收货地址</label>
+                <input id="songbo_buy_address" placeholder="省市区 + 详细地址">
+                <span class="songbo_err" id="songbo_buy_address_err"></span>
+            </div>
+            <div class="songbo_modal_foot">
+                <button class="songbo_btn songbo_btn_ghost" id="songbo_buy_cancel">取消</button>
+                <button class="songbo_btn" id="songbo_buy_ok">提交订单</button>
+            </div>
+        </div>
+    </div>
+
+    <footer id="songbo_footer"></footer>
+
+    <script src="js/songbo_config.js"></script>
+    <script src="js/songbo_api.js"></script>
+    <script src="js/songbo_auth.js"></script>
+    <script src="js/songbo_common.js"></script>
+    <script src="js/songbo_detail.js"></script>
+</body>
+</html>

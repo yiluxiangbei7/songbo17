@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - 小米商城</title>
+    <link rel="stylesheet" href="css/songbo.css">
+</head>
+<body>
+    <header id="songbo_header"></header>
+
+    <main class="songbo_wrap" style="margin-top:18px;">
+        <div class="songbo_panel" id="songbo_user_panel">
+            <div class="songbo_user_head">
+                <div class="songbo_avatar">宋</div>
+                <div>
+                    <b id="songbo_user_nick">加载中…</b>
+                    <p style="color:#999;font-size:12px;margin-top:4px;" id="songbo_user_mail"></p>
+                </div>
+                <button class="songbo_op_btn" style="margin-left:auto;" onclick="songbo_do_logout()">退出登录</button>
+            </div>
+        </div>
+
+        <div class="songbo_panel">
+            <h3>我的订单</h3>
+            <div id="songbo_orders_box"><div class="songbo_loading">订单加载中…</div></div>
+        </div>
+    </main>
+
+    <footer id="songbo_footer"></footer>
+
+    <script src="js/songbo_config.js"></script>
+    <script src="js/songbo_api.js"></script>
+    <script src="js/songbo_auth.js"></script>
+    <script src="js/songbo_common.js"></script>
+    <script src="js/songbo_profile.js"></script>
+</body>
+</html>

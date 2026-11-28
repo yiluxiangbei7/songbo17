@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小米商城 - 首页</title>
+    <link rel="stylesheet" href="css/songbo.css">
+</head>
+<body>
+    <header id="songbo_header"></header>
+
+    <main>
+        <!-- ① 轮播 banner（JS效果：轮播图 / 动画：指示点呼吸） -->
+        <section class="songbo_wrap" style="margin-top:14px;">
+            <div class="songbo_banner" id="songbo_banner">
+                <div class="songbo_banner_list" id="songbo_banner_list">
+                    <img src="images/songbo_b1.svg" alt="小米15 Ultra 新品">
+                    <img src="images/songbo_b2.svg" alt="智能家电焕新季">
+                    <img src="images/songbo_b3.svg" alt="以旧换新补贴">
+                </div>
+                <button class="songbo_banner_arrow songbo_prev" id="songbo_banner_prev">‹</button>
+                <button class="songbo_banner_arrow songbo_next" id="songbo_banner_next">›</button>
+                <div class="songbo_banner_dots" id="songbo_banner_dots"></div>
+            </div>
+        </section>
+
+        <!-- ② 分类导航（数据来自 Supabase categories 表） -->
+        <section class="songbo_wrap">
+            <div class="songbo_cat_grid" id="songbo_cat_grid">
+                <div class="songbo_loading">分类加载中…</div>
+            </div>
+        </section>
+
+        <!-- ③ 爆款推荐 -->
+        <section class="songbo_wrap songbo_section">
+            <div class="songbo_sec_head">
+                <h2>爆款推荐</h2>
+                <a href="list.html">查看全部 ›</a>
+            </div>
+            <div class="songbo_goods_grid" id="songbo_hot_grid">
+                <div class="songbo_loading">商品加载中…</div>
+            </div>
+        </section>
+
+        <!-- ④ 新品上架 -->
+        <section class="songbo_wrap songbo_section">
+            <div class="songbo_sec_head">
+                <h2>新品上架</h2>
+                <a href="list.html">更多 ›</a>
+            </div>
+            <div class="songbo_goods_grid" id="songbo_new_grid">
+                <div class="songbo_loading">加载中…</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 首页背景粒子动画（动画方式③：canvas） -->
+    <canvas id="songbo_canvas" style="position:fixed;inset:0;z-index:-1;pointer-events:none;"></canvas>
+
+    <footer id="songbo_footer"></footer>
+
+    <script src="js/songbo_config.js"></script>
+    <script src="js/songbo_api.js"></script>
+    <script src="js/songbo_auth.js"></script>
+    <script src="js/songbo_common.js"></script>
+    <script src="js/songbo_index.js"></script>
+</body>
+</html>
